@@ -1,0 +1,47 @@
+<link rel="import" href="/elements/elements.html" />
+
+<dom-module id="grid-app">
+	<template>
+	    <app-drawer-layout fullbleed>
+		  	<app-drawer id="drawer" swipe-open >
+		    	<div style="height: 100%; overflow: auto; background-color: #f2f2f2;">
+		    		<app-toolbar>
+		    			<paper-button onclick="drawer.toggle()">
+		    				<iron-icon icon="menu" ></iron-icon>
+		    			</paper-button>
+		    			<!-- <span class="float-right" >THE GRID</span> -->
+					</app-toolbar>
+					<paper-icon-item>
+						<iron-icon icon="work" item-icon></iron-icon> 
+						<span>Jobs</span>
+					</paper-icon-item>
+					<paper-icon-item>
+						<iron-icon icon="mail" item-icon></iron-icon> 
+						<span>Inbox</span>
+					</paper-icon-item>
+					<paper-icon-item>
+						<iron-icon icon="credit-card" item-icon></iron-icon> 
+						<span>Transactions</span>
+					</paper-icon-item>
+				</div>
+		  	</app-drawer>
+		  	<<!-- app-toolbar>
+				<paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
+				<div main-title>The GRID</div>
+			</app-toolbar>
+ -->		  	<div>
+		    	main content
+		    	<paper-fab mini icon="search"></paper-fab>
+		  	</div>
+		</app-drawer-layout>
+  	</template>
+
+	<script>
+		(function(){
+			'use strict'
+			Polymer({
+				is: 'grid-app'
+			});
+		}());
+	</script>
+</dom-module>
