@@ -1,0 +1,30 @@
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<link rel="import" href="/bower_components/google-map/google-map-directions.html">
+
+<dom-module id="grid-view">
+	<template>
+		<!-- <google-map api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" clientID="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" latitude="37.77493" longitude="-122.41942" fit-to-markers>
+		  <google-map-marker latitude="37.779" longitude="-122.3892"
+		      draggable="true" title="Go Giants!"></google-map-marker>
+		  <google-map-marker latitude="37.777" longitude="-122.38911"></google-map-marker>
+		</google-map> -->
+		<google-map latitude="37.779" longitude="-122.3892" api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" zoom="13" disable-default-ui>
+  		</google-map>
+		<google-map-directions
+		  start-address="San Francisco"
+		  end-address="Mountain View"
+		  api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc"></google-map-directions>
+	</template>
+</dom-module>
+<script>
+	(function(){
+		'user strict'
+
+		Polymer({
+			is: 'grid-view'
+		});
+
+		var gMap = document.querySelector('google-map');
+		
+	}());
+</script>

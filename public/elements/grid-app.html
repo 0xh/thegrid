@@ -1,47 +1,73 @@
 <link rel="import" href="/elements/elements.html" />
 
 <dom-module id="grid-app">
+	<style include="iron-flex">
+		:host {
+			--grid-view-left: 56px;
+		}
+		div[main] {
+			height: 100%;
+		}
+		grid-view {
+			left: var(--grid-view-left);
+		    position: absolute;
+		    top: 0px;
+		    width: calc(100% - 56px);
+		    height: 100%;
+		    z-index: 0;
+		    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1), right 350ms cubic-bezier(0.4, 0, 0.2, 1);
+		}
+		grid-drawer[opened] ~ grid-view {
+			left: 150px;
+		}
+		grid-inbox[opened] ~ grid-view {
+			left: 250px;
+		}
+	</style>
 	<template>
-	    <app-drawer-layout fullbleed>
-		  	<app-drawer id="drawer" swipe-open >
-		    	<div style="height: 100%; overflow: auto; background-color: #f2f2f2;">
-		    		<app-toolbar>
-		    			<paper-button onclick="drawer.toggle()">
-		    				<iron-icon icon="menu" ></iron-icon>
-		    			</paper-button>
-		    			<!-- <span class="float-right" >THE GRID</span> -->
-					</app-toolbar>
-					<paper-icon-item>
-						<iron-icon icon="work" item-icon></iron-icon> 
-						<span>Jobs</span>
-					</paper-icon-item>
-					<paper-icon-item>
-						<iron-icon icon="mail" item-icon></iron-icon> 
-						<span>Inbox</span>
-					</paper-icon-item>
-					<paper-icon-item>
-						<iron-icon icon="credit-card" item-icon></iron-icon> 
-						<span>Transactions</span>
-					</paper-icon-item>
-				</div>
-		  	</app-drawer>
-		  	<<!-- app-toolbar>
-				<paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-				<div main-title>The GRID</div>
-			</app-toolbar>
- -->		  	<div>
-		    	main content
-		    	<paper-fab mini icon="search"></paper-fab>
-		  	</div>
-		</app-drawer-layout>
-  	</template>
-
-	<script>
-		(function(){
-			'use strict'
-			Polymer({
-				is: 'grid-app'
-			});
-		}());
-	</script>
+		<div main class="layout horizontal">
+			<grid-drawer id="drawer"></grid-drawer>
+			<grid-inbox id="inbox"></grid-inbox>
+			<grid-view class="flex"></grid-view>
+		</div>
+	</template>
 </dom-module>
+<script>
+	(function(){
+		'use strict'
+		Polymer({
+			is: 'grid-app',
+			/**
+			* A reference to the app-drawer element.
+			*
+			* @property drawer
+			*/
+			get drawer() {
+				//var drawer = document.getElementById('drawer');
+				return this.$.drawer;//.getDistributedNodes()[0];
+			},
+			get inbox() {
+				return this.$.inbox;
+			},
+			_resetView: function() {
+				this.inbox.opened = false;
+				this.drawer.opened = false;
+				console.log('reset view');
+			},
+			_click: function() {
+				console.log('click from child');
+			},
+			_openInbox: function() {
+				// console.log('open inbox');
+				this.drawer.opened = false;
+				this.inbox.opened = true;
+			},
+			_toggleInbox: function() {
+				this.inbox._toggleInbox();
+			},
+			ready: function() {
+				
+			}
+		});
+	}());
+</script>

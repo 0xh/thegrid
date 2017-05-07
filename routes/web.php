@@ -25,11 +25,19 @@ Route::get('/users', function() {
 	//return $users;
 });
 
+Route::get('/user/{id}', function($id) {
+	$result = Array();
+	$items = App\User::find($id)->items;
+
+	$result = Array("user" => App\User::find($id), "items" => $items);
+	return $result;
+});
+
 Route::get('/items', function() {
 	$items = App\Item::all();
 
 	foreach ($items as $item) {
-		echo $item->item_name . ' : ' . $item->user->name . '<br/>';
+	//	echo $item->item_name . ' : ' . $item->user->name . '<br/>';
 	}
-	//return $items;
+	return $items;
 });

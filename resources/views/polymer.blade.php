@@ -8,23 +8,38 @@
         <title>Polymer</title>
 
         <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 
-        <script type="text/javascript" href="/bower_components/webcomponentsjs/webcomponents.js"></script>
         <!-- Styles -->
         <style>
+            * {
+                box-sizing: border-box;
+            }
             html, body {
                 background-color: #fff;
                 color: #636b6f;
-                font-family: 'Raleway', sans-serif;
+                font-family: 'Roboto', sans-serif;
                 font-weight: 100;
                 height: 100vh;
                 margin: 0;
+                padding: 0;
+                overflow: hidden;
+                user-select: none;
             }
         </style>
         <link rel="import" href="/elements/grid-app.html" />
     </head>
     <body>
-        <grid-app></grid-app>
+        <grid-app>
+            <grid-drawer></grid-drawer>
+        </grid-app>
+        <script type="text/javascript" href="/bower_components/webcomponentsjs/webcomponents.js"></script>
+        <script>
+        var gMap = document.querySelector('google-map');
+
+        gMap.addEventListener('api-load', function(e) {
+            document.querySelector('google-map-directions').map = this.map;
+        });
+        </script>
     </body>
 </html>
