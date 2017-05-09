@@ -4,6 +4,9 @@
 	<style include="iron-flex">
 		:host {
 			--grid-view-left: 56px;
+			--grid-view-left-drawer-open: 150px;
+			--grid-view-second-fold-left: 250px;
+			--grid-view-third-fold-left: 500px;
 		}
 		div[main] {
 			height: 100%;
@@ -15,19 +18,31 @@
 		    width: calc(100% - 56px);
 		    height: 100%;
 		    z-index: 0;
-		    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1), right 350ms cubic-bezier(0.4, 0, 0.2, 1);
+		    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1);/*, right 350ms cubic-bezier(0.4, 0, 0.2, 1);*/
 		}
 		grid-drawer[opened] ~ grid-view {
-			left: 150px;
+			left: var(--grid-view-left-drawer-open);
 		}
-		grid-inbox[opened] ~ grid-view {
-			left: 250px;
+		grid-second-fold[opened] ~ grid-view {
+			left: var(--grid-view-second-fold-left);
 		}
+		grid-second-fold[opened] ~ grid-third-fold {
+			left: calc((var(--grid-second-fold-width) + var(--grid-drawer-collapse-width)) - var(--grid-third-fold-width));
+		}
+		grid-third-fold[opened] ~ grid-view {
+			left: var(--grid-view-third-fold-left);
+		}
+		grid-second-fold[opened] ~ grid-third-fold[opened] {
+			left: calc(var(--grid-drawer-collapse-width) + var(--grid-second-fold-width)) !important;
+		}
+
 	</style>
 	<template>
 		<div main class="layout horizontal">
 			<grid-drawer id="drawer"></grid-drawer>
-			<grid-inbox id="inbox"></grid-inbox>
+			<!-- <grid-inbox id="inbox"></grid-inbox> -->
+			<grid-second-fold id="secondFold"></grid-second-fold>
+			<grid-third-fold id="thirdFold"></grid-third-fold>
 			<grid-view class="flex"></grid-view>
 		</div>
 	</template>
@@ -37,28 +52,17 @@
 		'use strict'
 		Polymer({
 			is: 'grid-app',
-			/**
-			* A reference to the app-drawer element.
-			*
-			* @property drawer
-			*/
 			get drawer() {
-				//var drawer = document.getElementById('drawer');
-				return this.$.drawer;//.getDistributedNodes()[0];
+				return this.$.drawer;
 			},
 			get inbox() {
 				return this.$.inbox;
 			},
-			_resetView: function() {
-				this.inbox.opened = false;
-				this.drawer.opened = false;
-				console.log('reset view');
-			},
 			_click: function() {
 				console.log('click from child');
+				console.log(this.customStyle);
 			},
 			_openInbox: function() {
-				// console.log('open inbox');
 				this.drawer.opened = false;
 				this.inbox.opened = true;
 			},

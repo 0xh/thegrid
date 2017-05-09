@@ -1,0 +1,58 @@
+<script>
+	window.GridBehaviors = window.GridBehaviors || {};
+
+	GridBehaviors.FoldBehavior = {
+		properties : {
+			opened: {
+	          type: Boolean,
+	          value: false,
+	          notify: true,
+	          reflectToAttribute: true,
+	          observer: '_viewChanged'
+	        }
+		},
+		created: function() {
+			console.log('Behavior is created for ', this);
+		},
+		get parent() {
+			return this.domHost;
+		},
+		get secondFold() {
+			return this.parent.$.secondFold;
+		},
+		get thirdFold() {
+			return this.parent.$.thirdFold;
+		},
+		get drawer() {
+			return this;
+		},
+		open: function() {
+			this.opened = true;
+			this._onOpen();
+		},
+		close: function() {
+			this.opened = false;
+			this._onClose();
+		},
+		toggle: function() {
+			this.opened = !this.opened;
+			this._onToggle();
+		},
+		_onOpen: function() {
+			// abstract
+		},
+		_onClose: function() {
+			// abstract
+		},
+		_onToggle: function() {
+			// abstract
+		},
+		_viewChanged: function() {
+			if( this.opened ) {
+				this._onOpen();
+			} else {
+				this._onClose();
+			}
+		}
+	}
+</script>
