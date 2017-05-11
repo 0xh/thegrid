@@ -30,9 +30,7 @@
         <link rel="import" href="/elements/grid-app.html" />
     </head>
     <body>
-        <grid-app>
-            <grid-drawer></grid-drawer>
-        </grid-app>
+        <grid-app id="the-grid"></grid-app>
         <script type="text/javascript" href="/bower_components/webcomponentsjs/webcomponents.js"></script>
         <script>
         // var gMap = document.querySelector('google-map');

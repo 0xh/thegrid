@@ -41,3 +41,5 @@ Route::get('/items', function() {
 	}
 	return $items;
 });
+
+Route::get('/grid-elements', 'ElementsController@index');

@@ -232,7 +232,6 @@
 				this.close();
 				this.thirdFold.close();
 				this.secondFold.open();
-				console.log(tab);
 				this.secondFold.selectedTab = tab;
 			},
 
@@ -242,78 +241,17 @@
 
 			// inbox events
 			openInbox: function() {
-				//var children = Polymer.dom(this.secondFold).node.children;
-				// children.forEach(function(item, index){
-				// 	console.log(item);
-				// });
-				//for(var item in children) {
-				//	console.log(item);
-			//		item.opened = false;//('opened');
-			//	}
-			//	console.log(children);
-			//	if(Polymer.dom(this.secondFold).node.children.inbox) {
-			//		console.log('inbox already loaded');
-			//		Polymer.dom(this.secondFold).node.children.inbox.opened = true;
-			//	} else {
-					this._selectTab('inbox');
-
-					// var inbox = document.createElement('grid-inbox');
-					// inbox.id = 'inbox';
-					// inbox.setAttribute('opened', undefined);
-					// this.secondFold.innerHTML = '';
-					// this.secondFold.appendChild(inbox);
-			//	}
-				//console.log(Polymer.dom(this.secondFold).node.children.inbox);
-			//	console.log(Polymer.dom(this.secondFold));//.querySelectorAll('#inbox'));
-				//console.log(Polymer.dom(this.secondFold).node.children);//.querySelectorAll('#inbox'));
-				
-			},
-			_closeInbox: function() {
-				this.inbox._close();
-			},
-			_toggleInbox: function() {
-				this._close();
-				this.thirdFold._close();
-				//if(this.secondFold.opened)
-				this.secondFold._toggle();
-
-				var inbox = document.createElement('grid-inbox');
-				this.secondFold.innerHTML = '';
-				this.secondFold.appendChild(inbox);
+				this._selectTab('inbox');
 			},
 
 			// jobs events
 			openJobs: function() {
 				this._selectTab('jobs');
 			},
-			_closeJobs: function() {
-				this.jobs._close();
-			},
-			_toggleJobs: function() {
-				this._close();
-				this.thirdFold._close();
-				this.secondFold._toggle();
-
-				var jobs = document.createElement('grid-jobs');
-				this.secondFold.innerHTML = '';
-				this.secondFold.appendChild(jobs);
-			},
-
+			
 			// transactions events
 			openTransactions: function() {
 				this._selectTab('transactions');
-			},
-			_closeTransactions: function() {
-				this.transactions._close();
-			},
-			_toggleTransactions: function() {
-				this._close();
-				this.thirdFold._close();
-				this.secondFold._toggle();
-
-				var transactions = document.createElement('grid-transactions');
-				this.secondFold.innerHTML = '';
-				this.secondFold.appendChild(transactions);
 			}
 
 		});

@@ -13,17 +13,17 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function(Blueprint $table) {
+        Schema::create('notifications', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
             $table->string('notification');
             $table->integer('type');
-            $table->timestamp();
+            $table->timestamps();
         });
 
-        Schema::table('notificatins', function($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
+        // Schema::table('notifications', function ($table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        // });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateNotificationsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('notifications');
     }
 }

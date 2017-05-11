@@ -14,8 +14,12 @@
 		created: function() {
 			console.log('Behavior is created for ', this);
 		},
+		get grid() {
+			return document.getElementById('the-grid');
+		},
 		get parent() {
-			return this.domHost;
+			// return this.domHost;
+			return document.getElementById('the-grid');
 		},
 		get secondFold() {
 			return this.parent.$.secondFold;
@@ -24,7 +28,7 @@
 			return this.parent.$.thirdFold;
 		},
 		get drawer() {
-			return this;
+			return this.parent.$.drawer;
 		},
 		open: function() {
 			this.opened = true;

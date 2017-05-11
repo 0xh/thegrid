@@ -44,6 +44,9 @@
 		Polymer({
 			is: 'grid-second-fold',
 			behaviors: [GridBehaviors.FoldBehavior, GridBehaviors.TabsBehavior],
+			_onClose: function() {
+				this.thirdFold.close();
+			},
 			callParent: function() {
 				this.thirdFold.opened = !this.thirdFold.opened;
 			}

@@ -16,6 +16,7 @@ class CreateJobsTable extends Migration
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
+            $table->integer('category_id')->unsigned();
             $table->string('name');
             $table->text('image_url');
             $table->integer('gallery_id')->unsigned();
@@ -29,10 +30,11 @@ class CreateJobsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('jobs', function($table) {
-            $table->foreign('gallery_id')->references('id')->on('galleries');
-            $table->foreign('currency_id')->references('id')->on('currencies');
-        });
+        // Schema::table('jobs', function ($table) {
+        //     $table->foreign('gallery_id')->references('id')->on('galleries');
+        //     $table->foreign('currency_id')->references('id')->on('currencies');
+        //     $table->foreign('category_id')->references('id')->on('job_categories');
+        // });
     }
 
     /**

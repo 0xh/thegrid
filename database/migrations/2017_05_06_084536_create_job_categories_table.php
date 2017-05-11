@@ -13,11 +13,11 @@ class CreateJobCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('job_categories', function(Blueprint $table) {
+        Schema::create('job_categories', function (Blueprint $table) {
             $table->increments('id');
             $table->string('category');
             $table->string('details');
-            $table->timestamp();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +28,6 @@ class CreateJobCategoriesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('job_categories');
     }
 }

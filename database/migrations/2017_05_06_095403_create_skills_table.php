@@ -13,9 +13,9 @@ class CreateSkillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('skills', function(Blueprint $table) {
+        Schema::create('skills', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id');
+            $table->integer('user_id')->unsigned();
             $table->string('skill');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateSkillsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('skills');
     }
 }

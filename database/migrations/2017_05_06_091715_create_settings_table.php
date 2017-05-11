@@ -20,6 +20,9 @@ class CreateSettingsTable extends Migration
             $table->string('value');
             $table->timestamps();
         });
+        // Schema::table('settings', function($table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        // });
     }
 
     /**
@@ -29,6 +32,6 @@ class CreateSettingsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('settings');
     }
 }

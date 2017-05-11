@@ -13,18 +13,20 @@ class CreateReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reviews', function(Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
+            $table->integer('job_id')->unsigned();
             $table->text('review');
             $table->integer('star_up');
             $table->integer('star_down');
             $table->timestamps();
         });
 
-        Schema::table('reviews', function($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-        });
+        // Schema::table('reviews', function ($table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        //     $table->foreign('job_id')->references('id')->on('jobs');
+        // });
     }
 
     /**

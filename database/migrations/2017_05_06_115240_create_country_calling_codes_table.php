@@ -13,12 +13,13 @@ class CreateCountryCallingCodesTable extends Migration
      */
     public function up()
     {
-        Schema::create('country_calling_codes', function(Blueprint $table) {
+        Schema::create('country_calling_codes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('country');
             $table->string('country_calling_code');
             $table->string('idd');
             $table->integer('length');
+            $table->timestamps();
         });
     }
 
@@ -29,6 +30,6 @@ class CreateCountryCallingCodesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('country_calling_codes');
     }
 }

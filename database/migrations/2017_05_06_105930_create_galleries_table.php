@@ -13,7 +13,7 @@ class CreateGalleriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('galleries', function(Blueprint $table) {
+        Schema::create('galleries', function (Blueprint $table) {
             $table->increments('id');
             $table->string('gallery');
             $table->text('description');
@@ -28,6 +28,6 @@ class CreateGalleriesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('galleries');
     }
 }
