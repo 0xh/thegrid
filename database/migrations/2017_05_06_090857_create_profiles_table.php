@@ -27,10 +27,10 @@ class CreateProfilesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('profiles', function ($table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('country_calling_code_id')->references('id')->on('country_calling_codes');
-        });
+        // Schema::table('profiles', function ($table) {
+        //     $table->foreign('user_id')->references('id')->on('users');
+        //     $table->foreign('country_calling_code_id')->references('id')->on('country_calling_codes');
+        // });
     }
 
     /**
