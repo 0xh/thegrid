@@ -1,7 +1,8 @@
 <link rel="import" href="/grid-elements/1.grid-auth">
 <link rel="import" href="/grid-elements/1.grid-profile">
-<link rel="import" href="/grid-elements/1.grid-inbox">
 <link rel="import" href="/grid-elements/1.grid-jobs">
+<link rel="import" href="/grid-elements/1.grid-bids">
+<link rel="import" href="/grid-elements/1.grid-inbox">
 <link rel="import" href="/grid-elements/1.grid-transactions">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
@@ -39,11 +40,14 @@
 				<grid-profile id="profile"></grid-auth>
 			</section>
 			@endif
-			<section data-tab="inbox">
-				<grid-inbox id="inbox"></grid-inbox>
+			<section data-tab="bids">
+				<grid-bids id="bids"></grid-bids>
 			</section>
 			<section data-tab="jobs">
 				<grid-jobs id="jobs"></grid-jobs>
+			</section>
+			<section data-tab="inbox">
+				<grid-inbox id="inbox"></grid-inbox>
 			</section>
 			<section data-tab="transactions">
 				<grid-transactions id="transactions"></grid-transactions>

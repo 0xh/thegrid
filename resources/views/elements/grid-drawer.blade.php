@@ -160,7 +160,16 @@
 					<paper-icon-button icon="work"></paper-icon-button>
 				</div>
 				<div class="menu-item-text">
-					<span>Jobs</span>
+					<span>Posts</span>
+					<paper-ripple></paper-ripple>
+				</div>
+			</div>
+			<div class="menu-item" on-tap="openBids">
+				<div class="menu-item-icon">
+					<paper-icon-button icon="pan-tool"></paper-icon-button>
+				</div>
+				<div class="menu-item-text">
+					<span>Bids</span>
 					<paper-ripple></paper-ripple>
 				</div>
 			</div>
@@ -254,6 +263,7 @@
 			openProfile: function() {
 				this._selectTab('profile');
 			},
+
 			// inbox events
 			openInbox: function() {
 				this._selectTab('inbox');
@@ -262,6 +272,10 @@
 			// jobs events
 			openJobs: function() {
 				this._selectTab('jobs');
+			},
+
+			openBids: function() {
+				this._selectTab('bids');
 			},
 			
 			// transactions events
