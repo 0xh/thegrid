@@ -27,7 +27,7 @@
                 user-select: none;
             }
         </style>
-        <link rel="import" href="/elements/grid-app.html" />
+        <link rel="import" href="/grid-elements/grid-app" />
     </head>
     <body>
         <grid-app id="the-grid"></grid-app>
