@@ -41,15 +41,15 @@
 		<paper-header-panel class="flex">
 		    <paper-toolbar>
 		      <div class="flex">Login/Register</div>
-		      <paper-icon-button icon="chevron-left" onclick="secondFold.close()"></paper-icon-button>
+		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		 </paper-header-panel>
 		 <div class="container">
-		 	<form role="form" method="POST" action="{{ route('login') }}">
+		 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
 		 		{{ csrf_field() }}
-		 		<paper-input label="Email" type="email" value="{{ old('email') }}"></paper-input>
-		 		<paper-input label="Password" type="password"></paper-input>
-		 		<paper-button raised class="sign-in" type="submit" default-submit>Sign In</paper-button>
+		 		<paper-input name="email" label="Email" type="email" value="{{ old('email') }}"></paper-input>
+		 		<paper-input name="password" label="Password" type="password"></paper-input>
+		 		<paper-button raised class="sign-in" type="submit" on-tap="signIn">Sign In</paper-button>
 		 	</form>
 		 	<div class="or">
 		 		<span>OR</span>
@@ -72,6 +72,9 @@
 			behaviors: [GridBehaviors.FoldBehavior],
 			close: function() {
 				this.secondFold.close();
+			},
+			signIn: function() {
+				this.$.form.submit();
 			}
 		});
 	}());

@@ -136,7 +136,11 @@
 			</div>
 			<div class="menu-item account">
 				<div class="profile-image">
+				@if (Auth::guest())
 					<paper-icon-button icon="account-circle" on-tap="openAuth"></paper-icon-button>
+				@else
+					<paper-icon-button icon="account-circle" on-tap="openProfile"></paper-icon-button>
+				@endif
 				</div>
 				<div class="profile">
 					@if (Auth::guest())
@@ -247,6 +251,9 @@
 				this._selectTab('auth');
 			},
 
+			openProfile: function() {
+				this._selectTab('profile');
+			},
 			// inbox events
 			openInbox: function() {
 				this._selectTab('inbox');

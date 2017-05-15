@@ -80,7 +80,11 @@ class RegisterController extends Controller
      */
     public function redirectToProvider($provider)
     {
-        return Socialite::driver($provider)->redirect();
+        try {
+            return Socialite::driver($provider)->redirect();
+        } catch(\Exception $e) {
+            return redirect('/');
+        }
     }
 
     /**
@@ -92,8 +96,7 @@ class RegisterController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
-        }
-        catch(\Exception $e) {
+        } catch(\Exception $e) {
             return redirect('/');
         }
         //check if we have logged provider

@@ -1,3 +1,8 @@
+<link rel="import" href="/grid-elements/1.grid-auth">
+<link rel="import" href="/grid-elements/1.grid-profile">
+<link rel="import" href="/grid-elements/1.grid-inbox">
+<link rel="import" href="/grid-elements/1.grid-jobs">
+<link rel="import" href="/grid-elements/1.grid-transactions">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="/elements/the-grid/grid-behaviors/grid-fold-behavior.html">
@@ -25,9 +30,15 @@
 	</style>
 	<template>
 		<iron-pages id="tabs" selected="@{{selectedTab}}" attr-for-selected="data-tab">
+			@if (Auth::guest())
 			<section data-tab="auth">
 				<grid-auth id="auth"></grid-auth>
 			</section>
+			@else
+			<section data-tab="profile">
+				<grid-profile id="profile"></grid-auth>
+			</section>
+			@endif
 			<section data-tab="inbox">
 				<grid-inbox id="inbox"></grid-inbox>
 			</section>

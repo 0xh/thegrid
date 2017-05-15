@@ -29,10 +29,6 @@
 
 <!-- second fold -->
 <link rel="import" href="/grid-elements/grid-second-fold">
-<link rel="import" href="/grid-elements/1.grid-auth">
-<link rel="import" href="/grid-elements/1.grid-inbox">
-<link rel="import" href="/grid-elements/1.grid-jobs">
-<link rel="import" href="/grid-elements/1.grid-transactions">
 
 <!-- third fold -->
 <link rel="import" href="/grid-elements/grid-third-fold">

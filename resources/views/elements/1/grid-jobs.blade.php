@@ -15,7 +15,7 @@
 		<paper-header-panel class="flex">
 		    <paper-toolbar>
 		      <div class="flex">Jobs</div>
-		      <paper-icon-button icon="chevron-left" onClick="secondFold.close()"></paper-icon-button>
+		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div>
 		    	content

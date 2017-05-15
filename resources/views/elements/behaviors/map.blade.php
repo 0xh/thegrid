@@ -115,7 +115,7 @@
                                 "elementType": "labels.text.fill",
                                 "stylers": [
                                     {
-                                        "color": "#f44336"
+                                        "color": "#ffffff"
                                     }
                                 ]
                             },
@@ -160,7 +160,7 @@
                                 "elementType": "geometry.fill",
                                 "stylers": [
                                     {
-                                        "color": "#f44336"
+                                        "color": "#575757"
                                     },
                                     {
                                         "lightness": "0"
@@ -190,7 +190,7 @@
                                 "elementType": "labels.text.stroke",
                                 "stylers": [
                                     {
-                                        "color": "#f44336"
+                                        "color": "#ffffff"
                                     }
                                 ]
                             },
