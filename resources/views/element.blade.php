@@ -15,7 +15,7 @@
 <!-- <link rel="import" href="/elements/first-element.html" /> -->
 
 <!-- Custom Elements -->
-<link rel="import" href="/elements/the-grid/grid-shared-styles.html">
+<link rel="import" href="/grid-elements/grid-shared-styles">
 <link rel="import" href="/elements/the-grid/grid-drawer.html">
 <link rel="import" href="/elements/the-grid/grid-view.html">
 
@@ -27,3 +27,8 @@
 
 <!-- third fold -->
 <link rel="import" href="/elements/the-grid/grid-third-fold.html">
+@if (Auth::guest())
+                           
+@else
+    {{ Auth::user()->name }}
+@endif

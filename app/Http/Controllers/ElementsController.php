@@ -14,4 +14,11 @@ class ElementsController extends Controller
 		$response->header('Content-Type', 'text/html');
 		return $response;
     }
+
+    public function element($element) {
+    	$contents = View::make('elements.'.$element);
+		$response = Response::make($contents, 200);
+		$response->header('Content-Type', 'text/html');
+		return $response;
+    }
 }

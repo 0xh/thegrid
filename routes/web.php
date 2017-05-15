@@ -43,3 +43,12 @@ Route::get('/items', function() {
 });
 
 Route::get('/grid-elements', 'ElementsController@index');
+Route::get('/grid-elements/{element}', 'ElementsController@element');
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/auth/{provider}', 'Auth\RegisterController@redirectToProvider');
+Route::get('/auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
