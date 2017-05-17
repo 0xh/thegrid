@@ -18,7 +18,6 @@
 			padding: var(--paper-material-padding);
 			height: 100%;
 		}
-
 		paper-material#menu .menu-item {
 			display: block;
 			height: 40px;
@@ -26,7 +25,6 @@
 			position: relative;
 			line-height: 24px;
 		}
-
 		paper-material#menu .menu-item.account {
 			height: 200px;
 		}
@@ -36,13 +34,14 @@
 		paper-material#menu .menu-item.account .profile {
 			padding: 8px;
 			opacity: 0;
+			/*white-space: nowrap;*/
 			transition-property: opacity;
 			transform-style: cubic-bezier(0.4, 0, 0.2, 1);
 			transition-duration: 250ms;
 			/*transition-delay: 0ms;*/
 		}
 		:host[opened] paper-material#menu .menu-item.account .profile {
-			transition-delay: 350ms;
+			transition-delay: 250ms;
 			/*transition-duration: 250ms;*/
 			opacity: 1;
 		}
@@ -55,6 +54,15 @@
 		:host[opened] paper-material#menu .menu-item.account paper-icon-button {
 			height: 75px;
 			width: 75px;
+		}
+		paper-material#menu .menu-item.hidden {
+			visibility: hidden;
+			opacity: 0;
+			transition: visibility 350ms, opacity 350ms cubic-bezier(0.4, 0, 0.2, 1);
+		}
+		:host[opened] paper-material#menu .menu-item.hidden {
+			visibility: visible;
+			opacity: 1;
 		}
 		paper-material#menu .menu-item .menu-item-icon {
 			float: left;
@@ -88,7 +96,7 @@
 			transition-delay: 0ms;
 		}
 		:host[opened] paper-material#menu .menu-item .menu-item-text .icon-badge {
-			transition-duration: 350ms;
+			transition-duration: 250ms;
 			transition-delay: 350ms;
 			opacity: 1;
 		}
@@ -98,15 +106,14 @@
 			width: calc(100% - 40px);
 			padding: 8px;
 			line-height: 24px;
+			white-space: nowrap;
 			opacity: 0;
 		    transition-property: opacity;
 			transform-style: cubic-bezier(0.4, 0, 0.2, 1);
-			transition-duration: 200ms;
-			transition-delay: 200ms;
+			transition-duration: 350ms;
+			/*transition-delay: 200ms;*/
 		}
 		:host[opened] paper-material#menu .menu-item .menu-item-text {
-			transition-duration: 350ms;
-			transition-delay: 350ms;
 			opacity: 1;
 		}
 		paper-material#menu .menu-item .menu-item-text span {
@@ -166,7 +173,7 @@
 			</div>
 			<div class="menu-item" on-tap="openBids">
 				<div class="menu-item-icon">
-					<paper-icon-button icon="pan-tool"></paper-icon-button>
+					<paper-icon-button src="/images/BID.svg"></paper-icon-button>
 				</div>
 				<div class="menu-item-text">
 					<span>Bids</span>
@@ -194,7 +201,7 @@
 				</div>
 			</div>
 			<div class="divider"></div>
-			<div class="menu-item">
+			<div class="menu-item hidden">
 				<div class="menu-item-icon">
 					<paper-icon-button icon="settings"></paper-icon-button>
 				</div>
@@ -203,7 +210,7 @@
 					<paper-ripple></paper-ripple>
 				</div>
 			</div>
-			<div class="menu-item">
+			<div class="menu-item hidden">
 				<div class="menu-item-icon">
 					<paper-icon-button icon="help"></paper-icon-button>
 				</div>
@@ -237,17 +244,19 @@
 			},
 
 			_onOpen: function() {
-				console.log('drawer has been opened');
+				// console.log('drawer has been opened');
 				this._closeOtherFolds();
 			},
 
 			_onClose: function() {
-				console.log('drawer has been closed');
+				// console.log('drawer has been closed');
 			},
 
 			_selectTab: function(tab) {
-				this.close();
-				this.thirdFold.close();
+				if(this.opened)
+					this.close();
+				if(this.thirdFold.opened)
+					this.thirdFold.close();
 				this.secondFold.open();
 				this.secondFold.selectedTab = tab;
 			},

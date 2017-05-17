@@ -3,7 +3,8 @@
 <dom-module id="grid-third-fold">
 	<style is="custom-style">
 		:host {
-			background-color: #FFF;
+			background-color: #FFFFFF;
+			/*min-width: var(--grid-third-fold-min-width);*/
 			width: var(--grid-third-fold-width);
 			position: absolute;
 			left: calc(var(--grid-drawer-collapse-width) - var(--grid-third-fold-width));

@@ -19,7 +19,7 @@
 		<paper-header-panel class="flex">
 		    <paper-toolbar>
 		      <div class="flex">Inbox</div>
-		      <paper-icon-button icon="chevron-left" on-top="close"></paper-icon-button>
+		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		 </paper-header-panel>
 		 <div role="listbox">

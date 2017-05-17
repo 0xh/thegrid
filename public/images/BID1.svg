@@ -1,0 +1,18 @@
+<svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with Method Draw - http://github.com/duopixel/Method-Draw/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="302" width="302" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <text font-weight="bold" stroke="#000" transform="matrix(4.706739634134249,0,0,4.570437234700771,-318.44746187172893,-530.2383669859055) " xml:space="preserve" text-anchor="start" font-family="Helvetica, Arial, sans-serif" font-size="24" id="svg_1" y="156.74228" x="78.442316" stroke-width="0" fill="#000000">BID</text>
+  <line stroke="#000" stroke-width="8" stroke-linecap="null" stroke-linejoin="null" id="svg_6" y2="13.5" x2="286.132283" y1="13.5" x1="11.867706" stroke-opacity="null" fill="none"/>
+  <line stroke="#000" stroke-width="8" stroke-linecap="null" stroke-linejoin="null" id="svg_7" y2="287" x2="290.132303" y1="287.5" x1="11.867706" stroke-opacity="null" fill="none"/>
+  <line stroke="#000" transform="rotate(-90 12.00000000000003,150.99998474121097) " stroke-width="8" stroke-linecap="null" stroke-linejoin="null" id="svg_8" y2="150.999985" x2="152.632268" y1="150.999985" x1="-128.632267" stroke-opacity="null" fill="none"/>
+  <line stroke="#000" transform="rotate(-90 288.97070312500006,150.50000000000003) " stroke-width="8" stroke-linecap="null" stroke-linejoin="null" id="svg_9" y2="150.5" x2="429.102986" y1="150.5" x1="148.838396" stroke-opacity="null" fill="none"/>
+ </g>
+</svg>

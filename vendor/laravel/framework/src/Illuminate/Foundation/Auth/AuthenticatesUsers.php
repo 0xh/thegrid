@@ -131,6 +131,7 @@ trait AuthenticatesUsers
         }
 
         return redirect()->back()
+        // return redirect('/login')
             ->withInput($request->only($this->username(), 'remember'))
             ->withErrors($errors);
     }
