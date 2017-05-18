@@ -57,28 +57,28 @@
 		></iron-ajax>
 		<iron-request id="xhr" ></iron-request>
 		<paper-header-panel class="flex">
-		    <paper-toolbar>
+		    <paper-toolbar slot="header">
 		      <div class="flex">Login/Register {{ old('email') }}</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
+		    <div class="container">
+			 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
+			 		{{ csrf_field() }}
+			 		<paper-input name="email" label="Email" type="email" value="@{{email}}" required autofocus></paper-input>
+			 		<paper-input name="password" label="Password" type="password" value=@{{password}}></paper-input>
+			 		<paper-button raised class="sign-in" type="submit" on-tap="signIn">Sign In</paper-button>
+			 	</form>
+			 	<div class="or">
+			 		<span>OR</span>
+			 	</div>
+			 	<a href="/auth/facebook">
+			 		<paper-button raised class="sign-in facebook">Sign In with Facebook</paper-button>
+			 	</a>
+			 	<a href="/auth/google">
+			 		<paper-button raised class="sign-in google">Sign In with Google</paper-button>
+			 	</a>
+			 </div>
 		 </paper-header-panel>
-		 <div class="container">
-		 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
-		 		{{ csrf_field() }}
-		 		<paper-input name="email" label="Email" type="email" value="@{{email}}" required autofocus></paper-input>
-		 		<paper-input name="password" label="Password" type="password" value=@{{password}}></paper-input>
-		 		<paper-button raised class="sign-in" type="submit" on-tap="signIn">Sign In</paper-button>
-		 	</form>
-		 	<div class="or">
-		 		<span>OR</span>
-		 	</div>
-		 	<a href="/auth/facebook">
-		 		<paper-button raised class="sign-in facebook">Sign In with Facebook</paper-button>
-		 	</a>
-		 	<a href="/auth/google">
-		 		<paper-button raised class="sign-in google">Sign In with Google</paper-button>
-		 	</a>
-		 </div>
 	</template>
 </dom-module>
 <script>

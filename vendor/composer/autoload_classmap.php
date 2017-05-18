@@ -6,6 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Adaojunior\\Passport\\SocialGrant' => $vendorDir . '/adaojunior/passport-social-grant/src/SocialGrant.php',
+    'Adaojunior\\Passport\\SocialGrantException' => $vendorDir . '/adaojunior/passport-social-grant/src/SocialGrantException.php',
+    'Adaojunior\\Passport\\SocialGrantServiceProvider' => $vendorDir . '/adaojunior/passport-social-grant/src/SocialGrantServiceProvider.php',
+    'Adaojunior\\Passport\\SocialUserResolverInterface' => $vendorDir . '/adaojunior/passport-social-grant/src/SocialUserResolverInterface.php',
     'AlterBidsTable' => $baseDir . '/database/migrations/2017_05_10_083936_alter_bids_table.php',
     'AlterConversationsTable' => $baseDir . '/database/migrations/2017_05_10_084144_alter_conversations_table.php',
     'AlterJobsTable' => $baseDir . '/database/migrations/2017_05_10_083830_alter_jobs_table.php',
@@ -29,6 +33,8 @@ return array(
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\ElementsController' => $baseDir . '/app/Http/Controllers/ElementsController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',
+    'App\\Http\\Controllers\\UserController' => $baseDir . '/app/Http/Controllers/UserController.php',
+    'App\\Http\\Controllers\\auth\\SocialUserResolver' => $baseDir . '/app/Http/Controllers/Auth/SocialUserResolver.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
     'App\\Http\\Middleware\\EncryptCookies' => $baseDir . '/app/Http/Middleware/EncryptCookies.php',
     'App\\Http\\Middleware\\RedirectIfAuthenticated' => $baseDir . '/app/Http/Middleware/RedirectIfAuthenticated.php',

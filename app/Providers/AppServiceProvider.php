@@ -25,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+        $this->app->singleton(SocialUserResolverInterface::class, SocialUserResolver::class);
     }
 }

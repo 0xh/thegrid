@@ -15,8 +15,8 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
-        'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
+        'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
     );
@@ -116,6 +116,7 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
         'A' => 
         array (
             'App\\' => 4,
+            'Adaojunior\\Passport\\' => 20,
         ),
     );
 
@@ -310,6 +311,10 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
         array (
             0 => __DIR__ . '/../..' . '/app',
         ),
+        'Adaojunior\\Passport\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/adaojunior/passport-social-grant/src',
+        ),
     );
 
     public static $prefixesPsr0 = array (
@@ -352,6 +357,10 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
     );
 
     public static $classMap = array (
+        'Adaojunior\\Passport\\SocialGrant' => __DIR__ . '/..' . '/adaojunior/passport-social-grant/src/SocialGrant.php',
+        'Adaojunior\\Passport\\SocialGrantException' => __DIR__ . '/..' . '/adaojunior/passport-social-grant/src/SocialGrantException.php',
+        'Adaojunior\\Passport\\SocialGrantServiceProvider' => __DIR__ . '/..' . '/adaojunior/passport-social-grant/src/SocialGrantServiceProvider.php',
+        'Adaojunior\\Passport\\SocialUserResolverInterface' => __DIR__ . '/..' . '/adaojunior/passport-social-grant/src/SocialUserResolverInterface.php',
         'AlterBidsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_083936_alter_bids_table.php',
         'AlterConversationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084144_alter_conversations_table.php',
         'AlterJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_083830_alter_jobs_table.php',
@@ -375,6 +384,8 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Controllers\\ElementsController' => __DIR__ . '/../..' . '/app/Http/Controllers/ElementsController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
+        'App\\Http\\Controllers\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/UserController.php',
+        'App\\Http\\Controllers\\auth\\SocialUserResolver' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/SocialUserResolver.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',

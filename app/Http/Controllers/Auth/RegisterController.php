@@ -116,6 +116,27 @@ class RegisterController extends Controller
         else {
             $user = $socialProvider->user;
         }
+
+        // OAuth Two Providers
+        // $token = $socialUser->token;
+        // $refreshToken = $socialUser->refreshToken; // not always provided
+        // $expiresIn = $socialUser->expiresIn;
+
+        // // OAuth One Providers
+        // $token = $socialUser->token;
+        // // $tokenSecret = $socialUser->tokenSecret;
+        // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
+        // $response = $http->post(env('APP_URL').'/oauth/token', [
+        //     'form_params' => [
+        //         'grant_type' => 'social',
+        //         'client_id' => '2',
+        //         'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
+        //         'network' => 'google', /// or any other network that your server is able to resolve.
+        //         'access_token' => $token,
+        //     ],
+        // ]);
+        // //$response = $http->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
+        // return $response;
         // dd($user);
         auth()->login($user);
         return redirect('/');
