@@ -3,6 +3,7 @@
 <link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
 
 <dom-module id="grid-auth">
 	<style include="iron-flex">
@@ -38,17 +39,34 @@
 		}
 	</style>
 	<template>
+		<iron-ajax 
+			id="ajaxToken" 
+			url="/oauth/token"
+			method="POST"
+			handle-as="json"
+			content-type="application/json"
+			on-response="_getToken"
+		></iron-ajax>
+		<iron-ajax 
+			id="ajaxGetUser" 
+			url="/users"
+			method="GET"
+			handle-as="json"
+			content-type="application/json"
+			on-response="_getUsers"
+		></iron-ajax>
+		<iron-request id="xhr" ></iron-request>
 		<paper-header-panel class="flex">
 		    <paper-toolbar>
-		      <div class="flex">Login/Register</div>
+		      <div class="flex">Login/Register {{ old('email') }}</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		 </paper-header-panel>
 		 <div class="container">
 		 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
 		 		{{ csrf_field() }}
-		 		<paper-input name="email" label="Email" type="email" value="{{ old('email') }}"></paper-input>
-		 		<paper-input name="password" label="Password" type="password"></paper-input>
+		 		<paper-input name="email" label="Email" type="email" value="@{{email}}" required autofocus></paper-input>
+		 		<paper-input name="password" label="Password" type="password" value=@{{password}}></paper-input>
 		 		<paper-button raised class="sign-in" type="submit" on-tap="signIn">Sign In</paper-button>
 		 	</form>
 		 	<div class="or">
@@ -69,12 +87,35 @@
 
 		Polymer({
 			is: 'grid-auth',
+			properties: {
+				email: String,
+				password: String
+			},
 			behaviors: [GridBehaviors.FoldBehavior],
 			close: function() {
 				this.secondFold.close();
 			},
+			_getToken: function(e, request) {
+				console.log(request.response);
+				this.$.ajaxGetUser.headers = {
+					'Accept' : 'application/json',
+					'Authorization' : 'Bearer ' + request.response.access_token
+				};
+				this.$.ajaxGetUser.generateRequest();
+				console.log('get user done');
+			},
+			_getUsers: function(e, request) {
+				console.log(request.response);
+			},
 			signIn: function() {
-				this.$.form.submit();
+				this.$.ajaxToken.body = {
+					username: this.email,
+					password: this.password,
+					client_id: 2,
+					client_secret: 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
+					grant_type: 'password'
+				};
+				this.$.ajaxToken.generateRequest();
 			}
 		});
 	}());

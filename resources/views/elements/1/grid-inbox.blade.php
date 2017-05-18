@@ -17,37 +17,23 @@
 	</style>
 	<template>
 		<paper-header-panel class="flex">
-		    <paper-toolbar>
+		    <paper-toolbar slot="header">
 		      <div class="flex">Inbox</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
+		    <div role="listbox">
+			 	<template is="dom-repeat" items="@{{inbox}}">
+					<paper-icon-item onclick="thirdFold.open()">
+						<iron-icon icon="account-circle" item-icon></iron-icon>
+						<paper-item-body two-line>
+							<div>@{{item.title}}</div>
+							<div secondary>@{{item.text}}</div>
+						</paper-item-body>
+						<paper-ripple></paper-ripple>
+					</paper-icon-item>
+				</template>
+			</div>
 		 </paper-header-panel>
-		 <div role="listbox">
-			<paper-icon-item onclick="thirdFold.open()">
-				<iron-icon icon="account-circle" item-icon></iron-icon>
-				<paper-item-body two-line>
-					<div>(650) 555-1234</div>
-					<div secondary>Mobile</div>
-				</paper-item-body>
-				<paper-ripple></paper-ripple>
-			</paper-icon-item>
-			<paper-icon-item>
-				<iron-icon icon="account-circle" item-icon></iron-icon>
-				<paper-item-body two-line>
-					<div>(650) 555-1234</div>
-					<div secondary>Mobile</div>
-				</paper-item-body>
-				<paper-ripple></paper-ripple>
-			</paper-icon-item>
-			<paper-icon-item>
-				<iron-icon icon="account-circle" item-icon></iron-icon>
-				<paper-item-body two-line>
-					<div>(650) 555-1234</div>
-					<div secondary>Mobile</div>
-				</paper-item-body>
-				<paper-ripple></paper-ripple>
-			</paper-icon-item>
-		</div>
 	</template>
 </dom-module>
 <script>
@@ -59,6 +45,34 @@
 			behaviors: [GridBehaviors.FoldBehavior],
 			close: function() {
 				this.secondFold.close();
+			},
+			ready: function() {
+				this.inbox = [
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Macbook for sale (AED 1000)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Iphone for sale (AED 900)', text: 'Brand new, no dents, 10% complete'},
+					{title: 'Web Developer needed budget (AED 9000)', text: 'Brand new, no dents, 10% complete'},
+				];
 			}
 		});
 	}());

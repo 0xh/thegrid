@@ -1,8 +1,8 @@
 <style is="custom-style">
 :root {
-	--grid-drawer-collapse-width: 56px;
-	--grid-drawer-expanded-width: 250px;
-	--grid-second-fold-width: 400px;
+	--grid-drawer-collapse-width: 56px; /* 72px */
+	--grid-drawer-expanded-width: 250px; /* 333px */
+	--grid-second-fold-width: 400px; /* 519px */
 	--grid-third-fold-width-comp: calc(100% - (var(--grid-drawer-collapse-width) + var(--grid-second-fold-width)));
 	--grid-third-fold-width: calc(100% - 456px); /*var(--grid-third-fold-width-comp);*/
 	--grid-third-fold-min-width: 400px;

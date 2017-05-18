@@ -19,11 +19,11 @@ Route::get('/', function () {
 Route::get('/users', function() {
 	$users = App\User::all();
 
-	foreach ($users as $user) {
-		echo $user->name . ' : ' . $user->items().join(',');
-	}
-	//return $users;
-});
+	// foreach ($users as $user) {
+	// 	echo $user->name . ' : ' . $user->items().join(',');
+	// }
+	return response()->json(request()->user());
+})->middleware('auth:api');
 
 Route::get('/user/{id}', function($id) {
 	$result = Array();

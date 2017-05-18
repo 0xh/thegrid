@@ -28,6 +28,9 @@
 		paper-header-panel {
 			background-color: #fff;
 		}
+		iron-pages, iron-pages section {
+			height: 100%;
+		}
 	</style>
 	<template>
 		<iron-pages id="tabs" selected="@{{selectedTab}}" attr-for-selected="data-tab">

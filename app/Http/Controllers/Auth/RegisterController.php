@@ -96,6 +96,7 @@ class RegisterController extends Controller
     {
         try {
             $socialUser = Socialite::driver($provider)->user();
+            // dd($socialUser);
         } catch(\Exception $e) {
             return redirect('/');
         }
@@ -115,6 +116,7 @@ class RegisterController extends Controller
         else {
             $user = $socialProvider->user;
         }
+        // dd($user);
         auth()->login($user);
         return redirect('/');
     }
