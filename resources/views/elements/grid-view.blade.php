@@ -79,8 +79,8 @@
 			// observers: ['generateLocation(lat, lng)'],
 			behaviors: [GridBehaviors.MapBehavior],
 			generateLocation: function(lat, lng) {
-				for( var i = 0; i <= 9; i++) {
-					var r = 500/111300 // = 500 meters
+				for( var i = 0; i <= 199; i++) {
+					var r = 1000/111300 // = 500 meters
 					  , y0 = lat
 					  , x0 = lng
 					  , u = Math.random()

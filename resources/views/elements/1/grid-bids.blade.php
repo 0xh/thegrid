@@ -13,7 +13,7 @@
 	</style>
 	<template>
 		<paper-header-panel class="flex">
-		    <paper-toolbar>
+		    <paper-toolbar slot="header">
 		      <div class="flex">Bids</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>

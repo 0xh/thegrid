@@ -16,22 +16,22 @@
 	</style>
 	<template>
 		<paper-header-panel class="flex">
-		    <paper-toolbar>
+		    <paper-toolbar slot="header">
 		      <div class="flex">Profile</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
+			    <div role="listbox">
+				<paper-item on-tap="logout">
+					<paper-item-body>
+						<div>Logout</div>
+					</paper-item-body>
+					<paper-ripple></paper-ripple>
+				</paper-item>
+			</div>
+	        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
+	                {{ csrf_field() }}
+	        </form>
 		</paper-header-panel>
-		<div role="listbox">
-			<paper-item on-tap="logout">
-				<paper-item-body>
-					<div>Logout</div>
-				</paper-item-body>
-				<paper-ripple></paper-ripple>
-			</paper-item>
-		</div>
-        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
-                {{ csrf_field() }}
-        </form>
 	</template>
 </dom-module>
 <script>
