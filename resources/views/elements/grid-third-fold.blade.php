@@ -1,4 +1,5 @@
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
+<link rel="import" href="/grid-elements/2.grid-register">
 
 <dom-module id="grid-third-fold">
 	<style is="custom-style">
@@ -14,7 +15,7 @@
 		}
 	</style>
 	<template>
-		<div on-tap="showStyles">Third Fold</div>
+		
 	</template>
 </dom-module>
 <script>
@@ -24,7 +25,21 @@
 
 		Polymer({
 			is: 'grid-third-fold',
-			behaviors: [GridBehaviors.FoldBehavior]
+			properties: {
+				component: {
+					type: String,
+					notify: true,
+				}
+			},
+			observers: ['_insertComponent(component)'],
+			behaviors: [GridBehaviors.FoldBehavior],
+			_insertComponent: function(component) {
+				if(component) {
+					var _component = document.createElement(component);
+					this.innerHTML = '';
+					this.appendChild(_component);
+				}
+			},
 		});
 	}());
 

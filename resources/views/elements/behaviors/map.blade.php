@@ -8,12 +8,13 @@
                 value: function() {
                     return {
                         'dragEvents': true,
+                        'clickEvents': true,
                         'mapTypeControl': false,
                         'streetViewControl': false,
                         'mapTypeId': 'roadmap',
                         'disableDefaultUI': true,
                         'panControl': false,
-                        'zoomControl': false,
+                        'zoomControl': true,
                         'zoom': 16,
                         'styles': 
                         [

@@ -8,6 +8,8 @@ use App\SocialProvider;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
+use Mail;
 
 use Socialite;
 
@@ -43,6 +45,48 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $input = $request->all();
+        $validator = $this->validator($input);
+
+        if($validator->passes()) {
+            $data = $this->create($input)->toArray();
+
+            $data['confirmation_token'] = str_random(40);
+
+            $user = User::find($data['id']);
+            $user->confirmation_token = $data['confirmation_token'];
+            $user->save();
+
+            Mail::send('mails.confirmation', $data, function($message) use($data) {
+                $message->to($data['email']);
+                $message->subject('Registration Confirmation');
+            });
+            
+            return response()->json(['message' => 'Email has been sent for confirmation'], 200);
+        }
+        return response()->json($validator->errors(), 422);
+    }
+
+    public function confirmation($token) {
+        $user = User::where('confirmation_token', $token)->first();
+
+        if(!is_null($user)) {
+            $user->confirmed = 1;
+            $user->confirmation_token = '';
+            $user->save();
+
+            return redirect(route('login'))->with('status', 'Email Activated');
+        }
+        return redirect(route('login'))->with('status', 'Something went wrong');
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -95,7 +139,7 @@ class RegisterController extends Controller
     public function handleProviderCallback($provider)
     {
         try {
-            $socialUser = Socialite::driver($provider)->user();
+            $socialUser = Socialite::driver($provider)->stateless()->user();
             // dd($socialUser);
         } catch(\Exception $e) {
             return redirect('/');
@@ -107,7 +151,8 @@ class RegisterController extends Controller
             //create a new user and provider
             $user = User::firstOrCreate(
                 ['email' => $socialUser->getEmail()],
-                ['name' => $socialUser->getName()]
+                ['name' => $socialUser->getName()],
+                ['confirmed' => 1]
             );
             $user->socialProviders()->create(
                 ['provider_id' => $socialUser->getId(), 'provider' => $provider]
@@ -116,29 +161,34 @@ class RegisterController extends Controller
         else {
             $user = $socialProvider->user;
         }
-
+        // dd($user);
         // OAuth Two Providers
         // $token = $socialUser->token;
         // $refreshToken = $socialUser->refreshToken; // not always provided
         // $expiresIn = $socialUser->expiresIn;
 
-        // // OAuth One Providers
-        // $token = $socialUser->token;
+        // OAuth One Providers
+        $token = $socialUser->token;
         // // $tokenSecret = $socialUser->tokenSecret;
-        // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
-        // $response = $http->post(env('APP_URL').'/oauth/token', [
-        //     'form_params' => [
-        //         'grant_type' => 'social',
-        //         'client_id' => '2',
-        //         'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
-        //         'network' => 'google', /// or any other network that your server is able to resolve.
-        //         'access_token' => $token,
-        //     ],
-        // ]);
+        $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
+        $response = $http->post(env('APP_URL').'/oauth/token', [
+            'form_params' => [
+                'grant_type' => 'social',
+                'client_id' => 2,
+                'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
+                'network' => $provider, /// or any other network that your server is able to resolve.
+                'access_token' => $token,
+            ],
+        ]);
+        $account = Socialite::driver($provider)->userFromToken($token);
+        //dd($account);
         // //$response = $http->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
+        auth()->login($user);
         // return $response;
         // dd($user);
-        auth()->login($user);
+        // if ($request->expectsJson()) {
+        //     return response()->json(['user' => $account, 'token' => $response]);
+        // }
         return redirect('/');
     }
 }

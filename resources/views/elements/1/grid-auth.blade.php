@@ -2,8 +2,11 @@
 <link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-toast/paper-toast.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/grid-elements/axios">
 
 <dom-module id="grid-auth">
 	<style include="iron-flex">
@@ -23,6 +26,7 @@
 		    background-color: #e00008;
 		    color: #FFF;
 		    text-transform: none;
+		    line-height: 28px;
 		}
 		.sign-in.facebook {
 			background-color: #335795;
@@ -37,15 +41,27 @@
 		a {
 			text-decoration: none;
 		}
+		#submit {
+			margin-top: 20px;
+		}
+		#submit span {
+			/*line-height: 28px;*/
+		}
+		#spinner {
+			/*margin-left: -33px;*/
+			/*margin-right: 5px;*/
+		}
 	</style>
 	<template>
-		<iron-ajax 
+		{{-- <iron-ajax 
 			id="ajaxToken" 
 			url="/oauth/token"
 			method="POST"
 			handle-as="json"
 			content-type="application/json"
 			on-response="_getToken"
+			on-error="_getTokenError"
+			last-response="_getTokenError"
 		></iron-ajax>
 		<iron-ajax 
 			id="ajaxGetUser" 
@@ -55,28 +71,39 @@
 			content-type="application/json"
 			on-response="_getUsers"
 		></iron-ajax>
-		<iron-request id="xhr" ></iron-request>
+		<iron-request id="xhr" ></iron-request> --}}
 		<paper-header-panel class="flex">
 		    <paper-toolbar slot="header">
-		      <div class="flex">Login/Register {{ old('email') }}</div>
+		      <div class="flex">Sign In/Sign Up</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
-		    <div class="container">
-			 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
-			 		{{ csrf_field() }}
-			 		<paper-input name="email" label="Email" type="email" value="@{{email}}" required autofocus></paper-input>
-			 		<paper-input name="password" label="Password" type="password" value=@{{password}}></paper-input>
-			 		<paper-button raised class="sign-in" type="submit" on-tap="signIn">Sign In</paper-button>
-			 	</form>
-			 	<div class="or">
-			 		<span>OR</span>
-			 	</div>
-			 	<a href="/auth/facebook">
-			 		<paper-button raised class="sign-in facebook">Sign In with Facebook</paper-button>
-			 	</a>
-			 	<a href="/auth/google">
-			 		<paper-button raised class="sign-in google">Sign In with Google</paper-button>
-			 	</a>
+		    <div>
+			    <div class="container">
+			    	<p hidden="@{{!isMessage}}">@{{message}}</p>
+				 	<form id="form" role="form" method="POST" action="{{ route('login') }}">
+				 		{{ csrf_field() }}
+				 		<paper-input id="email" name="email" label="Email" type="email" value="@{{email}}" required autofocus error-message="@{{errorEmail}}"></paper-input>
+				 		<paper-input id="password" name="password" label="Password" type="password" value="@{{password}}" required error-message="@{{errorPassword}}"></paper-input>
+				 		<paper-button id="submit" raised class="sign-in" type="submit" on-tap="signIn">
+				 			<template is="dom-if" if="[[isLoading]]">
+				 				<paper-spinner id="spinner" active></paper-spinner>
+							</template>
+							<template is="dom-if" if="[[!isLoading]]">
+				 				<span>Sign In/Sign Up</span>
+				 			</template>
+				 		</paper-button>
+				 	</form>
+				 	<div class="or">
+				 		<span>OR</span>
+				 	</div>
+				 	<a href="/auth/facebook">
+				 		<paper-button raised class="sign-in facebook">Sign In with Facebook</paper-button>
+				 	</a>
+				 	<a href="/auth/google">
+				 		<paper-button raised class="sign-in google">Sign In with Google</paper-button>
+				 	</a>
+				 	<paper-toast id="errorToast" class="fit-bottom"></paper-toast>
+				 </div>
 			 </div>
 		 </paper-header-panel>
 	</template>
@@ -89,33 +116,95 @@
 			is: 'grid-auth',
 			properties: {
 				email: String,
-				password: String
+				password: String,
+				errorEmail: String,
+				errorPassword: String,
+				isLoading: {
+					type: Boolean,
+					value: false
+				},
+				isMessage: {
+					type: Boolean,
+					value: false
+				},
+				message: String
 			},
-			behaviors: [GridBehaviors.FoldBehavior],
+			behaviors: [
+				GridBehaviors.FoldBehavior
+			],
 			close: function() {
 				this.secondFold.close();
 			},
+			// _set
 			_getToken: function(e, request) {
-				console.log(request.response);
-				this.$.ajaxGetUser.headers = {
-					'Accept' : 'application/json',
-					'Authorization' : 'Bearer ' + request.response.access_token
-				};
-				this.$.ajaxGetUser.generateRequest();
-				console.log('get user done');
+				console.log(e);
+				// console.log(request.response);
+				// this.$.ajaxGetUser.headers = {
+				// 	'Accept' : 'application/json',
+				// 	'Authorization' : 'Bearer ' + request.response.access_token
+				// };
+				// this.$.ajaxGetUser.generateRequest();
+				// console.log('get user done');
+			},
+			_getTokenError: function(e, request) {
+				console.log(e);
 			},
 			_getUsers: function(e, request) {
 				console.log(request.response);
 			},
 			signIn: function() {
-				this.$.ajaxToken.body = {
-					username: this.email,
-					password: this.password,
-					client_id: 2,
-					client_secret: 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
-					grant_type: 'password'
-				};
-				this.$.ajaxToken.generateRequest();
+				var self = this;
+				// self.$.spinner.active = true;
+				self.isLoading = true;
+				axios.post('/login', {
+					email: this.email,
+					password: this.password
+				})
+				.then(function (response) {
+					console.log(response);
+					var data = response.data;
+					if(data.access_token) {
+						window.location.href = "/";
+					} else if(data.status == 0) {
+						self.thirdFold.component = 'grid-register';
+						self.thirdFold.open();
+						self.isLoading = false;
+					}
+				})
+				.catch(function (error) {
+					if (error.response) {
+						var data = error.response.data;
+				    	// console.log(error.response.data);
+				    	self.errorEmail = data.email;
+				    	self.errorPassword = data.password;
+				    	self.$.email.validate();
+				    	self.$.password.validate();
+
+				    	var err = [];
+				    	for( var key in data) {
+				    		// err += "<br/>" + data[key];
+				    		err.push(data[key]);
+				    	}
+				    	
+				    	// self.error = err.join('<br/>');
+				    	self.$.errorToast.fitInto = self;
+				    	self.$.errorToast.innerHTML = err.join('<br/>');
+				    	self.$.errorToast.open();
+				    } else {
+				      // Something happened in setting up the request that triggered an Error
+				      console.log('Error', error.message);
+				    }
+				    // self.$.spinner.active = false;
+				    self.isLoading = false;
+				});
+				// this.$.ajaxToken.body = {
+				// 	username: this.email,
+				// 	password: this.password,
+				// 	client_id: {{env('CLIENT_ID')}},
+				// 	client_secret: '{{env('CLIENT_SECRET')}}',
+				// 	grant_type: 'password'
+				// };
+				// this.$.ajaxToken.generateRequest();
 			}
 		});
 	}());

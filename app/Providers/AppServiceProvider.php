@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\auth\SocialUserResolver;
+// use Adaojunior\Passport\SocialUserResolverInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+        //
     }
 
     /**
@@ -24,7 +27,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        //dd(SocialUserResolverInterface::class);
         //
-        $this->app->singleton(SocialUserResolverInterface::class, SocialUserResolver::class);
+        // $this->app->singleton(SocialUserResolverInterface::class, SocialUserResolver::class);
+        $this->app->bind('Adaojunior\Passport\SocialUserResolverInterface', SocialUserResolver::class);
+
     }
 }
