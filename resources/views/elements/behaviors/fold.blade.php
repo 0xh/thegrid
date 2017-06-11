@@ -30,6 +30,12 @@
 		get drawer() {
 			return this.parent.$.drawer;
 		},
+		get view() {
+			return this.parent.$.view;
+		},
+		get map() {
+			return this.view.$.map;
+		},
 		open: function() {
 			this.opened = true;
 			this._onOpen();
@@ -57,6 +63,6 @@
 			} else {
 				this._onClose();
 			}
-		}
+		},
 	}
 </script>

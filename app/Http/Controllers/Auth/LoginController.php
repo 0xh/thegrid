@@ -22,6 +22,11 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+     public function showLoginForm() {
+        return view('polymer');
+    }
+
+
     public function login(Request $request) {
 
         $this->validateLogin($request);
@@ -55,19 +60,22 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        //$request->session()->regenerate();
+        $request->session()->regenerate();
 
-        //$this->clearLoginAttempts($request);
-        $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
-        $response = $http->post(env('APP_URL').'/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'password',
-                'client_id' => 2,
-                'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
-                'username' => $request->email, /// or any other network that your server is able to resolve.
-                'password' => $request->password
-            ],
-        ]);
+        $this->clearLoginAttempts($request);
+        // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
+        // $response = $http->post(env('APP_URL').'/oauth/token', [
+        //     'form_params' => [
+        //         'grant_type' => 'password',
+        //         'client_id' => 2,
+        //         'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
+        //         'username' => $request->email, /// or any other network that your server is able to resolve.
+        //         'password' => $request->password
+        //     ],
+        // ]);
+
+
+        $response = ['status' => 1];
 
         return $response;
 
@@ -99,12 +107,12 @@ class LoginController extends Controller
 
         if ($request->expectsJson()) {
             //return response()->json($errors, 422);
-            $user = User::where($this->username(), $request->{$this->username()})->first();
-            if( !is_null($user) ) {
+           // $user = User::where($this->username(), $request->{$this->username()})->first();
+            //if( !is_null($user) ) {
                 //return response()->json(['errors' => $errors, 'message' => 'Please verify your email first.'], 422);
                 return response()->json($errors, 422);
-            }
-            return response()->json(['status' => '0'], 200);
+            //}
+            //return response()->json(['status' => '0'], 200);
         }
 
         return redirect()->back()

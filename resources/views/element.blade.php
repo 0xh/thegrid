@@ -20,6 +20,7 @@
 <link rel="import" href="/grid-elements/behaviors.fold">
 <link rel="import" href="/grid-elements/behaviors.tabs">
 <link rel="import" href="/grid-elements/behaviors.map">
+<link rel="import" href="/grid-elements/behaviors.page">
 
 
 <!-- Custom Elements -->
@@ -32,6 +33,8 @@
 
 <!-- third fold -->
 <link rel="import" href="/grid-elements/grid-third-fold">
+
+<link rel="import" href="/grid-elements/scripts.socket-io">
 @if (Auth::guest())
                            
 @else

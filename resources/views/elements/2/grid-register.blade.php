@@ -31,7 +31,9 @@
 			    <div class="container">
 				 	<form id="form" role="form" method="POST" action="{{ route('register') }}">
 				 		{{ csrf_field() }}
+				 		<paper-input id="email" name="email" label="Email" type="email" value="@{{email}}" required autofocus error-message="@{{errorEmail}}"></paper-input>
 				 		<paper-input id="name" name="name" label="Name" type="text" value="@{{name}}" required autofocus error-message="@{{errorName}}"></paper-input>
+				 		<paper-input id="password" name="password" label="Password" type="password" value="@{{password}}" required error-message="@{{errorPassword}}"></paper-input>
 				 		<paper-input id="password_confirmation" name="password_confirmation" type="password" label="Password Confirmation" type="text" value="@{{password_confirmation}}" required error-message="@{{errorPasswordConfirmation}}"></paper-input>
 				 		<paper-button id="submit" raised class="sign-up" type="submit" on-tap="register">
 				 			<template is="dom-if" if="[[isLoading]]">
@@ -67,6 +69,9 @@
 			behaviors: [
 				GridBehaviors.FoldBehavior
 			],
+			attached: function() {
+				this.$.email.focus();
+			},
 			_updateCredentials: function() {
 				this.email = this.secondFold.$.auth.email;
 				this.password = this.secondFold.$.auth.password;

@@ -1,6 +1,5 @@
 <link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
 <link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="/elements/the-grid/grid-behaviors/grid-fold-behavior.html">
 
 <dom-module id="grid-transactions">
 	<style include="iron-flex">

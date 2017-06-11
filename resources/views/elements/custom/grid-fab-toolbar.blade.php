@@ -18,26 +18,26 @@
 		.grid-fab-toolbar-wrapper {
 			overflow: hidden;
 			height: 64px;
-			position: relative;
+			/*position: relative;*/
 			transition-property: all;
 			transform-style: cubic-bezier(0.4, 0, 0.2, 1);
 		}
 		.grid-fab-toolbar-wrapper ::slotted(paper-fab) {
-			position: absolute;
-			right: 0;
-			bottom: 0;
+			/*position: absolute;*/
+			/*right: 0;*/
+			/*bottom: 0;*/
 		}
 		.grid-fab-toolbar ::slotted(paper-toolbar) {
 			/*position: absolute;*/
 			background-color: transparent;
 		}
 		.grid-fab-toolbar-triger {
-			width: 56px;
-			height: 56px;
-			position: absolute;
-			right: 10px;
-			top: 0px;
-			z-index: 20;
+			/*width: 56px;*/
+			/*height: 56px;*/
+			/*position: absolute;*/
+			/*right: 10px;*/
+			/*top: 0px;*/
+			/*z-index: 20;*/
 			/*transform: translate(0px, 15px);*/
 			transition-property: all;
 			transform-style: cubic-bezier(0.4, 0, 0.2, 1);
@@ -70,6 +70,9 @@
 			position: relative;
 			z-index: 23;
 		}
+		#trigger {
+			float: right;
+		}
 	</style>
 	<template>
 		<div id="wrapper" class="grid-fab-toolbar-wrapper" on-blur="original">
@@ -89,12 +92,13 @@
 		Polymer({
 			is: 'grid-fab-toolbar',
 			properties : {
-				// transformed: {
-				// 	type: Boolean,
-				// 	value: false,
-				// 	notify: true,
-				// 	reflectToAttribute: true,
-				// },
+				opened: {
+					type: Boolean,
+					value: false,
+					notify: true,
+					reflectToAttribute: true,
+					observer: '_gridFabToolbarStatus'
+				},
 				fabPosition : {
 					type: String,
 					value: 'top'
@@ -114,23 +118,27 @@
 				this.$.trigger.style.width = fabStyles.width;
 				this.$.trigger.style.height = fabStyles.height;
 				if(this.fabPosition == 'top') {
-					this.$.trigger.style.top = '0';
-					this.$.trigger.style.bottom = 'auto';
+					this.$.trigger.style.marginTop = '0';
+					this.$.trigger.style.marginBottom = 'auto';
 				} else {
-					this.$.trigger.style.top = 'auto';
-					this.$.trigger.style.bottom = '0';
+					this.$.trigger.style.marginTop = 'auto';
+					this.$.trigger.style.marginBottom = '0';
 				}
 
 				if(this.direction == 'left') {
-					this.$.trigger.style.right = '10px';
-					this.$.trigger.style.left = 'auto';
+					this.$.trigger.style.marginRight = '10px';
+					this.$.trigger.style.float = 'right';
 				} else if(this.direction == 'right') {
-					this.$.trigger.style.right = 'auto';
-					this.$.trigger.style.left = '10px';
+					this.$.trigger.style.float = 'lefy';
+					this.$.trigger.style.marginLeft = '10px';
 				}
 			},
-			specialTap: function(e) {
-				// console.log(e);
+			_gridFabToolbarStatus: function() {
+				if(this.opened) {
+					this.fire('grid-fab-toolbar-opened');
+				} else {
+					this.fire('grid-fab-toolbar-closed');
+				}
 			},
 			get fab() {
 				return Polymer.dom(this.$.fabContent).getDistributedNodes()[0];
@@ -140,6 +148,7 @@
 			},
 			transform: function(e) {
 				e.stopPropagation();
+
 				var scale = 2 * (this.$.wrapper.offsetWidth / this.fab.offsetWidth);
 				this.$.bg.style.transitionDelay = '50ms';
 				this.$.bg.style.transform = 'scale('+scale+')';
@@ -171,8 +180,10 @@
 
 				this.$.wrapper.style.transitionDelay = '350ms';
 				this.$.wrapper.style.backgroundColor = window.getComputedStyle(this.fab).backgroundColor;
+
+				this.opened = true;
 			},
-			original: function() {
+			close: function() {
 				//this.transformed = false;
 				this.$.bg.style.transitionDelay = '0ms';
 				this.$.bg.style.transform = 'scale(0)';
@@ -196,9 +207,11 @@
 				});
 				this.$.wrapper.style.transitionDelay = '0ms';
 				this.$.wrapper.style.backgroundColor = 'transparent';
+
+				this.opened = false;
 			},
 			ready: function() {
-				console.log(this.fab, this.toolbar);
+				// console.log(this.fab, this.toolbar);
 				var self = this;
 				var items = this.toolbar.querySelectorAll('.item');
 				items.forEach(function(item, index) {
@@ -212,12 +225,12 @@
 				});
 				this.$.wrapper.addEventListener('click', function(e) {
 					//this.fab.style.transform = 'scale(20)';
-					e.stopPropagation();
+					// e.stopPropagation();
 				});
 				document.body.addEventListener('click', function(e) {
 					// alert('body was clicked');
 					// console.log(e);
-					self.original();
+					// self.close();
 				});
 			}
 		});

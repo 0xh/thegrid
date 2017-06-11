@@ -43,7 +43,7 @@
 			<grid-drawer id="drawer"></grid-drawer>
 			<grid-second-fold id="secondFold"></grid-second-fold>
 			<grid-third-fold id="thirdFold" component=""></grid-third-fold>
-			<grid-view class="flex"></grid-view>
+			<grid-view id="view" class="flex"></grid-view>
 		</div>
 	</template>
 </dom-module>

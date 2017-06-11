@@ -1,19 +1,23 @@
 <link rel="import" href="/bower_components/google-map/google-map.html">
-<link rel="import" href="/bower_components/google-map/google-map-marker.html">
-<link rel="import" href="/bower_components/google-map/google-map-directions.html">
-<link rel="import" href="/bower_components/google-map-markerclusterer/google-map-markerclusterer.html">
 <link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
 <link rel="import" href="/bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker-light.html">
 <link rel="import" href="/grid-elements/custom.grid-fab-toolbar">
+<link rel="import" href="/grid-elements/custom.grid-info-window">
+<link rel="import" href="/grid-elements/scripts.axios">
+{{-- <link rel="import" href="/grid-elements/custom.grid-mapster"> --}}
 
 <dom-module id="grid-view">
 	<style include="iron-flex">
 		:host {
 			background-color: #fffff2;
 			/*display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; position: absolute; top: 0; left: 0;*/
-			--paper-input-container-input-color: #FFF;
-			--paper-input-container-color: #FFF;
-			--paper-input-container-underline: #FFF;
+			/*--paper-input-container-input-color: #FFF;*/
+			/*--paper-input-container-color: #FFF;*/
+			/*--paper-input-container-underline: #FFF;*/
 		}
 		.view-controls {
 			/*position: fixed;
@@ -34,10 +38,10 @@
 		}
 		google-map {
 			position: absolute;
-		    top: 0;
-		    left: 0;
-		    height: 100%;
-		    width: 100%;
+			top: 0;
+			left: 0;
+			height: 100%;
+			width: 100%;
 		}
 		/*#toolbar {
 			position: fixed;
@@ -63,11 +67,11 @@
 		}*/
 		.tt {
 			background-color: transparent;
-		    border: 1px solid #f35c62;
-		    line-height: 24px;
-		    color: #FFFFFF;
-		    padding: 2px 10px;
-		    width: 100%;
+			border: 1px solid #f35c62;
+			line-height: 24px;
+			color: #FFFFFF;
+			padding: 2px 10px;
+			width: 100%;
 		}
 		grid-fab-toolbar {
 			/*position: fixed;
@@ -80,51 +84,114 @@
 			--paper-fab-background: #FAFAFA;
 			color: #737373;
 		}
+		.item {
+			padding: 2px 5px;
+		}
+		.done {
+			background-color: #FFFFFF;
+			width: 100%;
+			color: #737373;
+		}
+		.center-container {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			display: flex; 
+			width: 100%; 
+			height: 100%;
+			align-items: center; 
+			justify-content: center;
+		}
+		#centerMarker {
+			width: 40px; 
+			height: 40px; 
+			background-color: transparent; 
+			z-index: 5;
+			/*display: none;*/
+			transform: scale(0);
+			overflow: visible;
+
+		}
+		#centerMarker img {
+			width: 100%;
+			height: 100%;
+			margin-top: -20px;
+		}
+		#centerMarker.bounce {
+			animation: bounce 1s 0s;
+			transform: scale(1);
+		}
+		#centerMarker.debounce {
+			animation: debounce 1s 0s;
+			transform: scale(0);
+		}
+		@keyframes bounce {
+			0% { transform: scale(0); }
+			10% { transform: scale(1.1); }
+			50% { transform: scale(1.6); }
+			60% { transform: scale(0.6); }
+			80% { transform: scale(0.95); }
+			90% { transform: scale(0.85); }
+			100% { transform: scale(1); }
+		}
+		@keyframes debounce {
+			0% { transform: scale(1); }
+			10% { transform: scale(0.85); }
+			50% { transform: scale(0.95); }
+			60% { transform: scale(0.6); }
+			80% { transform: scale(1.6); }
+			90% { transform: scale(1.1); }
+			100% { transform: scale(0); }			
+		}
 	</style>
-	<template>
-		<google-map-markerclusterer id="markerCluster"></google-map-markerclusterer>
-		<google-map id="map" api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" clientID="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" latitude="25.276987" longitude="55.296249" additional-map-options='@{{mapOptions}}' draggable="true" drag-events="true" single-info-window>
-		</google-map>
-		<!-- <google-map latitude="37.779" longitude="-122.3892" api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc" zoom="13" disable-default-ui>
-  		</google-map>
-		<google-map-directions
-		  start-address="San Francisco"
-		  end-address="Mountain View"
-		  api-key="AIzaSyAJyuWvZ03O18yHTvC1t3Mlj22VY73hJWc"></google-map-directions> -->
-		<div class="view-controls layout vertical">
-			<grid-fab-toolbar fab-position="bottom" direction="left">
-				<paper-fab icon="search" id="add2" on-tap="searchOpen" mini></paper-fab>
-				<paper-toolbar id="toolbar2">
-					<div class="item flex">
-						{{-- <paper-input label="What" slot="top" class="flex"></paper-input> --}}
-						<input type="text" name="" class="tt" placeholder="Search...">
-					</div>
-				</paper-toolbar>
-			</grid-fab-toolbar>
-
-			<div class="flex"></div>
-			<paper-fab icon="sort" mini id="sort"></paper-fab>
-			<grid-fab-toolbar fab-position="top" direction="left">
-				<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
-				<paper-toolbar id="toolbar">
-					<div class="item flex">
-						{{-- <paper-input label="What" slot="top" class="flex"></paper-input> --}}
-						<input type="text" name="" class="tt">
-					</div>
-					<div class="item flex">
-						{{-- <paper-input label="When" slot="top" class="flex"></paper-input> --}}
-						<input type="text" name="" class="tt">
-					</div>
-					<div class="item flex">
-						{{-- <paper-input label="Where" slot="top" class="flex"></paper-input> --}}
-						<input type="text" name="" class="tt">
-					</div>
-				</paper-toolbar>
-			</grid-fab-toolbar>
-
-		</div>
-		{{-- <div style="width: 2px; height: 2px; background-color: #FFFFFF; z-index: 5;"></div> --}}
-	</template>
+	<dom-bind>
+		<template>
+			<google-map id="map" class="center-container" api-key="[[apiKey]]" clientID="[[apiKey]]" latitude="25.276987" longitude="55.296249" additional-map-options='@{{mapOptions}}' draggable="true" drag-events="true" single-info-window map="@{{map}}" fit-to-markers>
+				<div id="centerMarker">
+					<img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/map-marker-icon.png" alt="icon" />
+				</div>
+			</google-map>
+			<div class="view-controls layout vertical">
+				<grid-fab-toolbar fab-position="bottom" direction="left">
+					<paper-fab icon="search" id="add2" on-tap="searchOpen" mini></paper-fab>
+					<paper-toolbar id="toolbar2">
+						<div class="item flex">
+							<input id="" type="text" name="" class="tt" placeholder="Search...">
+						</div>
+					</paper-toolbar>
+				</grid-fab-toolbar>
+				<div class="flex"></div>
+				<paper-fab icon="sort" mini id="sort"></paper-fab>
+				@if (Auth::check())
+				<grid-fab-toolbar id="addFabToolbar" fab-position="top" direction="left">
+					<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
+					<paper-toolbar id="toolbar">
+						<div class="item flex">
+							<label>What</label>
+							<input type="text" name="" class="tt" value="@{{what::input}}">
+						</div>
+						<div class="item flex">
+							<label>When</label>
+							<input is="iron-input" type="date" name="" class="tt" value="@{{when::input}}">
+						</div>
+						<div class="item flex">
+							<label>Where</label>
+							<input id="gftwhere" type="text" name="" class="tt" value="@{{where::input}}">
+						</div>
+						<div class="item">
+							<paper-icon-button icon="maps:my-location" on-tap="setCurrentLocation"></paper-icon-button>
+						</div>
+						<div class="item">
+							<paper-icon-button icon="chevron-right" on-tap="showAddJobPane"></paper-icon-button>
+						</div>
+					</paper-toolbar>
+				</grid-fab-toolbar>
+				@endif
+			</div>
+		</template>
+	</dom-bind>
 </dom-module>
 <script>
 	(function(){
@@ -134,72 +201,67 @@
 			is: 'grid-view',
 			properties: {
 				lat: {
-					type: Number,
+					type: String,
 					value: ''
 				},
 				lng: {
-					type: Number,
+					type: String,
 					value: ''
 				},
 				open: {
 					type: Boolean,
 					value: true,
 					reflectToAttribute: true,
-				}
+				},
+				query: {
+					type: String,
+					notify: true
+				},
+				what: {
+					type: String,
+					notify: true
+				},
+				when: {
+					type: String,
+					notify: true
+				},
+				where: {
+					type: String,
+					value: '',
+					notify: true
+				},
+				isAddingJob: {
+					type: Boolean,
+					value: false,
+					notify: true
+				},
 			},
-			// observers: ['generateLocation(lat, lng)'],
-			behaviors: [
-				GridBehaviors.MapBehavior,
-				GridBehaviors.FoldBehavior
+			observers: [
+			'updateAddJobPane(what, when, where, lat, lng)'
+			],
+			behaviors: [	
+			GridBehaviors.FoldBehavior,
+			GridBehaviors.TabsBehavior,
+			GridBehaviors.MapBehavior
 			],
 			searchOpen: function() {
 
 			},
-			getMarkers: function(lat, lng)  {
-		       var markers = [];
-		   
-		       for (var i = 0; i < 1000; ++i) {
-		       	var r = 1000/111300 // = 500 meters
-					  , y0 = lat
-					  , x0 = lng
-					  , u = Math.random()
-					  , v = Math.random()
-					  , w = r * Math.sqrt(u)
-					  , t = 2 * Math.PI * v
-					  , x = w * Math.cos(t)
-					  , y1 = w * Math.sin(t)
-					  , x1 = x / Math.cos(y0);
-
-						var newY = y0 + y1,
-							newX = x0 + x1;
-
-		         var latLng = new google.maps.LatLng(newY,
-		             newX)
-		         var marker = new google.maps.Marker({
-		          position: latLng,
-//		          icon: markerImage
-		         });
-		         markers.push(marker);
-		       }
-
-		       return markers;
-		    },
-
-			generateLocation: function(lat, lng) {
-				for( var i = 0; i <= 50; i++) {
+		   	generateLocation: function(lat, lng) {
+		   		for( var i = 0; i <= 50; i++) {
 					var r = 1000/111300 // = 500 meters
-					  , y0 = lat
-					  , x0 = lng
-					  , u = Math.random()
-					  , v = Math.random()
-					  , w = r * Math.sqrt(u)
-					  , t = 2 * Math.PI * v
-					  , x = w * Math.cos(t)
-					  , y1 = w * Math.sin(t)
-					  , x1 = x / Math.cos(y0);
+					, y0 = lat
+					, x0 = lng
+					, u = Math.random()
+					, v = Math.random()
+					, w = r * Math.sqrt(u)
+					, t = 2 * Math.PI * v
+					, x = w * Math.cos(t)
+					, y1 = w * Math.sin(t)
+					, x1 = x / Math.cos(y0);
 
-						var newY = y0 + y1,
-							newX = x0 + x1;
+					var newY = y0 + y1,
+					newX = x0 + x1;
 					// console.log('aaa', newY, newX);
 
 					var marker = document.createElement('google-map-marker');
@@ -210,69 +272,225 @@
 					Polymer.dom(this.$.map).appendChild(marker);
 					console.log('adad');
 				}
+			},
+			updateAddJobPane: function(what, when, where, lat, lng) {
+				var addJobPane = this.secondFold.$.addJob;
+				addJobPane.what = what;
+				addJobPane.when = when;
+				addJobPane.where = where;
+				addJobPane.lat = lat;
+				addJobPane.lng = lng;
+			},
+			showAddJobPane: function() {
+				this.updateAddJobPane(this.what, this.when, this.where, this.lat, this.lng);
+				this.secondFold.selectedTab = 'add-job';
+				this.secondFold.open();
+				this.$.addFabToolbar.close();
+			},
+			geocodeLatLng: function() {
+				var self = this;
+				var latlng = {
+					lat: parseFloat(this.lat),
+					lng: parseFloat(this.lng)
+				};
+				var geocoder = new google.maps.Geocoder;
+				return new Promise(function(resolve,reject) {
+					geocoder.geocode({'location': latlng}, function(results, status) {
+						if (status === 'OK') {
+							if (results[1]) {
+								resolve(results);
+							} else {
+								reject(status);
+							}
+						} else {
+							reject(status);
+						}
+					});
+				});
+			},
+			setCurrentLocation: function() {
 				var gMap = this.$.map;
-				var gMapCluster = this.$.markerCluster;
-				 console.log(gMap.markers);// = gMap.markers;
-						  console.log(gMapCluster.markers);// = gMap.markers;
-				gMapCluster.map = gMap.map;
-						  gMapCluster.markers = gMap.markers;
+				var self = this;
+				this.getCurrentPosition(function(location) {
+					gMap.latitude = location.coords.latitude;
+					gMap.longitude = location.coords.longitude;
+					self.lat = gMap.latitude;
+					self.lng = gMap.longitude;
+					self.geocodeLatLng()
+					.then(function(results) {
+						self.where = results[0].formatted_address;
+					})
+					.catch(function(status) {
+						console.log(status);
+					});
+				});
+			},
+
+			_newMarker: function(data) {
+				var customPin = {
+					// path: 'M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z',
+					path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
+					fillColor: data.fillColor,
+					fillOpacity: 1,
+					scale: 1,
+					strokeColor: data.fillColor,
+					strokeWeight: 0.5
+				};
+				var d = JSON.stringify(data),
+					content = document.createElement('grid-info-window');
+				content.data = d;
+				content.isMyPost = data.isMyPost;
+				content.isBidded = data.isBidded;
+
+				this.addMarker({
+					lat: parseFloat(data.lat),
+					lng: parseFloat(data.lng),
+					icon: customPin,
+					content: content,
+					label: {
+						text: "AED " + data.price,
+						color: '#FFF',
+						fontSize: '10px',
+						fontWeight: 'normal',
+						textAlign: 'center',
+						width: '100px'
+					}
+				});
+			},
+
+			generateMarkers: function() {
+				console.log('generating markers');
+				var markers = this.markers;
+				var self = this;
+				axios.get('/job/all')
+				.then(function (response) {
+					var data = response.data;
+					if (markers) {
+						markers.forEach(function(marker) {
+							marker.setMap(null);
+						});
+					}
+					
+					for(var i = 0; i < data.length; i++) {
+							data[i].fillColor = '#FFF';
+							data[i].isMyPost = false;
+							data[i].isBidded = false;
+						var bids = data[i].bids;
+						if(Grid.user_id) {
+							if(Grid.user_id == data[i].user_id) {
+								data[i].fillColor = '#00872d';
+								data[i].isMyPost = true;
+							}
+							for(var j = 0; j < bids.length; j++) {
+								// Check if user is already bidded
+								if(Grid.user_id == bids[j].user_id) {
+									data[i].fillColor = '#f1f422';
+									data[i].isBidded = true;
+								}
+							}
+						}
+						
+						self._newMarker(data[i]);
+					}
+				});
 			},
 			ready: function() {
 				var self = this;
 				var gMap = this.$.map;
-				var gMapCluster = this.$.markerCluster;
-				//document.querySelector('google-map');
-				// gMap.additionalMapOptions = {
-				// 	'mapTypeId': 'sattelite',
-				// 	'ControlPosition': 'TOP_RIGHT'
-				// }
-								// console.log(gMap);
-				// gMap.dragEvents = true;
+				
 				gMap.addEventListener('google-map-ready', function(e) {
-					// alert('Map loaded!');
-					// console.log(this.map);
-					// console.log(gMap.markers);
-					// gMapCluster.map = gMap.map;
-					if(navigator) {
-						navigator.geolocation.getCurrentPosition(function(location) {
-						  console.log(location.coords.latitude);
-						  console.log(location.coords.longitude);
-						  console.log(location.coords.accuracy);
-						  gMap.latitude = location.coords.latitude;
-						  gMap.longitude = location.coords.longitude;
-						  self.generateLocation(gMap.latitude, gMap.longitude);
-						  // self.lat = gMap.latitude;
-						  // self.lng = gMap.longitude;
-						  
-						 
-						  // console.log(this.getMarkers(lat, lng));
-							// this.$.map.appendChild(marker);
-							//gMapCluster.markers = self.getMarkers(gMap.latitude, gMap.longitude);
+					self.google = google;
+					self.gMap = this.map;
+					socket.on('set-map', function(data) {
+						console.log(data);
+						self.lat = data.lat;
+						self.lng = data.lng;
+						self.gMap.setCenter(new google.maps.LatLng(self.lat, self.lng));
+					});
+
+					socket.on('add-marker', function(data) {
+						data.fillColor = '#FFF';
+						data.isMyPost = false;
+						data.isBidded = false;
+						self._newMarker(data);
+					});
+					
+					self.markerClusterer = new MarkerClusterer(this.map, [], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+					this.map.setOptions({ zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER } });
+					self.getCurrentPosition(function(location) {
+						gMap.latitude = location.coords.latitude;
+						gMap.longitude = location.coords.longitude;
+						self.generateMarkers();
+					});
+
+					var markers = [];
+					var input = document.getElementById('gftwhere');
+
+					if(input) {
+						var searchBox = new google.maps.places.SearchBox(input);
+
+						google.maps.event.addListener(searchBox, 'places_changed', function() {
+							self.where = input.value;
+							var places = searchBox.getPlaces();
+							if (places.length == 0) {
+								return;
+							}
+							var bounds = new google.maps.LatLngBounds();
+							for (var i = 0, place; place = places[i]; i++) {
+								bounds.extend(place.geometry.location);
+							}
+							self.gMap.fitBounds(bounds);
+						});
+
+						google.maps.event.addListener(self.gMap, 'bounds_changed', function() {
+							var bounds = self.gMap.getBounds();
+							searchBox.setBounds(bounds);
 						});
 					}
 
-					// console.log(gMapCluster.map);
-					// console.log(document.querySelector('google-map-markerclusterer'));
 				});
 				gMap.addEventListener('google-map-dragend', function(e) {
-					// alert('map dragened');
 					var center = this.map.getCenter();
-					console.log(center.lat(), center.lng());//.getCenter());
+					self.lat = center.lat();
+					self.lng = center.lng();
+					
+					if(self.isAddingJob) {
+						var geocoder = new google.maps.Geocoder;
+						self.geocodeLatLng(geocoder, this.map)
+						.then(function(results) {
+							self.where = results[0].formatted_address;
+						})
+						.catch(function(status) {
+						});
+						document.getElementById('gftwhere').value = self.where;
+					}
+
+					socket.emit('google-map-dragend', {
+						lat: self.lat,
+						lng: self.lng
+					});
 				});
 				gMap.clickEvents = true;
+
 				gMap.addEventListener('google-map-click', function(e) {
-					// alert('map was clicked');
 					self.secondFold.close();
 					self.drawer.close();
 				});
-				// var gmap = document.querySelector('google-map');
-				// gmap.addEventListener('google-map-ready', function(e) {
-				//   document.querySelector('google-map-markerclusterer').map = this.map;
-				// });
+
+				if(Grid.authenticated) {
+					this.$.addFabToolbar.addEventListener('grid-fab-toolbar-opened', function(e) {
+						self.$.centerMarker.classList.add("bounce");
+						self.$.centerMarker.classList.remove("debounce");
+						self.isAddingJob = true;
+					});
+
+					this.$.addFabToolbar.addEventListener('grid-fab-toolbar-closed', function(e) {
+						self.$.centerMarker.classList.add("debounce");
+						self.$.centerMarker.classList.remove("bounce");
+						self.isAddingJob = false;
+					});
+				}
 			}
 		});
-
-
-
 	}());
 </script>

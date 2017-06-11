@@ -1,13 +1,14 @@
 <link rel="import" href="/grid-elements/1.grid-auth">
+<link rel="import" href="/grid-elements/1.grid-register">
+<link rel="import" href="/grid-elements/1.grid-forgot-password">
 <link rel="import" href="/grid-elements/1.grid-profile">
 <link rel="import" href="/grid-elements/1.grid-jobs">
 <link rel="import" href="/grid-elements/1.grid-bids">
 <link rel="import" href="/grid-elements/1.grid-inbox">
 <link rel="import" href="/grid-elements/1.grid-transactions">
+<link rel="import" href="/grid-elements/1.grid-add-job">
 <link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
-<link rel="import" href="/elements/the-grid/grid-behaviors/grid-fold-behavior.html">
-<link rel="import" href="/elements/the-grid/grid-behaviors/grid-tabs-behavior.html">
 
 <dom-module id="grid-second-fold">
 	<style include="iron-flex">
@@ -34,10 +35,19 @@
 		}
 	</style>
 	<template>
+		@if(Auth::check()) 
+			{{-- <strong>{{Auth::user()->id}}, </strong> --}}
+		@endif
 		<iron-pages id="tabs" selected="@{{selectedTab}}" attr-for-selected="data-tab">
 			@if (Auth::guest())
 			<section data-tab="auth">
 				<grid-auth id="auth"></grid-auth>
+			</section>
+			<section data-tab="register">
+				<grid-register id="register"></grid-register>
+			</section>
+			<section data-tab="forgot-password">
+				<grid-forgot-password id="forgotPassword"></grid-forgot-password>
 			</section>
 			@else
 			<section data-tab="profile">
@@ -56,6 +66,11 @@
 			<section data-tab="transactions">
 				<grid-transactions id="transactions"></grid-transactions>
 			</section>
+
+			<section data-tab="add-job">
+				<grid-add-job id="addJob"></grid-add-job>
+			</section>
+
 		</iron-pages>
 	</template>
 </dom-module>
@@ -65,12 +80,23 @@
 
 		Polymer({
 			is: 'grid-second-fold',
-			behaviors: [GridBehaviors.FoldBehavior, GridBehaviors.TabsBehavior],
+			behaviors: [
+				GridBehaviors.FoldBehavior, 
+				GridBehaviors.TabsBehavior,
+				GridBehaviors.PageBehavior
+			],
 			_onClose: function() {
 				this.thirdFold.close();
 			},
 			callParent: function() {
 				this.thirdFold.opened = !this.thirdFold.opened;
+			},
+			ready: function() {
+				// console.log('tab',this.getTab);
+				if(this.getTab) {
+					this.selectedTab = this.getTab;
+					this.secondFold.open();
+				}
 			}
 		});
 	}());

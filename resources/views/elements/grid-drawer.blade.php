@@ -236,7 +236,10 @@
 		Polymer({
 			is: 'grid-drawer',
 
-			behaviors: [GridBehaviors.FoldBehavior],
+			behaviors: [
+				GridBehaviors.FoldBehavior,
+				GridBehaviors.PageBehavior
+			],
 
 			_closeOtherFolds: function() {
 				this.secondFold.close();
@@ -290,8 +293,7 @@
 			// transactions events
 			openTransactions: function() {
 				this._selectTab('transactions');
-			}
-
+			},
 		});
 	}());
 </script>

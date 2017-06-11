@@ -45,6 +45,13 @@ Route::get('/items', function() {
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
+Route::get('/test', function() {
+	$job = App\Job::find(32);
+	$user = App\User::find(1);
+	$job->user = $user;
+    return $job;
+
+});
 
 Auth::routes();
 
@@ -53,3 +60,12 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/auth/{provider}', 'Auth\RegisterController@redirectToProvider');
 Route::get('/auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
 Route::get('/user/confirmation/{token}', 'Auth\RegisterController@confirmation')->name('confirmation');
+
+Route::post('/job', 'JobController@add');
+Route::get('/job/all', 'JobController@all');
+Route::get('/job/{id}', 'JobController@viewJob');
+Route::get('/{id}/jobs', 'JobController@getJobs');
+
+Route::post('/bid', 'BidController@bid');
+Route::get('/{id}/bids', 'BidController@getBids');
+Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');

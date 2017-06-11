@@ -6,7 +6,7 @@
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-spinner/paper-spinner.html">
 <link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="/grid-elements/axios">
+<link rel="import" href="/grid-elements/scripts.axios">
 
 <dom-module id="grid-auth">
 	<style include="iron-flex">
@@ -74,7 +74,7 @@
 		<iron-request id="xhr" ></iron-request> --}}
 		<paper-header-panel class="flex">
 		    <paper-toolbar slot="header">
-		      <div class="flex">Sign In/Sign Up</div>
+		      <div class="flex">Sign In</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div>
@@ -89,10 +89,17 @@
 				 				<paper-spinner id="spinner" active></paper-spinner>
 							</template>
 							<template is="dom-if" if="[[!isLoading]]">
-				 				<span>Sign In/Sign Up</span>
+				 				<span>Sign In</span>
 				 			</template>
 				 		</paper-button>
 				 	</form>
+				 	<div >
+				 		<a href="#" on-click="openRegister">Sign Up</a>
+					 	<template is="dom-if" if="[[attempt]]">
+					 		<span> | </span>
+					 		<a href="#" on-click="openForgotPassword">Forgot Password</a>
+					 	</template>
+					 </div>
 				 	<div class="or">
 				 		<span>OR</span>
 				 	</div>
@@ -127,7 +134,12 @@
 					type: Boolean,
 					value: false
 				},
-				message: String
+				message: String,
+				attempt: {
+					type: Boolean,
+					value: false,
+					// observer: '_attemptChange'
+				}
 			},
 			behaviors: [
 				GridBehaviors.FoldBehavior
@@ -163,13 +175,13 @@
 				.then(function (response) {
 					console.log(response);
 					var data = response.data;
-					if(data.access_token) {
+					if(data.status == 1) {
 						window.location.href = "/";
 					} else if(data.status == 0) {
-						self.thirdFold.component = 'grid-register';
-						self.thirdFold.open();
-						self.isLoading = false;
+						// self.thirdFold.component = 'grid-register';
+						// self.thirdFold.open();
 					}
+					self.isLoading = false;
 				})
 				.catch(function (error) {
 					if (error.response) {
@@ -190,6 +202,7 @@
 				    	self.$.errorToast.fitInto = self;
 				    	self.$.errorToast.innerHTML = err.join('<br/>');
 				    	self.$.errorToast.open();
+				    	self.attempt = true;
 				    } else {
 				      // Something happened in setting up the request that triggered an Error
 				      console.log('Error', error.message);
@@ -205,6 +218,17 @@
 				// 	grant_type: 'password'
 				// };
 				// this.$.ajaxToken.generateRequest();
+			},
+			openRegister: function() {
+				this.drawer._selectTab('register');
+			},
+			openForgotPassword: function() {
+				this.drawer._selectTab('forgot-password');
+			},
+			_attemptChange: function() {
+				if (this.$.attempt > 0) {
+
+				}
 			}
 		});
 	}());

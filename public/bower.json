@@ -1,0 +1,21 @@
+{
+  "name": "myBowerComponents",
+  "homepage": "https://github.com/leomarbucud/thegrid",
+  "authors": [
+    "Leomar Bucud <leomarbucud@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "app-layout": "PolymerElements/app-layout#^1.0.1",
+    "google-map": "GoogleWebComponents/google-map#^1.2.0",
+    "axios": "^0.16.1",
+    "google-map-markerclusterer": "^1.0.2",
+    "iron-elements": "PolymerElements/iron-elements#^1.0.10",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "socket.io-client": "^2.0.2",
+    "vaadin-date-picker": "vaadin/vaadin-date-picker#^1.2.3"
+  }
+}

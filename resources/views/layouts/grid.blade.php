@@ -24,10 +24,41 @@
                 margin: 0;
                 padding: 0;
                 overflow: hidden;
-                user-select: none;
+                /*user-select: none;*/
+            }
+            .pac-container {
+                margin-top: -210px;
+                max-height: 186px !important;
             }
         </style>
+        <script>
+            @if (Auth::check())
+            window.Grid = {!! json_encode([
+                'authenticated' => true,
+                'user_id' => Auth::id(),
+                'csrfToken' => csrf_token(),
+                'session_id' => Session::getId()
+            ]) !!};
+            @else
+            window.Grid = {!! json_encode([
+                'authenticated' => false,
+                'csrfToken' => csrf_token(),
+            ]) !!};
+            @endif
+        </script>
         <link rel="import" href="/grid-elements/grid-app" />
+        <script type="text/javascript">
+            var socket = new io.connect('http://127.0.0.1:3000', {
+              query: "token=" + Grid.session_id
+            });
+            socket.on('connect', function(){
+                console.log('connected to socket');
+                socket.emit('new-user', Grid);
+            });
+            socket.on('user-callback', function(data){
+                console.log('user callback', data);
+            });
+        </script>
     </head>
     <body>
         @yield('content')
@@ -52,10 +83,10 @@
         // gMap.addEventListener('api-load', function(e) {
         //     document.querySelector('google-map-directions').map = this.map;
         // });
-        var gmap = document.querySelector('google-map');
-        gmap.addEventListener('google-map-ready', function(e) {
-          document.querySelector('google-map-markerclusterer').map = this.map;
-        });
+        // var gmap = document.querySelector('google-map');
+        // gmap.addEventListener('google-map-ready', function(e) {
+        //   document.querySelector('google-map-markerclusterer').map = this.map;
+        // });
 
         </script>
         {{-- <script>

@@ -14,7 +14,7 @@
 			// console.log('Tab behavior is created for ', this);
 		},
 		_tabChanged: function() {
-			console.log('selected tab:', this.selectedTab);
+			// console.log('selected tab:', this.selectedTab);
 		}
 	}
 </script>
