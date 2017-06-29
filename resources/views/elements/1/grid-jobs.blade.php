@@ -1,14 +1,10 @@
-<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="/grid-elements/scripts.axios">
-
 <dom-module id="grid-jobs">
 	<style include="iron-flex">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
 		}
-		:host {
+		:host, paper-scroll-header-panel {
 			height: 100%;
 		}
 		.icon-badge {
@@ -21,14 +17,20 @@
 		    text-align: center;
 		    font-style: normal;
 		}
+		paper-progress {
+			width: 100%;
+		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
+		<paper-scroll-header-panel class="flex">
 		    <paper-toolbar slot="header">
 		      <div class="flex">Jobs</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
+		    	<template is="dom-if" if="[[isLoading]]">
+		    		<paper-progress indeterminate></paper-progress>
+		    	</template>
 			 	<template is="dom-repeat" items="@{{jobs}}" as="job">
 					<paper-item on-tap="viewJob" data-id$=@{{job.id}}>					
 						<paper-item-body two-line>
@@ -37,10 +39,17 @@
 						</paper-item-body>
 						<i class="icon-badge">@{{job.bids.length}}</i>
 						<paper-ripple></paper-ripple>
+					</paper-item>	
+				</template>
+				<template is="dom-if" if="[[pagination.next_page_url]]">
+					<paper-item on-tap="loadJobs">
+						<paper-item-body>
+							<div >Load more</div>
+						</paper-item-body>
 					</paper-item>
 				</template>
 			</div>
-		 </paper-header-panel>
+		 </paper-scroll-header-panel>
 	</template>
 </dom-module>
 <script>
@@ -61,24 +70,41 @@
 					type: Number,
 					value: -1,
 					notify: true
+				},
+				pagination: {
+					type: Object,
+					value: function() {
+						return [];
+					},
+					notify: true
 				}
 			},
 			//observers: ['_jobChange(jobs)'],
+			listeners: {
+			"content-scroll": "scroll"
+			},
+			scroll: function(e, d){
+				if (d.target.scrollHeight - (d.target.clientHeight * 1.5) < d.target.scrollTop) {
+        			//console.log(d.target.scrollHeight, d.target.clientHeight, d.target.scrollTop);
+        			if(!this.isLoading) {
+        				this.loadJobs();
+        			}
+   				}
+   			},
 			behaviors: [
 				GridBehaviors.FoldBehavior
 			],
 			_jobChange: function(jobs) {
-				console.log('main job has changed');
 				this.jobs = jobs;
 			},
 			viewJob: function(e) {
 				var job = e.model.job;
 				this.thirdFold.component = 'job'
-				this.thirdFold.$.job.job = job;
+				// this.thirdFold.$.job.job = job;
+				this.thirdFold.$.job.id = job.id;
 				this.thirdFold.open();
 				var jobs = this.jobs;
 				this.indexOpened = jobs.findIndex(x => x.id == job.id);
-				console.log('selected index ', self.indexOpened);
 			},
 			close: function() {
 				this.secondFold.close();
@@ -86,41 +112,66 @@
 			insertJob: function(job) {
 				this.unshift('jobs', job);
 			},
+			loadJobs: function() {
+				var self = this,
+					pagination = self.pagination;
+				if(pagination.next_page_url) {
+					self.isLoading = true;
+					axios.get(pagination.next_page_url)
+						.then(function (response) {
+							var data = response.data,
+								c_j = self.jobs;
+							self.jobs = c_j.concat(data.data);
+							self.pagination = {
+								total: data.total,
+								per_page: data.per_page,
+								current_page: data.current_page,
+								last_page: data.last_page,
+								next_page_url: data.next_page_url,
+								prev_page_url: data.prev_page_url,
+								from: data.from,
+								to: data.to
+							};
+							self.isLoading = false;
+						});
+				}
+			},
 			refreshJobs: function() {
 				var self = this;
 				axios.get('/'+Grid.user_id+'/jobs')
 					.then(function (response) {
 						var data = response.data;
-						self.jobs = data;
-						console.log('jobs', data);
+						self.jobs = data.data;
+						self.pagination = {
+							total: data.total,
+							per_page: data.per_page,
+							current_page: data.current_page,
+							last_page: data.last_page,
+							next_page_url: data.next_page_url,
+							prev_page_url: data.prev_page_url,
+							from: data.from,
+							to: data.to
+						};
+						self.isLoading = false;
 					});
 			},
-			attached: function() {
+			init: function() {
 				var self = this;
-				this.refreshJobs();
+				self.refreshJobs();
 				socket.on('add-bid', function(data) {
-					var jobs = self.jobs;
-					var index = jobs.findIndex(x => x.id == data.job_id);
-					console.log('index', index);
-					self.unshift('jobs.' + index + '.bids', data);
-					self.notifyPath('jobs.' + index + '.bids');
-					// self.notifyPath('jobs.' + index + '.bids.legth');
-					// self.thirdFold.$.job.job. = self.jobs[index];
-					console.log('selected index', self.indexOpened);
+					var jobs = self.jobs,
+						index = jobs.findIndex(x => x.id == data.job_id);
+					if(self.jobs[index]) {
+						self.unshift('jobs.' + index + '.bids', data);
+						self.notifyPath('jobs.' + index + '.bids');
+					}
 					if(self.indexOpened > -1) {
 						if(index == self.indexOpened) {
-							console.log('updating the view of current open job');
-							console.log('3rdfold', self.thirdFold.$.job);
-							self.thirdFold.$.job.refreshJob(self.jobs[index]);
-							self.thirdFold.$.job.notifyPath('job.bids');
-						} else {
-							console.log('the job is not opened yet');
+							self.thirdFold.$.job.refreshJob();
 						}
-					} else {
-						console.log('no selected index');
 					}
-					console.log('main job add-bid socket');
 				});
+				this.isInit = true;
 			}
 		});
 	}());

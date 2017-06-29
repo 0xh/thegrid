@@ -13,6 +13,14 @@ class Bid extends Model
     }
 
     public function job() {
-    	return $this->belongsTo('App\Job')->with('user');
+    	return $this->belongsTo('App\Job')->with('only_bids')->with('user');
+    }
+
+    public function jobdetails() {
+    	return $this->belongsTo('App\Job');
+    }
+
+    public function isApproved() {
+    	return $this->hasOne('App\Winner');
     }
 }

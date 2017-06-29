@@ -7,7 +7,6 @@
 <link rel="import" href="/grid-elements/1.grid-inbox">
 <link rel="import" href="/grid-elements/1.grid-transactions">
 <link rel="import" href="/grid-elements/1.grid-add-job">
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="grid-second-fold">
@@ -87,6 +86,13 @@
 			],
 			_onClose: function() {
 				this.thirdFold.close();
+			},
+			_initialize: function() {
+				var tab = this.$$('#'+this.selectedTab);
+				if (tab) {
+						if(!tab.isInit)
+							tab.init();
+				}
 			},
 			callParent: function() {
 				this.thirdFold.opened = !this.thirdFold.opened;

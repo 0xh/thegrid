@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Mail;
+use Twilio\Rest\CLient;
+use Cookie;
 
 use Socialite;
 
@@ -59,25 +61,117 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $input = $request->all();
+        // trim phone number
+        if($input['phone_number'] != '') {
+            $input['phone_number'] = $input['country_code'].preg_replace('/[\-\s]/','',$input['phone_number']);    
+        }
+        
         $validator = $this->validator($input);
 
         if($validator->passes()) {
             $data = $this->create($input)->toArray();
 
             $data['confirmation_token'] = str_random(40);
-
+            $data['confirmation_code'] = $this->generateCode();
             $user = User::find($data['id']);
             $user->confirmation_token = $data['confirmation_token'];
+            $user->confirmation_code = $data['confirmation_code'];
             $user->save();
+
+            // TODO: send sms
 
             Mail::send('mails.confirmation', $data, function($message) use($data) {
                 $message->to($data['email']);
                 $message->subject('Registration Confirmation');
             });
-            
-            return response()->json(['message' => 'Email has been sent for confirmation'], 200);
+            if( env('SMS') ) {
+                $sms = $this->sendSMS($user->phone_number, $data['confirmation_code']);     
+            } else {
+                $sms = true;
+            }
+            if( $sms ) {
+                return response()->json(['message' => 'A confirmation code will be send to the mobile number provided', 'user' => $user], 200)->withCookie(Cookie::make('user', $user, 30));
+            } else {
+                return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);   
+            }
         }
         return response()->json($validator->errors(), 422);
+    }
+
+    public function submitCode(Request $request) {
+        $userCookie = Cookie::get('user');
+        $input = $request->all();
+        $user = User::where([
+            ['id', '=', $userCookie['id']],
+            ['confirmation_code', '=', $input['confirmation_code']]
+            ])->first();
+        if( $user ) {
+            $user->confirmation_code = '';
+            $user->confirmation_code_confirmed = 1;
+            $user->save();
+            $user->redirectUrl = route('login');
+            return response()->json($user, 200);
+        } else {
+            return response()->json(['message' => 'Invalid confirmation code'], 422);
+        }
+    }
+
+    public function resendCode() {
+        $userCookie = Cookie::get('user');
+        $code = $this->generateCode();
+        if( $userCookie ) {
+
+            $user = User::where('id', $userCookie['id'])->first();
+            if( $user ) {
+                $code = $user->confirmation_code;
+                if( env('SMS') ) {
+                    $sms = $this->sendSMS($user->phone_number, $code); 
+                } else {
+                    $sms = true;
+                }
+            } else {
+                $sms = false;
+            }    
+
+        }
+        if( $sms ) {
+            return response()->json(['message' => 'Successfully send the code to the number provided.', 'cookie' => $userCookie], 200);
+        } else {
+            return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);   
+        }
+    }
+
+    public function generateCode() {
+        $length = env('CONFIRMATION_CODE_LENGTH');
+        $start = '1';
+        $end = '9';
+        for($i = 1; $i < $length; $i++) {
+            $start .= '0';
+            $end .= '9';
+        }
+        $code = mt_rand($start, $end);
+        return $code;
+    }
+
+    public function sendSMS($phone_number, $code) {
+        $client = new Client(env('TWILIO_ACCOUNT_SID'), env('TWILIO_AUTH_TOKEN'));
+
+        $to = $phone_number;
+        $message = sprintf('THE GRID: Your %d digit pin code is %d', env('CONFIRMATION_CODE_LENGTH'), $code);
+        $twilioNumber = env('TWILIO_NUMBER');
+        try {
+            $client->messages->create(
+                $to,
+                [
+                "body" => $message,
+                "from" => $twilioNumber
+                ]
+                );
+            return true;
+        } catch (Exception $e) {
+            var_dump($e);
+            return false;
+        }
     }
 
     public function confirmation($token) {
@@ -103,8 +197,9 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
+            'phone_number' => 'required|string|unique:users',
             'password' => 'required|string|min:6|confirmed',
-        ]);
+            ]);
     }
 
     /**
@@ -118,8 +213,9 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
+            'phone_number' => $data['phone_number'],
             'password' => bcrypt($data['password']),
-        ]);
+            ]);
     }
 
     /**
@@ -158,12 +254,11 @@ class RegisterController extends Controller
                 ['email' => $socialUser->getEmail()],
                 ['name' => $socialUser->getName()],
                 ['confirmed' => 1]
-            );
+                );
             $user->socialProviders()->create(
                 ['provider_id' => $socialUser->getId(), 'provider' => $provider]
-            );
-        }
-        else {
+                );
+        } else {
             $user = $socialProvider->user;
         }
         // dd($user);

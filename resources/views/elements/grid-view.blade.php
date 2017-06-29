@@ -163,7 +163,7 @@
 					</paper-toolbar>
 				</grid-fab-toolbar>
 				<div class="flex"></div>
-				<paper-fab icon="sort" mini id="sort"></paper-fab>
+				{{-- <paper-fab icon="sort" mini id="sort"></paper-fab> --}}
 				@if (Auth::check())
 				<grid-fab-toolbar id="addFabToolbar" fab-position="top" direction="left">
 					<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
@@ -190,6 +190,16 @@
 				</grid-fab-toolbar>
 				@endif
 			</div>
+			<paper-dialog id="markerDialog" {{-- entry-animation="scale-up-animation" exit-animation="scale-down-animation" --}}>
+			 	<h2>Confirmation</h2>
+			 	<div>
+			 		<p>Are you sure you want to approve this bid?</p>
+			 	</div>
+			 	<div class="buttons">
+			 		<paper-button dialog-dismiss>Cancel</paper-button>
+			 		<paper-button dialog-confirm autofocus on-tap="approveBid">Yes</paper-button>
+			 	</div>
+			 </paper-dialog>
 		</template>
 	</dom-bind>
 </dom-module>
@@ -207,6 +217,15 @@
 				lng: {
 					type: String,
 					value: ''
+				},
+				currentLocation: {
+					type: Object,
+					value: function() {
+						return {
+							lat: 0,
+							lng: 0
+						}
+					}
 				},
 				open: {
 					type: Boolean,
@@ -246,32 +265,6 @@
 			],
 			searchOpen: function() {
 
-			},
-		   	generateLocation: function(lat, lng) {
-		   		for( var i = 0; i <= 50; i++) {
-					var r = 1000/111300 // = 500 meters
-					, y0 = lat
-					, x0 = lng
-					, u = Math.random()
-					, v = Math.random()
-					, w = r * Math.sqrt(u)
-					, t = 2 * Math.PI * v
-					, x = w * Math.cos(t)
-					, y1 = w * Math.sin(t)
-					, x1 = x / Math.cos(y0);
-
-					var newY = y0 + y1,
-					newX = x0 + x1;
-					// console.log('aaa', newY, newX);
-
-					var marker = document.createElement('google-map-marker');
-					marker.setAttribute('latitude', newY);
-					marker.setAttribute('longitude', newX);
-					marker.setAttribute('icon', 'data:image/svg+xml,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"38"%20height%3D"38"%20viewBox%3D"0%200%2038%2038"><path%20fill%3D"%23808080"%20stroke%3D"%23ccc"%20stroke-width%3D".5"%20d%3D"M34.305%2016.234c0%208.83-15.148%2019.158-15.148%2019.158S3.507%2025.065%203.507%2016.1c0-8.505%206.894-14.304%2015.4-14.304%208.504%200%2015.398%205.933%2015.398%2014.438z"%2F><text%20transform%3D"translate%2819%2018.5%29"%20fill%3D"%23fff"%20style%3D"font-family%3A%20Arial%2C%20sans-serif%3Bfont-weight%3Abold%3Btext-align%3Acenter%3B"%20font-size%3D"12"%20text-anchor%3D"middle">'+i+'<%2Ftext><%2Fsvg>');
-					marker.innerHTML = 'I am a marker';
-					Polymer.dom(this.$.map).appendChild(marker);
-					console.log('adad');
-				}
 			},
 			updateAddJobPane: function(what, when, where, lat, lng) {
 				var addJobPane = this.secondFold.$.addJob;
@@ -327,15 +320,19 @@
 			},
 
 			_newMarker: function(data) {
+				var self = this;
 				var customPin = {
-					// path: 'M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z',
+					//path: 'M34.305 16.234c0 8.83-15.148 19.158-15.148 19.158S3.507 25.065 3.507 16.1c0-8.505 6.894-14.304 15.4-14.304 8.504 0 15.398 5.933 15.398 14.438z',
 					path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
 					fillColor: data.fillColor,
 					fillOpacity: 1,
-					scale: 1,
+					scale: 1.5,
 					strokeColor: data.fillColor,
-					strokeWeight: 0.5
+					strokeWeight: 0.5,
+					width: 36,
+					height: 36
 				};
+				var svg = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="'+customPin.width+'" height="'+customPin.height+'"><path transform="scale('+customPin.scale+')" fill="'+customPin.fillColor+'" stroke="'+customPin.strokeColor+'" stroke-width="'+customPin.strokeWeight+'" d="'+customPin.path+'"/></svg>';
 				var d = JSON.stringify(data),
 					content = document.createElement('grid-info-window');
 				content.data = d;
@@ -343,26 +340,38 @@
 				content.isBidded = data.isBidded;
 
 				this.addMarker({
+					id: data.id,
+					price: data.price,
+					isBidded: data.isBidded,
+					isMyPost: data.isMyPost,
 					lat: parseFloat(data.lat),
 					lng: parseFloat(data.lng),
-					icon: customPin,
-					content: content,
+					icon: svg,
+					// content: content,
+					events: [
+						{
+							name: 'click',
+							callback: function(e, obj) {
+								self.$.markerDialog.innerHTML = '';
+								content.marker = obj;
+								self.$.markerDialog.appendChild(content);
+								self.$.markerDialog.open();
+							}
+						}
+					],
 					label: {
 						text: "AED " + data.price,
 						color: '#FFF',
-						fontSize: '10px',
+						fontSize: '12px',
 						fontWeight: 'normal',
-						textAlign: 'center',
-						width: '100px'
 					}
 				});
 			},
 
 			generateMarkers: function() {
-				console.log('generating markers');
 				var markers = this.markers;
 				var self = this;
-				axios.get('/job/all')
+				axios.get('/job/all?lat='+self.currentLocation.lat+'&lng='+self.currentLocation.lng)
 				.then(function (response) {
 					var data = response.data;
 					if (markers) {
@@ -370,34 +379,56 @@
 							marker.setMap(null);
 						});
 					}
+
+					var markerType = self.markerType.newJob;
 					
 					for(var i = 0; i < data.length; i++) {
-							data[i].fillColor = '#FFF';
+							markerType = self.markerType.newJob;
+							data[i].fillColor = markerType.color;
 							data[i].isMyPost = false;
 							data[i].isBidded = false;
 						var bids = data[i].bids;
 						if(Grid.user_id) {
 							if(Grid.user_id == data[i].user_id) {
-								data[i].fillColor = '#00872d';
+								markerType = self.markerType.myJob;
+								data[i].fillColor = markerType.color;
 								data[i].isMyPost = true;
 							}
 							for(var j = 0; j < bids.length; j++) {
 								// Check if user is already bidded
 								if(Grid.user_id == bids[j].user_id) {
-									data[i].fillColor = '#f1f422';
+									markerType = self.markerType.biddedJob;
+									data[i].fillColor = markerType.color;
 									data[i].isBidded = true;
 								}
 							}
 						}
-						
 						self._newMarker(data[i]);
 					}
+					// var m15 = self.removeBy(function(marker) {
+					// 	return marker.price > 200;
+					// });
+
+					// console.log('m15',m15);
 				});
+			},
+			getCountry: function(addrComponents) {
+				for (var i = 0; i < addrComponents.length; i++) {
+					if (addrComponents[i].types[0] == "country") {
+						return addrComponents[i].short_name;
+					}
+					if (addrComponents[i].types.length == 2) {
+						if (addrComponents[i].types[0] == "political") {
+							return addrComponents[i].short_name;
+						}
+					}
+				}
+				return false;
 			},
 			ready: function() {
 				var self = this;
 				var gMap = this.$.map;
-				
+
 				gMap.addEventListener('google-map-ready', function(e) {
 					self.google = google;
 					self.gMap = this.map;
@@ -409,18 +440,46 @@
 					});
 
 					socket.on('add-marker', function(data) {
-						data.fillColor = '#FFF';
-						data.isMyPost = false;
+						data.fillColor = self.markerType.newJob.color;
+						if( Grid.user_id == data.user_id ) {
+							data.isMyPost = true;
+							data.fillColor = self.markerType.myJob.color;
+						} else {
+							data.isMyPost = false;
+							data.fillColor = self.markerType.newJob.color;
+						}
 						data.isBidded = false;
 						self._newMarker(data);
 					});
 					
-					self.markerClusterer = new MarkerClusterer(this.map, [], { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
+					self.markerClusterer = new MarkerClusterer(this.map, [], self.clusterOptions);
 					this.map.setOptions({ zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER } });
 					self.getCurrentPosition(function(location) {
 						gMap.latitude = location.coords.latitude;
 						gMap.longitude = location.coords.longitude;
+						self.currentLocation.lat = location.coords.latitude;
+						self.currentLocation.lng = location.coords.longitude;
 						self.generateMarkers();
+						var geocoder = new google.maps.Geocoder;
+						
+						self.lat = location.coords.latitude;
+						self.lng = location.coords.longitude;
+						if(self.secondFold.$.register) {
+							self.geocodeLatLng(geocoder, this.map)
+							.then(function(results) {
+								var country = self.getCountry(results[0].address_components);
+
+								axios.get('/country/'+country)
+									.then(function(response) {
+										console.log(response.data);
+										self.secondFold.$.register.country = response.data;
+									});
+							})
+							.catch(function(status) {
+								console.log(status);
+							});
+						}
+
 					});
 
 					var markers = [];

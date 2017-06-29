@@ -110,35 +110,11 @@
 					// self.secondFold.$.jobs.refreshJobs();
 					self.secondFold.$.jobs.insertJob(data);
 					self.secondFold.open();
-					var customPin = {
-						path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
-						fillColor: '#00872d',
-						fillOpacity: 1,
-						scale: 1,
-						strokeColor: '#00872d',
-						strokeWeight: 0.5
-					};
 
-					var d = JSON.stringify(data),
-						content = document.createElement('grid-info-window');
-					content.data = d;
-					content.isMyPost = true;
-					content.isBidded = false;
-
-					self.view.addMarker({
-						lat: parseFloat(data.lat),
-						lng: parseFloat(data.lng),
-						icon: customPin,
-						content: content,
-						label: {
-							text: "AED " + data.price,
-							color: '#FFF',
-							fontSize: '10px',
-							fontWeight: 'normal',
-							textAlign: 'center',
-							width: '100px'
-						}
-					});
+					data.fillColor = self.view.markerType.myJob.color;
+					data.isMyPost = true;
+					data.isBidded = false;
+					self.view._newMarker(data);
 
 					socket.emit('new-job', data);
 				})
@@ -167,7 +143,7 @@
 			},
 			close: function() {
 				this.secondFold.close();
-			}
+			},
 		});
 	}());
 </script>

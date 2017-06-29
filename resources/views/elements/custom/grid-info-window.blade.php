@@ -28,6 +28,8 @@
 				<div><strong>Posted by</strong>: @{{data.user.name}}</div>
 				<div><strong>Demand</strong>: @{{data.name}}</div>
 				<div><strong>Price</strong>: AED @{{data.price}}</div>
+				<div><strong>Distance</strong>: @{{data.distance}} Miles</div>
+				{{-- <div><strong>Time Left</strong>: @{{timeLeft}}</div> --}}
 				<template is="dom-if" if="[[isMyPost]]">
 					<p>This is my post</p>
 				</template>
@@ -83,15 +85,9 @@
 			attached: function() {
 				if(typeof this.data === 'string') {
 					this.data = JSON.parse(this.data);
+					// this.set('data.distance' ,this.data.distance.toFixed(2));
+					this.startCountDown(this.data.date);
 				}
-				var self = this;
-				// axios.get('/'+Grid.user_id+'/bid/check/'+this.data.id)
-				// 	.then(function(response) {
-				// 		self.isBidded = response.data.isBidded;
-				// 		self.isChecked = true;
-				// 	}).catch(function(response) {
-
-				// 	});
 			},
 			quickBid: function() {
 				var self = this;
@@ -112,6 +108,40 @@
 				} else {
 					alert('Please login first');
 				}
+			},
+			getTimeRemaining: function(endtime){
+				var t = Date.parse(endtime) - Date.parse(new Date());
+				var seconds = Math.floor( (t/1000) % 60 );
+				var minutes = Math.floor( (t/1000/60) % 60 );
+				var hours = Math.floor( (t/(1000*60*60)) % 24 );
+				var days = Math.floor( t/(1000*60*60*24) );
+				return {
+					'total': t,
+					'days': days,
+					'hours': hours,
+					'minutes': minutes,
+					'seconds': seconds
+				};
+			},
+			countDown: function(date) {
+				this.updateTimeLeft();
+				if(!this.started) {
+					this.startCountDown();
+				}
+			},
+			updateTimeLeft: function() {
+				var t = this.getTimeRemaining(this.data.date);
+				if(t.total <= 0) {
+					this.timeLeft = "Expired";
+				} else {
+					this.timeLeft = t.days + ' days : ' + t.hours + ' hrs. : ' + t.minutes + ' min. : ' + t.seconds + ' sec.' ; 
+				}
+			},
+			startCountDown: function() {
+				var self = this;
+				setInterval(function() {
+					self.updateTimeLeft();
+				}, 1000);
 			},
 			ready: function() {
 				

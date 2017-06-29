@@ -47,18 +47,6 @@
             @endif
         </script>
         <link rel="import" href="/grid-elements/grid-app" />
-        <script type="text/javascript">
-            var socket = new io.connect('http://127.0.0.1:3000', {
-              query: "token=" + Grid.session_id
-            });
-            socket.on('connect', function(){
-                console.log('connected to socket');
-                socket.emit('new-user', Grid);
-            });
-            socket.on('user-callback', function(data){
-                console.log('user callback', data);
-            });
-        </script>
     </head>
     <body>
         @yield('content')

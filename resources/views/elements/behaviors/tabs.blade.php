@@ -7,13 +7,13 @@
 	          type: String,
 	          value: "auth",
 	          notify: true,
-	          observer: '_tabChanged'
-	        }
+	          observer: '_initialize'
+	        },
 		},
 		created: function() {
 			// console.log('Tab behavior is created for ', this);
 		},
-		_tabChanged: function() {
+		_initialize: function() {
 			// console.log('selected tab:', this.selectedTab);
 		}
 	}

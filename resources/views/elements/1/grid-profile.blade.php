@@ -1,9 +1,3 @@
-<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
-<link rel="import" href="/bower_components/paper-input/paper-input.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
-
 <dom-module id="grid-profile">
 	<style include="iron-flex">
 		:root {

@@ -308,7 +308,31 @@
                 type: Boolean,
                 value: true
             },
-            markerClusterer: Object
+            markerClusterer: Object,
+            clusterOptions: {
+                type: Object,
+                value: function() {
+                    return {
+                        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                    }
+                }
+            },
+            markerType: {
+                type: Object,
+                value: function() {
+                    return {
+                        newJob: {
+                            color: '#808080'
+                        },
+                        myJob: {
+                            color: '#00872d'
+                        },
+                        biddedJob: {
+                            color: '#2c29e8'
+                        }
+                    }
+                }
+            }
         },
         _setMap: function() {
             if(this.google && this.markerClusterer) {
@@ -347,6 +371,9 @@
                 })
             }
         },
+        get infoWindow() {
+            return new google.maps.InfoWindow()
+        },
         addMarker: function(opts) {
             var marker
                 self = this;
@@ -363,20 +390,20 @@
                 this._attachEvents(marker, opts.events);
             }
             if (opts.content) {
+                var infoWindow = new google.maps.InfoWindow({
+                    content: opts.content
+                });
                 this._on({
                     obj: marker,
                     event: 'click',
                     callback: function() {
-                        var infoWindow = new google.maps.InfoWindow({
-                            content: opts.content
-                        });
                         infoWindow.open(this.gMap, marker);
                     }
                 });
             }
             return marker;
         },
-        _attachEvents: function(obj, event) {
+        _attachEvents: function(obj, events) {
             var self = this;
             events.forEach(function(event) {
                 self._on({
@@ -389,12 +416,38 @@
         _addMarker: function(marker) {
             this.markers.push(marker);
         },
+        remove: function(item) {
+            var indexOf = this.markers.indexOf(marker);
+            if (indexOf !== -1) {
+                this.markers.splice(indexOf, 1);
+            }
+        },
+        find: function(callback, action) {
+            var callbackReturn,
+            markers = this.markers,
+            length = markers.length,
+            matches = [],
+            i = 0;
+            console.log('markers', markers);
+            for(; i < length; i++) {
+                callbackReturn = callback(markers[i], i);
+                if(callbackReturn) {
+                    matches.push(markers[i]);
+                }
+            }
+
+            if (action) {
+                action.call(this, matches);
+            }
+
+            return matches;
+        },
         findBy: function(callback) {
-            return this.markers.find(callback);
+            return this.find(callback);
         },
         removeBy: function(callback) {
             var self = this;
-            self.marker.find(callback, function(markers) {
+            self.find(callback, function(markers) {
                 markers.forEach(function(marker) {
                     if (self.markerClusterer) {
                         self.markerClusterer.removeMarker(marker);

@@ -1,5 +1,7 @@
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
 <link rel="import" href="/grid-elements/2.grid-job">
+<link rel="import" href="/grid-elements/2.grid-bid">
+<link rel="import" href="/grid-elements/2.grid-confirmation">
+<link rel="import" href="/grid-elements/2.grid-conversation">
 
 <dom-module id="grid-third-fold">
 	<style include="iron-flex">
@@ -21,6 +23,15 @@
 		<iron-pages selected="@{{component}}" attr-for-selected="data-component">
 			<section data-component="job">
 				<grid-job id="job"></grid-job>
+			</section>
+			<section data-component="bid">
+				<grid-bid id="bid"></grid-bid>
+			</section>
+			<section data-component="conversation">
+				<grid-conversation id="conversation"></grid-conversation>
+			</section>
+			<section data-component="confirmation">
+				<grid-confirmation id="confirmation"></grid-confirmation>
 			</section>
 		</iron-pages>
 	</template>

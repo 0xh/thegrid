@@ -142,6 +142,7 @@
 				}
 			},
 			behaviors: [
+				GridBehaviors.AppSettingsBehavior,
 				GridBehaviors.FoldBehavior
 			],
 			close: function() {
@@ -168,7 +169,10 @@
 				var self = this;
 				// self.$.spinner.active = true;
 				self.isLoading = true;
-				axios.post('/login', {
+				axios.post(this.app.api_url + '/login', {
+					grant_type: 'password',
+            		client_id: this.client.client_id,
+            		client_secret: this.client.client_secret,
 					email: this.email,
 					password: this.password
 				})
@@ -178,8 +182,8 @@
 					if(data.status == 1) {
 						window.location.href = "/";
 					} else if(data.status == 0) {
-						// self.thirdFold.component = 'grid-register';
-						// self.thirdFold.open();
+						self.thirdFold.component = 'grid-register';
+						self.thirdFold.open();
 					}
 					self.isLoading = false;
 				})
@@ -229,7 +233,7 @@
 				if (this.$.attempt > 0) {
 
 				}
-			}
+			},
 		});
 	}());
 </script>

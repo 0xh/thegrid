@@ -9,6 +9,14 @@
 	          notify: true,
 	          reflectToAttribute: true,
 	          observer: '_viewChanged'
+	        },
+	        isLoading: {
+	        	type: Boolean,
+	        	value: true
+	        },
+	        isInit: {
+	        	type: Boolean,
+	        	value: false
 	        }
 		},
 		created: function() {
@@ -64,5 +72,8 @@
 				this._onClose();
 			}
 		},
+		init: function() {
+			// abstract
+		}
 	}
 </script>
