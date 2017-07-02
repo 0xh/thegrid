@@ -8,9 +8,12 @@ use App\Message;
 class MessageController extends Controller
 {
     public function getMessages($id, $conversation_id) {
-    	$messages = Message::where('conversation_id', $conversation_id)
+    	$messages = Message::where([
+    					['conversation_id', '=', $conversation_id],
+    					['is_deleted', '=', 0]
+    				])
     				->orderBy('created_at', 'DESC')
-    				->get();
+    				->paginate(25);
     	return $messages;
     }
 

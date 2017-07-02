@@ -1,8 +1,5 @@
-<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
-
 <dom-module id="grid-transactions">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
@@ -12,8 +9,8 @@
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-		    <paper-toolbar>
+		<paper-scroll-header-panel class="flex h100">
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Transactions</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
@@ -21,7 +18,7 @@
 		    	content
 		    	<paper-icon-button icon="help" on-click="callParent"></paper-icon-button>
 		    </div>
-		 </paper-header-panel>
+		 </paper-scroll-header-panel>
 	</template>
 </dom-module>
 <script>

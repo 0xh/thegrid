@@ -14,6 +14,7 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="/bower_components/paper-menu/paper-menu.html">
@@ -36,6 +37,7 @@
 <link rel="import" href="/grid-elements/behaviors.tabs">
 <link rel="import" href="/grid-elements/behaviors.map">
 <link rel="import" href="/grid-elements/behaviors.page">
+<link rel="import" href="/grid-elements/behaviors.storage">
 
 <!-- Custom Elements -->
 <link rel="import" href="/grid-elements/grid-shared-styles">

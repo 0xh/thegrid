@@ -1,22 +1,14 @@
-<link rel="import" href="/bower_components/paper-header-panel/paper-header-panel.html">
-<link rel="import" href="/bower_components/paper-toolbar/paper-toolbar.html">
-<link rel="import" href="/bower_components/neon-animation/animations/scale-up-animation.html">
-<link rel="import" href="/bower_components/neon-animation/animations/scale-down-animation.html">
-<link rel="import" href="/bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="/bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="/bower_components/vaadin-grid/vaadin-grid-sorter.html">
 
 <dom-module id="grid-bid">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
 		}
 		:host {
 			height: 100%;
-		}
-		.container {
-			margin: 0 20px;
 		}
 		.main-price {
 			font-weight: 400;
@@ -28,8 +20,8 @@
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-		    <paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100">
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Bid Details</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
@@ -54,7 +46,7 @@
 		    		</template>
 		    	</div>
 			</div>
-		 </paper-header-panel>
+		 </paper-scroll-header-panel>
 	</template>
 	<script>
 		Polymer({

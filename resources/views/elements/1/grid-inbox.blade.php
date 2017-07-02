@@ -1,5 +1,5 @@
 <dom-module id="grid-inbox">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
@@ -9,12 +9,15 @@
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-		    <paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100">
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Inbox</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
+		    	<template is="dom-if" if="[[isLoading]]">
+		    		<paper-progress indeterminate class="w100"></paper-progress>
+		    	</template>
 			 	<template is="dom-repeat" items="@{{inbox}}">
 					<paper-icon-item on-tap="viewConversation">
 						<iron-icon icon="account-circle" item-icon></iron-icon>
@@ -26,7 +29,7 @@
 					</paper-icon-item>
 				</template>
 			</div>
-		 </paper-header-panel>
+		 </paper-scroll-header-panel>
 	</template>
 </dom-module>
 <script>
@@ -52,6 +55,7 @@
 					.then(function(response) {
 						var data = response.data;
 						self.inbox = data;
+						self.isLoading = false;
 					})
 					.catch(function(error) {
 

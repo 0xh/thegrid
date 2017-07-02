@@ -1,5 +1,5 @@
 <dom-module id="grid-profile">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
@@ -9,8 +9,8 @@
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-		    <paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100">
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Profile</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
@@ -25,7 +25,7 @@
 	        <form id="logoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
 	                {{ csrf_field() }}
 	        </form>
-		</paper-header-panel>
+		</paper-scroll-header-panel>
 	</template>
 </dom-module>
 <script>

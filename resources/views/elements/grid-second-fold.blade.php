@@ -10,22 +10,7 @@
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="grid-second-fold">
-	<style include="iron-flex">
-		:host {
-			width: 400px;
-			background-color: #ffffff;
-			left: calc(var(--grid-drawer-collapse-width) - var(--grid-second-fold-width));
-		    position: absolute;
-		    top: 0px;
-		    height: 100%;
-		    z-index: 3;
-		    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1);
-		    display: block;
-		    border-right: 1px solid #d6d6d6;
-		}
-		:host[opened] {
-			left: 56px;
-		}
+	<style include="iron-flex grid">
 		paper-header-panel {
 			background-color: #fff;
 		}

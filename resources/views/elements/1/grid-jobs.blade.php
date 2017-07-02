@@ -1,10 +1,10 @@
 <dom-module id="grid-jobs">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
 		}
-		:host, paper-scroll-header-panel {
+		:host {
 			height: 100%;
 		}
 		.icon-badge {
@@ -17,19 +17,16 @@
 		    text-align: center;
 		    font-style: normal;
 		}
-		paper-progress {
-			width: 100%;
-		}
 	</style>
 	<template>
-		<paper-scroll-header-panel class="flex">
-		    <paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100" fixed>
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Jobs</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
 		    	<template is="dom-if" if="[[isLoading]]">
-		    		<paper-progress indeterminate></paper-progress>
+		    		<paper-progress indeterminate class="w100"></paper-progress>
 		    	</template>
 			 	<template is="dom-repeat" items="@{{jobs}}" as="job">
 					<paper-item on-tap="viewJob" data-id$=@{{job.id}}>					

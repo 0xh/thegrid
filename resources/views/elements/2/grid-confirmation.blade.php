@@ -1,5 +1,5 @@
 <dom-module id="grid-confirmation">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
@@ -7,17 +7,14 @@
 		:host {
 			height: 100%;
 		}
-		.container {
-			margin: 0 20px;
-		}
 		.main-price {
 			font-weight: 400;
 			font-size: 18px;
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-			<paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100">
+			<paper-toolbar slot="header" class="border-bottom">
 				<div class="flex">Confirmation</div>
 				<paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 			</paper-toolbar>
@@ -46,7 +43,7 @@
 					</paper-button>
 				</div>
 			</div>
-		</paper-header-panel>
+		</paper-scroll-header-panel>
 	</template>
 	<script>
 		Polymer({
