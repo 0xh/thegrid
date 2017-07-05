@@ -98,16 +98,16 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			display: flex; 
-			width: 100%; 
+			display: flex;
+			width: 100%;
 			height: 100%;
-			align-items: center; 
+			align-items: center;
 			justify-content: center;
 		}
 		#centerMarker {
-			width: 40px; 
-			height: 40px; 
-			background-color: transparent; 
+			width: 40px;
+			height: 40px;
+			background-color: transparent;
 			z-index: 5;
 			/*display: none;*/
 			transform: scale(0);
@@ -143,14 +143,14 @@
 			60% { transform: scale(0.6); }
 			80% { transform: scale(1.6); }
 			90% { transform: scale(1.1); }
-			100% { transform: scale(0); }			
+			100% { transform: scale(0); }
 		}
 	</style>
 	<dom-bind>
 		<template>
 			<google-map id="map" class="center-container" api-key="[[apiKey]]" clientID="[[apiKey]]" latitude="25.276987" longitude="55.296249" additional-map-options='@{{mapOptions}}' draggable="true" drag-events="true" single-info-window map="@{{map}}" fit-to-markers>
 				<div id="centerMarker">
-					<img src="http://icons.iconarchive.com/icons/paomedia/small-n-flat/1024/map-marker-icon.png" alt="icon" />
+					<img src="/images/map-marker-icon.png" alt="icon" />
 				</div>
 			</google-map>
 			<div class="view-controls layout vertical">
@@ -258,7 +258,7 @@
 			observers: [
 			'updateAddJobPane(what, when, where, lat, lng)'
 			],
-			behaviors: [	
+			behaviors: [
 			GridBehaviors.FoldBehavior,
 			GridBehaviors.TabsBehavior,
 			GridBehaviors.MapBehavior
@@ -381,7 +381,7 @@
 					}
 
 					var markerType = self.markerType.newJob;
-					
+
 					for(var i = 0; i < data.length; i++) {
 							markerType = self.markerType.newJob;
 							data[i].fillColor = markerType.color;
@@ -451,7 +451,7 @@
 						data.isBidded = false;
 						self._newMarker(data);
 					});
-					
+
 					self.markerClusterer = new MarkerClusterer(this.map, [], self.clusterOptions);
 					this.map.setOptions({ zoomControlOptions: { position: google.maps.ControlPosition.RIGHT_CENTER } });
 					self.getCurrentPosition(function(location) {
@@ -461,7 +461,7 @@
 						self.currentLocation.lng = location.coords.longitude;
 						self.generateMarkers();
 						var geocoder = new google.maps.Geocoder;
-						
+
 						self.lat = location.coords.latitude;
 						self.lng = location.coords.longitude;
 						if(self.secondFold.$.register) {
@@ -512,7 +512,7 @@
 					var center = this.map.getCenter();
 					self.lat = center.lat();
 					self.lng = center.lng();
-					
+
 					if(self.isAddingJob) {
 						var geocoder = new google.maps.Geocoder;
 						self.geocodeLatLng(geocoder, this.map)
