@@ -71,14 +71,16 @@
 			<paper-scroll-header-panel id="scroller" class="flex" fixed>
 				<paper-toolbar slot="header" class="border-bottom">
 					<div class="flex">
+						<paper-icon-button icon="first-page" on-tap="closeParent"></paper-icon-button>
+						<paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 						<template is="dom-if" if="[[!isTyping]]">
 							<span>@{{conversation.job.name}}</span>
 						</template>
 						<template is="dom-if" if="[[isTyping]]">
-							<span class="typing">Typing...</span>	
+							<span class="typing">Typing...</span>
 						</template>
 					</div>
-					<paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
+					<paper-icon-button icon="more-vert"></paper-icon-button>
 				</paper-toolbar>
 				<div id="msgs" role="list-box">
 					<template is="dom-if" if="[[isLoading]]">
@@ -335,6 +337,9 @@
 			close: function() {
 				this.thirdFold.close();
 			},
+			closeParent: function() {
+				this.secondFold.close();
+			},
 			attached: function() {
 				var self = this;
 				socket.on('receive-message', function(data) {
@@ -344,7 +349,7 @@
 						self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
 						self.isTyping = false;
 						self.scrollToBottom(true);
-					} 
+					}
 				});
 				socket.on('sender-typing', function(data) {
 					if(data.conversation_id == self.id) {

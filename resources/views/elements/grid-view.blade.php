@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker-light.html">
 <link rel="import" href="/grid-elements/custom.grid-fab-toolbar">
 <link rel="import" href="/grid-elements/custom.grid-info-window">
@@ -165,7 +165,7 @@
 				<div class="flex"></div>
 				{{-- <paper-fab icon="sort" mini id="sort"></paper-fab> --}}
 				@if (Auth::check())
-				<grid-fab-toolbar id="addFabToolbar" fab-position="top" direction="left">
+				<grid-fab-toolbar id="addFabToolbar" fab-position="top" direction="left" class="fab-button">
 					<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
 					<paper-toolbar id="toolbar">
 						<div class="item flex">
@@ -221,10 +221,7 @@
 				currentLocation: {
 					type: Object,
 					value: function() {
-						return {
-							lat: 0,
-							lng: 0
-						}
+						return {};
 					}
 				},
 				open: {
@@ -284,8 +281,8 @@
 			geocodeLatLng: function() {
 				var self = this;
 				var latlng = {
-					lat: parseFloat(this.lat),
-					lng: parseFloat(this.lng)
+					lat: parseFloat(self.lat),
+					lng: parseFloat(self.lng)
 				};
 				var geocoder = new google.maps.Geocoder;
 				return new Promise(function(resolve,reject) {
@@ -305,14 +302,18 @@
 			setCurrentLocation: function() {
 				var gMap = this.$.map;
 				var self = this;
-				this.getCurrentPosition(function(location) {
-					gMap.latitude = location.coords.latitude;
-					gMap.longitude = location.coords.longitude;
-					self.lat = gMap.latitude;
-					self.lng = gMap.longitude;
+				if(self.currentLocation.address) {
+					gMap.latitude = self.lat = self.currentLocation.lat;
+					gMap.longitude = self.lng = self.currentLocation.lng;
+					self.where = self.currentLocation.address;
+					return;
+				}
+				self.getCurrentPosition(function(location) {
+					self.lat = gMap.latitude = location.coords.latitude;
+					self.lng = gMap.longitude = location.coords.longitude;
 					self.geocodeLatLng()
 					.then(function(results) {
-						self.where = results[0].formatted_address;
+						self.currentLocation.address = self.where = results[0].formatted_address;
 					})
 					.catch(function(status) {
 						console.log(status);
@@ -461,6 +462,7 @@
 						gMap.longitude = location.coords.longitude;
 						self.currentLocation.lat = location.coords.latitude;
 						self.currentLocation.lng = location.coords.longitude;
+
 						self.generateMarkers();
 						var geocoder = new google.maps.Geocoder;
 
@@ -470,6 +472,7 @@
 							self.geocodeLatLng(geocoder, this.map)
 							.then(function(results) {
 								var country = self.getCountry(results[0].address_components);
+								self.currentLocation.address = results[0].formatted_address;
 
 								axios.get('/country/'+country)
 									.then(function(response) {

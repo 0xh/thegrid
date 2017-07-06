@@ -88,7 +88,7 @@
 
 		[mobile] grid-second-fold {
 			width: 100%;
-			left: -100%
+			left: 100%
 		}
 
 		[mobile] grid-second-fold[opened] {
@@ -97,7 +97,7 @@
 
 		[mobile] grid-second-fold[opened] ~ grid-third-fold {
 			width: 100%;
-			left: -100%;
+			left: 100%;
 			z-index: 3;
 		}
 
@@ -108,7 +108,7 @@
 
 		[mobile] grid-third-fold {
 			width: calc(100% - var(--grid-drawer-collapse-width));
-			left: -100%
+			left: 100%
 		}
 
 		[mobile] grid-drawer {
@@ -123,7 +123,7 @@
 		}
 
 		[mobile] grid-view {
-			left: 0;
+			left: 0 !important;
 			width: 100%;
 		}
 

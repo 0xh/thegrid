@@ -19,7 +19,7 @@
 		}
 	</style>
 	<template>
-		@if(Auth::check()) 
+		@if(Auth::check())
 			{{-- <strong>{{Auth::user()->id}}, </strong> --}}
 		@endif
 		<iron-pages id="tabs" selected="@{{selectedTab}}" attr-for-selected="data-tab">
@@ -65,7 +65,7 @@
 		Polymer({
 			is: 'grid-second-fold',
 			behaviors: [
-				GridBehaviors.FoldBehavior, 
+				GridBehaviors.FoldBehavior,
 				GridBehaviors.TabsBehavior,
 				GridBehaviors.PageBehavior
 			],

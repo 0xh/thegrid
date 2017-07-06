@@ -45,7 +45,7 @@
     <paper-toolbar class="tall">
       <paper-icon-button slot="top" icon="menu" on-tap="openDrawer"></paper-icon-button>
       <span slot="top" class="title"></span>
-      <paper-icon-button slot="top" icon="maps:my-location"></paper-icon-button>
+      <paper-icon-button slot="top" icon="maps:my-location" on-tap="setCurrentLocation"></paper-icon-button>
       <paper-icon-button slot="top" icon="filter-list"></paper-icon-button>
       <div slot="middle" class="middle title-text">
         <small clas="date">July 11, 2016</small>
@@ -65,6 +65,10 @@
       behaviors: [GridBehaviors.FoldBehavior],
       openDrawer: function() {
         this.drawer.open();
+      },
+      setCurrentLocation: function() {
+        console.log('setting current location');
+        this.view.setCurrentLocation();
       }
 
 		});

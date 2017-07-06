@@ -11,8 +11,10 @@
 	<template>
 		<paper-scroll-header-panel class="flex h100">
 		    <paper-toolbar slot="header" class="border-bottom">
+					<paper-icon-button icon="first-page" on-tap="close"></paper-icon-button>
 		      <div class="flex">Inbox</div>
-		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
+		      <paper-icon-button icon="search" class="fab-button"></paper-icon-button>
+		      <paper-icon-button icon="more-vert"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
 		    	<template is="dom-if" if="[[isLoading]]">

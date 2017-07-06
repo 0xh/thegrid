@@ -4,10 +4,10 @@
 <dom-module id="grid-fab-toolbar">
 	<style>
 		:host {
-			
+
 		}
 		:host paper-toolbar {
-			
+
 		}
 		#toolbarContent {
 
@@ -84,7 +84,7 @@
 				<slot id="toolbarContent" select="paper-toolbar"></slot>
 			</div>
 		</div>
-	</template> 
+	</template>
 </dom-module>
 <script>
 	(function(){
@@ -144,7 +144,7 @@
 				return Polymer.dom(this.$.fabContent).getDistributedNodes()[0];
 			},
 			get toolbar() {
-				return Polymer.dom(this.$.toolbarContent).getDistributedNodes()[0];	
+				return Polymer.dom(this.$.toolbarContent).getDistributedNodes()[0];
 			},
 			transform: function(e) {
 				e.stopPropagation();
@@ -190,11 +190,11 @@
 				this.$.toolbarContainer.style.pointerEvents = 'none';
 				this.$.trigger.style.transitionDelay = '.2s';
 				//if(this.fabPosition == 'top') {
-					//this.$.trigger.style.transform = 'translate(0px, -8px)';	
+					//this.$.trigger.style.transform = 'translate(0px, -8px)';
 				//} else {
 					this.$.trigger.style.transform = 'translate(0px, 0px)';
 				//}
-				
+
 				this.$.wrapper.style.transitionDelay = '.3s';
 				// setTimeout(function() {
 				// 	self.$.wrapper.style.overflow = 'visible';
@@ -221,7 +221,7 @@
 				});
 				this.fab.addEventListener('click', function(e) {
 					//this.fab.style.transform = 'scale(20)';
-					
+
 				});
 				this.$.wrapper.addEventListener('click', function(e) {
 					//this.fab.style.transform = 'scale(20)';
