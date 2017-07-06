@@ -14,6 +14,8 @@
 <link rel="import" href="/bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="/bower_components/iron-icons/social-icons.html">
 <link rel="import" href="/bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="/bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="/bower_components/iron-media-query/iron-media-query.html">
 
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
@@ -43,6 +45,7 @@
 <link rel="import" href="/grid-elements/grid-shared-styles">
 <link rel="import" href="/grid-elements/grid-drawer">
 <link rel="import" href="/grid-elements/grid-view">
+<link rel="import" href="/grid-elements/custom.grid-mobile-header">
 
 <!-- second fold -->
 <link rel="import" href="/grid-elements/grid-second-fold">
@@ -54,7 +57,7 @@
 <link rel="import" href="/grid-elements/scripts.axios">
 <link rel="import" href="/grid-elements/scripts.socket-io">
 @if (Auth::guest())
-                           
+
 @else
     {{ Auth::user()->name }}
 @endif

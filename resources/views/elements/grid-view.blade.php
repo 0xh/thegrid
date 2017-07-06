@@ -3,7 +3,7 @@
 <link rel="import" href="/bower_components/paper-fab/paper-fab.html">
 <link rel="import" href="/bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+
 <link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker-light.html">
 <link rel="import" href="/grid-elements/custom.grid-fab-toolbar">
 <link rel="import" href="/grid-elements/custom.grid-info-window">
@@ -191,13 +191,13 @@
 				@endif
 			</div>
 			<paper-dialog id="markerDialog" {{-- entry-animation="scale-up-animation" exit-animation="scale-down-animation" --}}>
-			 	<h2>Confirmation</h2>
-			 	<div>
+			 	<h2>@{{selectedJob.name}}</h2>
+			 	<div id="markerDialogContent">
 			 		<p>Are you sure you want to approve this bid?</p>
 			 	</div>
 			 	<div class="buttons">
-			 		<paper-button dialog-dismiss>Cancel</paper-button>
-			 		<paper-button dialog-confirm autofocus on-tap="approveBid">Yes</paper-button>
+			 		<paper-button dialog-dismiss>Close</paper-button>
+			 		<paper-button dialog-confirm autofocus on-tap="">View Details</paper-button>
 			 	</div>
 			 </paper-dialog>
 		</template>
@@ -254,6 +254,7 @@
 					value: false,
 					notify: true
 				},
+				selectedJob: Object
 			},
 			observers: [
 			'updateAddJobPane(what, when, where, lat, lng)'
@@ -352,9 +353,10 @@
 						{
 							name: 'click',
 							callback: function(e, obj) {
-								self.$.markerDialog.innerHTML = '';
+								self.selectedJob = data;
+								self.$.markerDialogContent.innerHTML = '';
 								content.marker = obj;
-								self.$.markerDialog.appendChild(content);
+								self.$.markerDialogContent.appendChild(content);
 								self.$.markerDialog.open();
 							}
 						}

@@ -1,7 +1,7 @@
 <script src="/bower_components/socket.io-client/dist/socket.io.js"></script>
 <script type="text/javascript">
     var socket = new io.connect('{{env('SOCKET_HOST')}}:{{env('SOCKET_PORT')}}', {
-      query: "token=" + Grid.session_id
+      secure: true
     });
     socket.on('connect', function(){
         console.log('connected to socket');

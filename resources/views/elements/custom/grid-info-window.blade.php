@@ -1,14 +1,12 @@
-<link rel="import" href="/bower_components/paper-spinner/paper-spinner.html">
-<link rel="import" href="/grid-elements/scripts.axios">
 
 <dom-module id="grid-info-window">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:host  .wrapper {
-			height: 170px;
+			/*height: 170px;
 			width: 200px;
-			display: flex; 
-			align-items: center; 
-			justify-content: center;
+			display: flex;
+			align-items: center;
+			justify-content: center;*/
 		}
 		.btn-bid {
 			background-color: #E00008;
@@ -23,35 +21,26 @@
 		}
 	</style>
 	<template>
-		<div class="wrapper">
-			<div>
-				<div><strong>Posted by</strong>: @{{data.user.name}}</div>
-				<div><strong>Demand</strong>: @{{data.name}}</div>
-				<div><strong>Price</strong>: AED @{{data.price}}</div>
-				<div><strong>Distance</strong>: @{{data.distance}} Miles</div>
-				{{-- <div><strong>Time Left</strong>: @{{timeLeft}}</div> --}}
-				<template is="dom-if" if="[[isMyPost]]">
-					<p>This is my post</p>
+		<div>
+			<h3><span>@{{data.user.name}}</span></h3>
+			<div><strong>Budget</strong>: <span>AED @{{data.price}}</span></div>
+			<div><strong>Distance</strong>: <span>@{{data.distance}} Miles</span></div>
+			<template is="dom-if" if="[[isMyPost]]">
+				<p>This is my post</p>
+			</template>
+			<template is="dom-if" if="[[!isMyPost]]">
+				<template is="dom-if" if="[[!isBidded]]">
+					<div>
+						<paper-input label="Quick Bid" value="@{{price_bid}}" name="bid" class="flex bid-input"></paper-input>
+						<paper-button raised class="flex btn-bid" on-tap="quickBid">Bid</paper-button>
+					</div>
 				</template>
-				<template is="dom-if" if="[[!isMyPost]]">
-					<template is="dom-if" if="[[!isBidded]]">
-						<div>
-							<paper-input label="Quick Bid" value="@{{price_bid}}" name="bid" class="flex bid-input"></paper-input>
-							<paper-button raised class="flex btn-bid" on-tap="quickBid">Bid</paper-button>
-						</div>
-					</template>
-					<template is="dom-if" if="[[isBidded]]">
-						<p>You already bidded to this job</p>
-					</template>
+				<template is="dom-if" if="[[isBidded]]">
+					<p>You already bidded to this job</p>
 				</template>
-			</div>
-			{{-- <template is="dom-if" if="[[!isChecked]]">
-				<div class="flex spinner">
-					<paper-spinner id="spinner" active></paper-spinner>
-				</div>
-			</template> --}}
+			</template>
 		</div>
-	</template> 
+	</template>
 </dom-module>
 <script>
 	(function(){
@@ -85,7 +74,8 @@
 			attached: function() {
 				if(typeof this.data === 'string') {
 					this.data = JSON.parse(this.data);
-					// this.set('data.distance' ,this.data.distance.toFixed(2));
+					if(this.data.distance)
+						this.set('data.distance' ,this.data.distance.toFixed(2));
 					this.startCountDown(this.data.date);
 				}
 			},
@@ -134,7 +124,7 @@
 				if(t.total <= 0) {
 					this.timeLeft = "Expired";
 				} else {
-					this.timeLeft = t.days + ' days : ' + t.hours + ' hrs. : ' + t.minutes + ' min. : ' + t.seconds + ' sec.' ; 
+					this.timeLeft = t.days + ' days : ' + t.hours + ' hrs. : ' + t.minutes + ' min. : ' + t.seconds + ' sec.' ;
 				}
 			},
 			startCountDown: function() {
@@ -144,7 +134,7 @@
 				}, 1000);
 			},
 			ready: function() {
-				
+
 			}
 		});
 	}());

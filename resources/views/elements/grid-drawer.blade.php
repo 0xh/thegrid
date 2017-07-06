@@ -4,15 +4,10 @@
 <dom-module id="grid-drawer">
 	<style>
 		:host {
-			position: relative;
-			height: 100%;
-			z-index: 4;
-			transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1), right 350ms cubic-bezier(0.4, 0, 0.2, 1);
-			background-color: #ffffff;
-			width: var(--grid-drawer-collapse-width);
+
 		}
 		:host[opened] {
-			width: var(--grid-drawer-expanded-width);
+			
 		}
 		paper-material#menu {
 			padding: var(--paper-material-padding);
@@ -289,7 +284,7 @@
 			openBids: function() {
 				this._selectTab('bids');
 			},
-			
+
 			// transactions events
 			openTransactions: function() {
 				this._selectTab('transactions');
