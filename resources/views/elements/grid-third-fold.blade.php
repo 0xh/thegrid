@@ -1,12 +1,12 @@
-<link rel="import" href="/grid-elements/2.grid-job">
+<!-- <link rel="import" href="/grid-elements/2.grid-job">
 <link rel="import" href="/grid-elements/2.grid-bid">
 <link rel="import" href="/grid-elements/2.grid-confirmation">
-<link rel="import" href="/grid-elements/2.grid-conversation">
+<link rel="import" href="/grid-elements/2.grid-conversation"> -->
 
 <dom-module id="grid-third-fold">
 	<style include="iron-flex">
 		:host {
-			
+
 		}
 		iron-pages, iron-pages section {
 			height: 100%;
@@ -30,7 +30,7 @@
 	</template>
 </dom-module>
 <script>
-	
+
 	(function(){
 		'use strict'
 
@@ -39,17 +39,27 @@
 			properties: {
 				component: {
 					type: String,
-					value: 'job',
+					value: null,
 					notify: true,
 				}
 			},
-			// observers: ['_insertComponent(component)'],
+			observers: ['_lazyLoad(component)'],
 			behaviors: [GridBehaviors.FoldBehavior],
-			_insertComponent: function(component) {
+			_lazyLoad: function(component) {
 				if(component) {
-					var _component = document.createElement(component);
-					this.innerHTML = '';
-					this.appendChild(_component);
+					//var _component = document.createElement(component);
+					//this.innerHTML = '';
+					//this.appendChild(_component);
+					var component = this.$$('#'+this.component);
+					if(Polymer.isInstance(component)) {
+						return;
+					}
+					Polymer.Base.importHref(
+						'/grid-elements/2.grid-'+this.component,
+						() => {
+							
+						}
+					);
 				}
 			},
 		});

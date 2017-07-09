@@ -46,11 +46,32 @@
             ]) !!};
             @endif
         </script>
+        <!-- <link rel="import" href="/bower_components/polymer/polymer.html"> -->
+        <!-- <link rel="import" href="/elements/elements.html" /> -->
+        <link rel="import" href="/elements/elements.html" />
         <link rel="import" href="/grid-elements/grid-app" />
+        <script type="text/javascript">
+            var socket = new io.connect('{{env('SOCKET_HOST')}}:{{env('SOCKET_PORT')}}', {
+              secure: true
+            });
+            socket.on('connect', function(){
+                console.log('connected to socket');
+                socket.emit('new-user', Grid);
+            });
+            socket.on('error', function() {
+            	console.log('Error connecting');
+            });
+            socket.on('user-callback', function(data){
+                console.log('user callback', data);
+            });
+            socket.on('testing', function(data){
+                console.log('testing', data);
+            });
+        </script>
     </head>
     <body>
         @yield('content')
-        
+
         {{-- <script src="/bower_components/webcomponentsjs/webcomponents.js"></script> --}}
         <script>
         (function() {

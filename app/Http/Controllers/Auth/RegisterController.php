@@ -63,9 +63,9 @@ class RegisterController extends Controller
         $input = $request->all();
         // trim phone number
         if($input['phone_number'] != '') {
-            $input['phone_number'] = $input['country_code'].preg_replace('/[\-\s]/','',$input['phone_number']);    
+            $input['phone_number'] = $input['country_code'].preg_replace('/[\-\s]/','',$input['phone_number']);
         }
-        
+
         $validator = $this->validator($input);
 
         if($validator->passes()) {
@@ -85,14 +85,14 @@ class RegisterController extends Controller
                 $message->subject('Registration Confirmation');
             });
             if( env('SMS') ) {
-                $sms = $this->sendSMS($user->phone_number, $data['confirmation_code']);     
+                $sms = $this->sendSMS($user->phone_number, $data['confirmation_code']);
             } else {
                 $sms = true;
             }
             if( $sms ) {
                 return response()->json(['message' => 'A confirmation code will be send to the mobile number provided', 'user' => $user], 200)->withCookie(Cookie::make('user', $user, 30));
             } else {
-                return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);   
+                return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);
             }
         }
         return response()->json($validator->errors(), 422);
@@ -125,19 +125,19 @@ class RegisterController extends Controller
             if( $user ) {
                 $code = $user->confirmation_code;
                 if( env('SMS') ) {
-                    $sms = $this->sendSMS($user->phone_number, $code); 
+                    $sms = $this->sendSMS($user->phone_number, $code);
                 } else {
                     $sms = true;
                 }
             } else {
                 $sms = false;
-            }    
+            }
 
         }
         if( $sms ) {
             return response()->json(['message' => 'Successfully send the code to the number provided.', 'cookie' => $userCookie], 200);
         } else {
-            return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);   
+            return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);
         }
     }
 
@@ -247,7 +247,7 @@ class RegisterController extends Controller
         }
         //check if we have logged provider
         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
-        
+
         if(!$socialProvider) {
             //create a new user and provider
             $user = User::firstOrCreate(
@@ -268,19 +268,19 @@ class RegisterController extends Controller
         // $expiresIn = $socialUser->expiresIn;
 
         // OAuth One Providers
-        $token = $socialUser->token;
-        // // $tokenSecret = $socialUser->tokenSecret;
-        $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
-        $response = $http->post(env('APP_URL').'/oauth/token', [
-            'form_params' => [
-                'grant_type' => 'social',
-                'client_id' => 2,
-                'client_secret' => 'PxiXYcdKz1bu39THhwdXtgQGrHt7yqvguE8K67Ea',
-                'network' => $provider, /// or any other network that your server is able to resolve.
-                'access_token' => $token,
-            ],
-        ]);
-        $account = Socialite::driver($provider)->userFromToken($token);
+        // $token = $socialUser->token;
+        // // // $tokenSecret = $socialUser->tokenSecret;
+        // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
+        // $response = $http->post(env('APP_URL').'/oauth/token', [
+        //     'form_params' => [
+        //         'grant_type' => 'social',
+        //         'client_id' => env('CLIENT_ID'),
+        //         'client_secret' => env('CLIENT_SECRET'),
+        //         'network' => $provider, /// or any other network that your server is able to resolve.
+        //         'access_token' => $token,
+        //     ],
+        // ]);
+        // $account = Socialite::driver($provider)->userFromToken($token);
         //dd($account);
         // //$response = $http->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
         auth()->login($user);

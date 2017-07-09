@@ -1,4 +1,4 @@
-<link rel="import" href="/grid-elements/1.grid-auth">
+<!-- <link rel="import" href="/grid-elements/1.grid-auth">
 <link rel="import" href="/grid-elements/1.grid-register">
 <link rel="import" href="/grid-elements/1.grid-forgot-password">
 <link rel="import" href="/grid-elements/1.grid-profile">
@@ -6,7 +6,7 @@
 <link rel="import" href="/grid-elements/1.grid-bids">
 <link rel="import" href="/grid-elements/1.grid-inbox">
 <link rel="import" href="/grid-elements/1.grid-transactions">
-<link rel="import" href="/grid-elements/1.grid-add-job">
+<link rel="import" href="/grid-elements/1.grid-add-job"> -->
 <link rel="import" href="/bower_components/iron-pages/iron-pages.html">
 
 <dom-module id="grid-second-fold">
@@ -75,8 +75,16 @@
 			_initialize: function() {
 				var tab = this.$$('#'+this.selectedTab);
 				if (tab) {
-						if(!tab.isInit)
-							tab.init();
+						if(Polymer.isInstance(tab)) {
+							return;
+						}
+						Polymer.Base.importHref(
+							'/grid-elements/1.grid-'+this.selectedTab,
+							() => {
+								if(!tab.isInit)
+									tab.init();
+							}
+						);
 				}
 			},
 			callParent: function() {

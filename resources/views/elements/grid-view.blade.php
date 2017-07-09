@@ -1,13 +1,40 @@
-<link rel="import" href="/bower_components/google-map/google-map.html">
-<link rel="import" href="/bower_components/paper-ripple/paper-ripple.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-ripple/paper-ripple.html">
+
+<link rel="import" href="../bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html">
+<link rel="import" href="../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="/bower_components/paper-fab/paper-fab.html">
-<link rel="import" href="/bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/social-icons.html">
+<link rel="import" href="../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="/bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="/bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../bower_components/iron-media-query/iron-media-query.html">
+
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-menu/paper-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../bower_components/neon-animation/animations/scale-down-animation.html">
+
+
+<link rel="import" href="../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../bower_components/gold-phone-input/gold-phone-input.html">
+
+<link rel="import" href="/bower_components/google-map/google-map.html">
+
 <link rel="import" href="/bower_components/vaadin-date-picker/vaadin-date-picker-light.html">
 <link rel="import" href="/grid-elements/custom.grid-fab-toolbar">
 <link rel="import" href="/grid-elements/custom.grid-info-window">
-<link rel="import" href="/grid-elements/scripts.axios">
 {{-- <link rel="import" href="/grid-elements/custom.grid-mapster"> --}}
 
 <dom-module id="grid-view">

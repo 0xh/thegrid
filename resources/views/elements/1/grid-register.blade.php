@@ -7,9 +7,6 @@
 		:host {
 			height: 100%;
 		}
-		.container {
-			padding: 8px 16px;
-		}
 		.sign-up {
 			width: 100%;
 			margin: 8px 0;
@@ -139,7 +136,7 @@
 				    		// err += "<br/>" + data[key];
 				    		err.push(data[key]);
 				    	}
-				    	
+
 				    	// self.error = err.join('<br/>');
 				    	self.$.toast.fitInto = self;
 				    	self.$.toast.innerHTML = err.join('<br/>');
@@ -169,7 +166,7 @@
 				this.secondFold.close();
 			},
 			ready: function() {
-				//this._updateCredentials();			
+				//this._updateCredentials();
 			}
 		});
 	}());
