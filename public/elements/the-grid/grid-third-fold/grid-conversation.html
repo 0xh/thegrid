@@ -74,7 +74,7 @@
 						<paper-icon-button icon="first-page" on-tap="closeParent"></paper-icon-button>
 						<paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 						<template is="dom-if" if="[[!isTyping]]">
-							<span>@{{conversation.job.name}}</span>
+							<span>{{conversation.job.name}}</span>
 						</template>
 						<template is="dom-if" if="[[isTyping]]">
 							<span class="typing">Typing...</span>
@@ -97,7 +97,7 @@
 							<div>
 								<ul class="chat">
 									<template is="dom-repeat" items="[[messages]]" sort="_sort">
-										<li id="[[item.id]]" data-index$="[[index]]" class$="chat-bubble @{{_getClass(item.author_id, index)}}" title="[[item.created_at]]">
+										<li id="[[item.id]]" data-index$="[[index]]" class$="chat-bubble {{_getClass(item.author_id, index)}}" title="[[item.created_at]]">
 											[[item.message]]
 										</li>
 									</template>
@@ -108,7 +108,7 @@
 				</div>
 			</paper-scroll-header-panel>
 			<paper-toolbar class="border-top">
-				<paper-input id="message" name="message" label="Write..." type="text" class="flex" value="@{{message}}" required autofocus error-message="@{{errorMessage}}" on-keydown="typing"></paper-input>
+				<paper-input id="message" name="message" label="Write..." type="text" class="flex" value="{{message}}" required autofocus error-message="{{errorMessage}}" on-keydown="typing"></paper-input>
 				<paper-icon-button icon="send" on-tap="sendMessage"></paper-icon-button>
 			</paper-toolbar>
 		</div>

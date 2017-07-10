@@ -1,73 +1,67 @@
-<link rel="import" href="/bower_components/paper-material/paper-material.html">
+<!-- <link rel="import" href="/grid-elements/2.grid-job">
+<link rel="import" href="/grid-elements/2.grid-bid">
+<link rel="import" href="/grid-elements/2.grid-confirmation">
+<link rel="import" href="/grid-elements/2.grid-conversation"> -->
 
 <dom-module id="grid-third-fold">
-	<style is="custom-style">
+	<style include="iron-flex">
 		:host {
-			background-color: #FFF;
-			width: var(--grid-third-fold-width);
-			position: absolute;
-			left: calc(var(--grid-drawer-collapse-width) - var(--grid-third-fold-width));
+
+		}
+		iron-pages, iron-pages section {
 			height: 100%;
-			z-index: 2;
-			@apply(--grid-transition-effect);
 		}
 	</style>
 	<template>
-		<div on-tap="showStyles">Third Fold</div>
+		<iron-pages selected="{{component}}" attr-for-selected="data-component">
+			<section data-component="job">
+				<grid-job id="job"></grid-job>
+			</section>
+			<section data-component="bid">
+				<grid-bid id="bid"></grid-bid>
+			</section>
+			<section data-component="conversation">
+				<grid-conversation id="conversation"></grid-conversation>
+			</section>
+			<section data-component="confirmation">
+				<grid-confirmation id="confirmation"></grid-confirmation>
+			</section>
+		</iron-pages>
 	</template>
 </dom-module>
 <script>
-	
+
 	(function(){
 		'use strict'
 
 		Polymer({
 			is: 'grid-third-fold',
-			behaviors: [GridBehaviors.FoldBehavior]
-			// properties: {
-			// 	opened: {
-		 //          type: Boolean,
-		 //          value: false,
-		 //          notify: true,
-		 //          reflectToAttribute: true
-		 //        }
-			// },
-			// get parent() {
-			// 	return this.domHost;
-			// },
-			// get drawer() {
-			// 	return this.parent.$.drawer;
-			// },
-			// get secondFold() {
-			// 	return this.parent.$.secondFold;
-			// },
-			// _open: function() {
-			// 	this.opened = true;
-			// },
-			// _close: function() {
-			// 	this.opened = false;
-			// },
-			// _toggle: function() {
-			// 	this.opened = !this.opened;
-			// },
-			// showStyles: function() {
-			// 	var self = this;
-			// 	var w = self.offsetWidth;
-			// 	console.log(self.customStyle);
-			// 	self.customStyle['--grid-third-fold-width'] = w.toString() + 'px';
-			// 	self.updateStyles();
-			// },
-			// ready: function() {
-			// 	var self = this;
-			// 	console.log(self.customStyle);
-			// 	setTimeout(function(){
-			// 		console.log(self.offsetWidth);
-			// 		var w = self.offsetWidth;
-			// 		console.log(self.customStyle);
-			// 		//self.customStyle['--grid-third-fold-width'] = w.toString() + 'px';
-			// 		//self.updateStyles();
-			// 	},1000);
-			// }
+			properties: {
+				component: {
+					type: String,
+					value: null,
+					notify: true,
+				}
+			},
+			observers: ['_lazyLoad(component)'],
+			behaviors: [GridBehaviors.FoldBehavior],
+			_lazyLoad: function(component) {
+				if(component) {
+					//var _component = document.createElement(component);
+					//this.innerHTML = '';
+					//this.appendChild(_component);
+					var component = this.$$('#' + this.component);
+					if(Polymer.isInstance(component)) {
+						return;
+					}
+					Polymer.Base.importHref(
+						'/elements/the-grid/grid-third-fold/grid-' + this.component + '.html',
+						() => {
+
+						}
+					);
+				}
+			},
 		});
 	}());
 

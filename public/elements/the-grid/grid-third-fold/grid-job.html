@@ -1,0 +1,248 @@
+<link rel="import" href="/bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="/bower_components/vaadin-grid/vaadin-grid-sorter.html">
+
+<dom-module id="grid-job">
+	<style include="iron-flex grid">
+		:root {
+			--paper-toolbar-background: #FFFFFF;
+			--paper-toolbar-color: #636b6f;
+		}
+		:host {
+			height: 100%;
+		}
+		.main-price {
+			font-weight: 400;
+			font-size: 18px;
+		}
+	</style>
+	<template>
+		<paper-scroll-header-panel class="flex h100">
+		    <paper-toolbar slot="header" class="border-bottom">
+		      <div class="flex">Job Details</div>
+		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
+		    </paper-toolbar>
+		    <div role="">
+		    	<div class="container">
+		    		<p><span class="main-price">AED [[job.price]]</span></p>
+		    		<p>[[job.name]]</p>
+		    		<p><strong>Time remaining:</strong> <span>[[timeLeft]]</span></p>
+		    		<template is="dom-if" if="[[hasBids]]">
+		    			<div id="status">
+		    				<strong>[[lowestBid]] - [[highestBid]]</strong>
+		    			</div>
+		    		</template>
+		    		<div id="bidders">
+		    			<h2>Bidders</h2>
+		    			<template id="bidss" is="dom-if" if="[[hasBids]]">
+		    				<!-- <template is="dom-repeat" items="[[job.bids]]" as="bid">
+		    					<p><strong>[[bid.price_bid]]</strong> : [[bid.user.name]]</strong></p>
+		    				</template> -->
+		    				<vaadin-grid id="bidGrid" aria-label="Sorting Example" items="[[job.bidders]]">
+		    					<!-- <vaadin-grid-column width="50px" flex-grow="0">
+		    						<template class="header">#</template>
+		    						<template>[[index]]</template>
+		    					</vaadin-grid-column> -->
+
+		    					<vaadin-grid-column>
+		    						<template class="header">
+		    							<vaadin-grid-sorter path="user.name">Name</vaadin-grid-sorter>
+		    						</template>
+		    						<template>[[item.user.name]]</template>
+		    					</vaadin-grid-column>
+
+		    					<vaadin-grid-column>
+		    						<template class="header">
+		    							<vaadin-grid-sorter path="price_bid" direction="asc">Bid</vaadin-grid-sorter>
+		    						</template>
+		    						<template>[[item.price_bid]]</template>
+		    					</vaadin-grid-column>
+
+		    					<vaadin-grid-column>
+		    						<template class="header">
+		    							<vaadin-grid-sorter path="price_bid" >Ratings</vaadin-grid-sorter>
+		    						</template>
+		    						<template>Star here...</template>
+		    					</vaadin-grid-column>
+
+		    					<vaadin-grid-column>
+		    						<template class="header">
+		    							Action
+		    						</template>
+		    						<template>
+		    							<paper-button raised mini on-tap="showApproveBidConfirmation">Approve</paper-button>
+		    						</template>
+		    					</vaadin-grid-column>
+
+		    				</vaadin-grid>
+		    			</template>
+		    			<template is="dom-if" if="[[!hasBids]]">
+		    				<p>This job has no bidder</p>
+		    			</template>
+		    		</div>
+		    	</div>
+			</div>
+		 </paper-scroll-header-panel>
+		 <paper-dialog id="approveDialog" entry-animation="scale-up-animation" exit-animation="scale-down-animation">
+		 	<h2>Confirmation</h2>
+		 	<div>
+		 		<p>Are you sure you want to approve this bid?</p>
+		 	</div>
+		 	<div class="buttons">
+		 		<paper-button dialog-dismiss>Cancel</paper-button>
+		 		<paper-button dialog-confirm autofocus on-tap="approveBid">Yes</paper-button>
+		 	</div>
+		 </paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			is: 'grid-job',
+			properties: {
+				id: {
+					type: Number,
+					value: 0,
+					notify: true
+				},
+				job: {
+					type: Object,
+					value: function() {
+						return null;
+					},
+					notify: true
+				},
+				hasBids: {
+					type: Boolean,
+					value: false
+				},
+				timeLeft: {
+					type: String,
+					//computed: 'countDown(job.date)'
+				},
+				started: {
+					type: Boolean,
+					value: false
+				},
+				selectedItem: {
+					type: Object,
+					value: function() {
+						return null
+					},
+					notify: true
+				}
+			},
+			observers: ['_getJobDetails(id)'],//,'_jobChange(job)', '_bidChange(job.bids)'],
+			behaviors: [
+				GridBehaviors.FoldBehavior
+			],
+			_bidChange: function(bids) {
+
+			},
+			get approveDialog() {
+				return this.$.approveDialog;
+			},
+			showApproveBidConfirmation: function(e) {
+				this.approveDialog.open();
+				this.selectedItem = e.model.item;
+			},
+			approveBid: function(e) {
+				if(this.selectedItem) {
+					axios.post('/bid/approve', this.selectedItem)
+						.then(function(response) {
+							// console.log(response);
+							var data = response.data;
+							socket.emit('approve-bid', data);
+						})
+						.catch(function(response) {
+							console.log(response);
+						});
+				}
+			},
+			_jobChange: function(job) {
+				var self = this;
+				if(job) {
+					self.job = job;
+					//console.log('refreshing job');
+					this.countDown(job.date);
+					var bidders = job.bidders;
+					if(bidders.length) {
+						//console.log('refreshing bids');
+						//this.set('job.bids', null); // sneaky hack
+						//this.set('job.bids', bids);
+
+						this.hasBids = true;
+						this.highestBid = Math.max.apply(Math,bidders.map(function(bid) {
+							return bid.price_bid;
+						}));
+						this.lowestBid = Math.min.apply(Math, bidders.map(function(bid) {
+							return bid.price_bid;
+						}));
+					} else {
+						this.hasBids = false;
+						this.highestBid = 0;
+						this.lowestBid = 0;
+						console.log('job has no bids');
+					}
+				} else {
+					console.log('job is undefined');
+				}
+			},
+			getTimeRemaining: function(endtime){
+				var t = Date.parse(endtime) - Date.parse(new Date());
+				var seconds = Math.floor( (t/1000) % 60 );
+				var minutes = Math.floor( (t/1000/60) % 60 );
+				var hours = Math.floor( (t/(1000*60*60)) % 24 );
+				var days = Math.floor( t/(1000*60*60*24) );
+				return {
+					'total': t,
+					'days': days,
+					'hours': hours,
+					'minutes': minutes,
+					'seconds': seconds
+				};
+			},
+			countDown: function(date) {
+				this.updateTimeLeft();
+				if(!this.started) {
+					this.startCountDown();
+				}
+			},
+			updateTimeLeft: function() {
+				var t = this.getTimeRemaining(this.job.date);
+				if(t.total <= 0) {
+					this.timeLeft = "Expired";
+				} else {
+					this.timeLeft = t.days + ' days : ' + t.hours + ' hours : ' + t.minutes + ' minutes : ' + t.seconds + ' seconds' ;
+				}
+			},
+			startCountDown: function() {
+				var self = this;
+				setInterval(function() {
+					self.updateTimeLeft();
+				}, 1000);
+			},
+			refreshJob: function() {
+				this._getJobDetails(this.id);
+			},
+			insertBid: function(data) {
+				var job = this.job;
+				this._jobChange(this.job);
+			},
+			_getJobDetails: function(id) {
+				var self = this;
+				if(id) {
+					axios.get('/'+Grid.user_id+'/job/'+id)
+						 .then(function(response) {
+						 	// console.log(response.data);
+						 	// self.job = response.data;
+						 	self._jobChange(response.data);
+						 });
+				}
+			},
+			close: function() {
+				this.thirdFold.close();
+			},
+			ready: function() {
+				this.approveDialog.fitInto = this;
+			}
+		});
+	</script>
+</dom-module>

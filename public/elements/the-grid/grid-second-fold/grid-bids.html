@@ -1,4 +1,4 @@
-<dom-module id="grid-jobs">
+<dom-module id="grid-bids">
 	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
@@ -21,30 +21,36 @@
 	<template>
 		<paper-scroll-header-panel class="flex h100" fixed>
 		    <paper-toolbar slot="header" class="border-bottom">
-		      <div class="flex">Jobs</div>
+		      <div class="flex">Bids</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
+		    <dom-bind>
 		    	<template is="dom-if" if="[[isLoading]]">
 		    		<paper-progress indeterminate class="w100"></paper-progress>
 		    	</template>
-			 	<template is="dom-repeat" items="{{jobs}}" as="job">
-					<paper-item on-tap="viewJob" data-id$={{job.id}}>
+			 	<template is="dom-repeat" items="{{bids}}" as="bid">
+					<paper-icon-item on-tap="viewBid" data-id$="{{bid.id}}">
+						{{_createRoom(bid.job.id)}}
+						<iron-icon icon="account-circle" item-icon></iron-icon>
 						<paper-item-body two-line>
-							<div>{{job.name}}</div>
-							<div secondary>{{job.location}}</div>
+							<div>{{bid.job.name}}</div>
+							<div secondary>{{bid.job.location}}</div>
 						</paper-item-body>
-						<i class="icon-badge">{{job.bids.length}}</i>
+						<template is="dom-if" if="[[bid.is_approved]]">
+							<i class="icon-badge"></i>
+						</template>
 						<paper-ripple></paper-ripple>
-					</paper-item>
+					</paper-icon-item>
 				</template>
 				<template is="dom-if" if="[[pagination.next_page_url]]">
-					<paper-item on-tap="loadJobs">
+					<paper-item on-tap="loadBids">
 						<paper-item-body>
 							<div >Load more</div>
 						</paper-item-body>
 					</paper-item>
 				</template>
+			</dom-bind>
 			</div>
 		 </paper-scroll-header-panel>
 	</template>
@@ -54,10 +60,10 @@
 		'use strict'
 
 		Polymer({
-			is: 'grid-jobs',
+			is: 'grid-bids',
 			properties: {
-				jobs: {
-					type: Object,
+				bids: {
+					type: Array,
 					value: function() {
 						return [];
 					},
@@ -76,7 +82,6 @@
 					notify: true
 				}
 			},
-			//observers: ['_jobChange(jobs)'],
 			listeners: {
 			"content-scroll": "scroll"
 			},
@@ -84,32 +89,33 @@
 				if (d.target.scrollHeight - (d.target.clientHeight * 1.5) < d.target.scrollTop) {
         			//console.log(d.target.scrollHeight, d.target.clientHeight, d.target.scrollTop);
         			if(!this.isLoading) {
-        				this.loadJobs();
+        				this.loadBids();
         			}
    				}
    			},
-			behaviors: [
-				GridBehaviors.FoldBehavior
-			],
-			_jobChange: function(jobs) {
-				this.jobs = jobs;
-			},
-			viewJob: function(e) {
-				var job = e.model.job;
-				this.thirdFold.component = 'job'
-				// this.thirdFold.$.job.job = job;
-				this.thirdFold.$.job.id = job.id;
-				this.thirdFold.open();
-				var jobs = this.jobs;
-				this.indexOpened = jobs.findIndex(x => x.id == job.id);
-			},
+			behaviors: [GridBehaviors.FoldBehavior],
 			close: function() {
 				this.secondFold.close();
 			},
-			insertJob: function(job) {
-				this.unshift('jobs', job);
+			_createRoom: function(room) {
+				var suf = 'JOB_';
+				room = suf + room;
+				console.log(room)
+				socket.emit('join-room', room);
 			},
-			loadJobs: function() {
+			viewBid: function(e) {
+				var bid = e.model.bid;
+				this.thirdFold.component = 'bid'
+				this.thirdFold.$.bid.bid = bid;
+				this.thirdFold.$.bid.id = bid.id;
+				this.thirdFold.open();
+				var bids = this.bids;
+				this.indexOpened = bids.findIndex(x => x.id == bid.id);
+			},
+			insertBid: function(data) {
+				this.unshift('bids', data);
+			},
+			loadBids: function() {
 				var self = this,
 					pagination = self.pagination;
 				if(pagination.next_page_url) {
@@ -117,8 +123,8 @@
 					axios.get(pagination.next_page_url)
 						.then(function (response) {
 							var data = response.data,
-								c_j = self.jobs;
-							self.jobs = c_j.concat(data.data);
+								c_b = self.bids;
+							self.bids = c_b.concat(data.data);
 							self.pagination = {
 								total: data.total,
 								per_page: data.per_page,
@@ -133,12 +139,12 @@
 						});
 				}
 			},
-			refreshJobs: function() {
+			refreshBids: function() {
 				var self = this;
-				axios.get('/'+Grid.user_id+'/jobs')
+				axios.get('/'+Grid.user_id+'/bids')
 					.then(function (response) {
 						var data = response.data;
-						self.jobs = data.data;
+						self.bids = data.data;
 						self.pagination = {
 							total: data.total,
 							per_page: data.per_page,
@@ -153,23 +159,32 @@
 					});
 			},
 			init: function() {
+				this.refreshBids();
 				var self = this;
-				self.refreshJobs();
-				socket.on('add-bid', function(data) {
-					var jobs = self.jobs,
-						index = jobs.findIndex(x => x.id == data.job_id);
-					if(self.jobs[index]) {
-						self.unshift('jobs.' + index + '.bids', data);
-						self.notifyPath('jobs.' + index + '.bids');
+				socket.on('approve-bid', function(data) {
+					var bids = self.bids;
+					var index = bids.findIndex(x => x.id == data.id);
+					// console.log('data', data);
+					// console.log('index', index);
+					if(self.bids[index]) {
+						self.set('bids.'+ index, data);
+						self.notifyPath('bids.' + index);
+						self.notifyPath('bids.' + index + '.is_approved');
+						// console.log('bids', self.bids);
 					}
 					if(self.indexOpened > -1) {
 						if(index == self.indexOpened) {
-							self.thirdFold.$.job.refreshJob();
+							self.thirdFold.$.bid.refreshBid();
+							// console.log('bid.'+index+' open');
 						}
 					}
 				});
+				socket.on('new-bidder', function(data) {
+					// console.log('new bidder', data); // working
+					self.thirdFold.$.bid.refreshBid();
+				});
 				this.isInit = true;
-			}
+			},
 		});
 	}());
 </script>

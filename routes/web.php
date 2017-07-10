@@ -40,6 +40,7 @@ Route::get('/test', function() {
 
 Auth::routes();
 
+Route::get('/bower_components/polymer/bundles', 'UserController@min');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/auth/{provider}', 'Auth\RegisterController@redirectToProvider');

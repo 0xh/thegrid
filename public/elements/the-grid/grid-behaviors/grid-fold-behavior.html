@@ -9,6 +9,14 @@
 	          notify: true,
 	          reflectToAttribute: true,
 	          observer: '_viewChanged'
+	        },
+	        isLoading: {
+	        	type: Boolean,
+	        	value: true
+	        },
+	        isInit: {
+	        	type: Boolean,
+	        	value: false
 	        }
 		},
 		created: function() {
@@ -29,6 +37,12 @@
 		},
 		get drawer() {
 			return this.parent.$.drawer;
+		},
+		get view() {
+			return this.parent.$.view;
+		},
+		get map() {
+			return this.view.$.map;
 		},
 		open: function() {
 			this.opened = true;
@@ -57,6 +71,9 @@
 			} else {
 				this._onClose();
 			}
+		},
+		init: function() {
+			// abstract
 		}
 	}
 </script>

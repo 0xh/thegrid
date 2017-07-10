@@ -5,16 +5,16 @@
 		properties: {
 			selectedTab: {
 	          type: String,
-	          value: "inbox",
+	          value: null,
 	          notify: true,
-	          observer: '_tabChanged'
-	        }
+	          observer: '_initialize'
+	        },
 		},
 		created: function() {
-			console.log('Tab behavior is created for ', this);
+			// console.log('Tab behavior is created for ', this);
 		},
-		_tabChanged: function() {
-			console.log('selected tab:', this.selectedTab);
+		_initialize: function() {
+			// console.log('selected tab:', this.selectedTab);
 		}
 	}
 </script>

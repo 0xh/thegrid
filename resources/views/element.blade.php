@@ -14,10 +14,10 @@
 <link rel="import" href="/grid-elements/custom.grid-mobile-header">
 
 <!-- second fold -->
-<link rel="import" href="/grid-elements/grid-second-fold">
+<!-- <link rel="import" href="/grid-elements/grid-second-fold"> -->
 
 <!-- third fold -->
-<link rel="import" href="/grid-elements/grid-third-fold">
+<!-- <link rel="import" href="/grid-elements/grid-third-fold"> -->
 
 <!-- scripts -->
 <link rel="import" href="/grid-elements/scripts.axios">

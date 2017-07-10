@@ -8,6 +8,12 @@
 			--grid-view-left-drawer-open: 150px;
 			--grid-view-second-fold-left: 250px;
 			--grid-view-third-fold-left: 500px;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			overflow: hidden;
 		}
 		div[main] {
 			height: 100%;
@@ -188,15 +194,31 @@
 				this.inbox._toggleInbox();
 			},
 			ready: function() {
-				if(Polymer.isInstance(this.$.view)) {
-					return;
+				if(!Polymer.isInstance(this.$.view)) {
+					Polymer.Base.importHref(
+						'/grid-elements/grid-view',
+						() => {
+							console.log('view has been loaded');
+						}
+					);
 				}
-				Polymer.Base.importHref(
-					'/grid-elements/grid-view',
-					() => {
-						console.log('view has been loaded');
-					}
-				);
+				if(!Polymer.isInstance(this.$.thirdFold)) {
+					Polymer.Base.importHref(
+						'/grid-elements/grid-third-fold',
+						() => {
+							console.log('thirdFold has been loaded');
+						}
+					);
+				}
+				if(!Polymer.isInstance(this.$.secondFold)) {
+					Polymer.Base.importHref(
+						'/grid-elements/grid-second-fold',
+						() => {
+							console.log('secondFold has been loaded');
+						}
+					);
+				}
+
 			}
 		});
 	}());
