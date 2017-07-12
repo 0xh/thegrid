@@ -94,7 +94,8 @@
       format="mm/dd/yyyy"
       date="{{birthDate}}"
       view="vertical"
-      disable-days="[7]"
+      disable-days="[]"
+      auto-update-date="true"
       ></app-datepicker-dialog>
       <div hidden$="[[!isLoading]]" class="spinner-container">
   			<paper-spinner active$="[[isLoading]]"></paper-spinner>
@@ -145,6 +146,10 @@
         return value;
       },
       openEditModal: function() {
+        if(this.user.profile.birth_date) {
+          console.log('setting datepicker');
+          this.birthDate = this.user.profile.birth_date;
+        }
         for(var i in this.user) {
           this.set('tmpUser.' + i, this.user[i]);
         }

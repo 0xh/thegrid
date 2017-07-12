@@ -1,3 +1,4 @@
+<link rel="import" href="/bower_components/app-storage/app-indexeddb-mirror/app-indexeddb-mirror.html">
 <dom-module id="grid-conversation">
 	<style include="iron-flex grid">
 		:root {
@@ -96,7 +97,7 @@
 							</template>
 							<div>
 								<ul class="chat">
-									<template is="dom-repeat" items="[[messages]]" sort="_sort">
+									<template is="dom-repeat" items="{{messages}}" sort="_sort">
 										<li id="[[item.id]]" data-index$="[[index]]" class$="chat-bubble {{_getClass(item.author_id, index)}}" title="[[item.created_at]]">
 											[[item.message]]
 										</li>
@@ -112,6 +113,11 @@
 				<paper-icon-button icon="send" on-tap="sendMessage"></paper-icon-button>
 			</paper-toolbar>
 		</div>
+		<!-- <app-indexeddb-mirror
+	    key="1"
+	    data="{{messages}}"
+	    persisted-data="{{persistedData}}">
+		</app-indexeddb-mirror> -->
 	</template>
 	<script>
 		Polymer({
@@ -178,10 +184,11 @@
    			loadConversation: function() {
    				var self = this,
    					pagination = self.pagination;
-   				if(pagination.next_page_url) {
+					var pg = JSON.parse(self.getSessionStorage('cnv-pg-'+self.id));
+   				if(pg.next_page_url) {
 					self.isLoading = true;
 					self.prepareFor('up');
-					axios.get(pagination.next_page_url)
+					axios.get(pg.next_page_url)
 						.then(function (response) {
 							var data = response.data,
 								c_m = self.messages;
@@ -204,6 +211,7 @@
 								to: data.to
 							};
 							self.isLoading = false;
+							self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
 						});
 				}
    			},
@@ -212,28 +220,41 @@
 				if ( id ) {
 					self.isLoading = true;
 					if(self.getSessionStorage('cnv-'+self.id)) {
-						// self.set('messages', JSON.parse(self.getSessionStorage('cnv-'+self.id)));
-						// self.isLoading = false;
-						// self.scrollToBottom();
+						self.set('messages', JSON.parse(self.getSessionStorage('cnv-'+self.id)));
+						self.isLoading = false;
+						self.scrollToBottom();
 					} else {
 						self.set('messages', null);
 					}
+
+					if(self.getSessionStorage('cnv-pg-'+self.id)) {
+
+						self.messages = JSON.parse(self.getSessionStorage('cnv-'+self.id));
+						return;
+
+					}
+					if ( Grid.user_id == self.conversation.user_id_1 ) {
+						self.author = self.conversation.user1;
+						self.recipient = self.conversation.user2;
+					} else {
+						self.author = self.conversation.user2;
+						self.recipient = self.conversation.user1;
+					}
 					axios.get('/users/'+Grid.user_id+'/conversations/'+id)
 					.then(function(response) {
-						var data = response.data;
-						// data.data.sort(function(a,b){
-						// 	return new Date(a.created_at) - new Date(b.created_at);
-						// });
-						self.messages = data.data;
+						var data = response.data,
+							c_m = self.messages;
 
-						var author_id, recipent_id;
-						if ( Grid.user_id == self.conversation.user_id_1 ) {
-							self.author = self.conversation.user1;
-							self.recipient = self.conversation.user2;
-						} else {
-							self.author = self.conversation.user2;
-							self.recipient = self.conversation.user1;
-						}
+						// if(self.getSessionStorage('cnv-'+self.id)) {
+							// self.messages = JSON.parse(self.getSessionStorage('cnv-'+self.id)).concat(c_m);
+							// return;
+						// } else {
+							self.messages = data.data;
+						// }
+
+
+						// var author_id, recipent_id;
+
 						self.isLoading = false;
 						self.pagination = {
 							total: data.total,
@@ -245,8 +266,10 @@
 							from: data.from,
 							to: data.to
 						};
+
 						self.scrollToBottom();
 						self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
+						self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
 					})
 					.catch(function(error) {
 

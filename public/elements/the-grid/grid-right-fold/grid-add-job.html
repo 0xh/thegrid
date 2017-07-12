@@ -127,7 +127,9 @@
 			postJob: function() {
 				var self = this;
 				self.isLoading = true;
-        self.category_id = self.$.category.selectedItem.getAttribute('value');
+				if(self.$.category.selectedItem) {
+        	self.category_id = self.$.category.selectedItem.getAttribute('value');
+				}
 				axios.post('/job', {
 					user_id: Grid.user_id,
 					name: self.what,

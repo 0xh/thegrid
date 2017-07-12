@@ -13,7 +13,7 @@ class MessageController extends Controller
     					['is_deleted', '=', 0]
     				])
     				->orderBy('created_at', 'DESC')
-    				->paginate(25);
+    				->paginate(10);
     	return $messages;
     }
 

@@ -95,8 +95,8 @@
 			viewConversation: function(e) {
 				var conversation = e.model.item;
 				this.thirdFold.component = 'conversation';
-				this.thirdFold.$.conversation.id = conversation.id;
 				this.thirdFold.$.conversation.conversation = conversation;
+				this.thirdFold.$.conversation.id = conversation.id;
 				this.thirdFold.open();
 			},
 			openSearch: function() {
