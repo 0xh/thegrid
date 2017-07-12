@@ -22,6 +22,7 @@ return array(
     'AlterMessagesTable' => $baseDir . '/database/migrations/2017_05_10_084050_alter_messages_table.php',
     'AlterNotificationsTable' => $baseDir . '/database/migrations/2017_05_10_084221_alter_notifications_table.php',
     'AlterProfilesTable' => $baseDir . '/database/migrations/2017_05_10_082818_alter_profiles_table.php',
+    'AlterProfilesTable2' => $baseDir . '/database/migrations/2017_07_12_075249_alter_profiles_table2.php',
     'AlterReviewsTable' => $baseDir . '/database/migrations/2017_05_10_084303_alter_reviews_table.php',
     'AlterSettingsTable' => $baseDir . '/database/migrations/2017_05_10_084336_alter_settings_table.php',
     'AlterSkillsTable' => $baseDir . '/database/migrations/2017_06_22_083736_alter_skills_table.php',

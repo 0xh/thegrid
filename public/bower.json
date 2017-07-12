@@ -18,6 +18,7 @@
     "socket.io-client": "^2.0.2",
     "vaadin-date-picker": "vaadin/vaadin-date-picker#^1.2.3",
     "vaadin-grid": "^2.0.3",
-    "gold-elements": "PolymerElements/gold-elements#^1.0.1"
+    "gold-elements": "PolymerElements/gold-elements#^1.0.1",
+    "app-datepicker": "^2.11.0"
   }
 }

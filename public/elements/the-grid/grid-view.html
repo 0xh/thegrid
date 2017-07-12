@@ -1,3 +1,4 @@
+<link rel="import" href="/bower_components/google-map/google-map.html">
 <link rel="import" href="/elements/the-grid/grid-custom/grid-info-window.html">
 <dom-module id="grid-view">
 	<style include="iron-flex grid">
@@ -7,9 +8,6 @@
 		.view-controls {
 		    height: 100%;
 		    width: 100%;
-		}
-		#add {
-			--paper-fab-background: #E00008;
 		}
 		#sort {
 			--paper-fab-background: #FAFAFA;
@@ -35,7 +33,6 @@
 		    width: 100%
 		}
 		#add2 {
-			--paper-fab-background: #FAFAFA;
 			color: #737373;
 		}
 		.item {
@@ -99,6 +96,11 @@
 			90% { transform: scale(1.1); }
 			100% { transform: scale(0); }
 		}
+		#add {
+			position: absolute;
+			right: 16px;
+			bottom: 22px;
+		}
 	</style>
 	<dom-bind>
 		<template>
@@ -117,7 +119,7 @@
 					</paper-toolbar>
 				</grid-fab-toolbar> -->
 				<div class="flex"></div>
-				<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
+				<paper-fab icon="add" id="add" on-tap="showAddJobPane" class="grid-main-fab"></paper-fab>
 				<!-- <grid-fab-toolbar id="addFabToolbar" fab-position="top" direction="left" class="fab-button">
 					<paper-fab icon="add" id="add" on-tap="searchOpen"></paper-fab>
 					<paper-toolbar id="toolbar">
@@ -227,9 +229,9 @@
 			},
 			showAddJobPane: function() {
 				this.updateAddJobPane(this.what, this.when, this.where, this.lat, this.lng);
-				this.secondFold.selectedTab = 'add-job';
-				this.secondFold.open();
-				this.$.addFabToolbar.close();
+				this.rightFold.selectedTab = 'addJob';
+				this.rightFold.open();
+				// this.$.addFabToolbar.close();
 			},
 			geocodeLatLng: function() {
 				var self = this;

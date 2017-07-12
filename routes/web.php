@@ -34,8 +34,7 @@ Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
 Route::get('/test', function() {
-	$user = App\Skill::where('id', 1)->with('users')->first();
-	return $user;
+	return Auth::user()->profile;
 });
 
 Auth::routes();
@@ -50,6 +49,7 @@ Route::post('/submitCode', 'Auth\RegisterController@submitCode');
 Route::post('/resendCode', 'Auth\RegisterController@resendCode');
 
 Route::get('/users/{id}', 'UserController@getUser');
+Route::put('/users/{id}', 'UserController@updateUser');
 
 Route::post('/job', 'JobController@add');
 Route::get('/job/all', 'JobController@all');

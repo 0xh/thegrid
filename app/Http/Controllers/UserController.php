@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use Twilio\Rest\CLient;
 
+use App\Profile;
+
 class UserController extends Controller
 {
     public function getUserDetails($id) {
@@ -39,48 +41,14 @@ class UserController extends Controller
   		}
     }
 
-    public function compress( $minify )
-    {
-  /* remove comments */
-      $minify = preg_replace( '!/*[^*]**+([^/][^*]**+)*/!', '', $minify );
-
-        /* remove tabs, spaces, newlines, etc. */
-      $minify = str_replace( array("rn", "r", "n", "t", '  ', '    ', '    '), '', $minify );
-
-        return $minify;
-    }
-
-    public function min(Request $request) {
-      header('Content-type: text/html');
-      ob_start();
-
-
-          /* html files for combining */
-          // include(public_path().'/bower_components/polymer/polymer.html');
-          include(public_path().'/bower_components/iron-flex-layout/iron-flex-layout-classes.html');
-          include(public_path().'/bower_components/paper-material/paper-material.html');
-          include(public_path().'/bower_components/paper-ripple/paper-ripple.html');
-          include(public_path().'/bower_components/paper-scroll-header-panel/paper-scroll-header-panel.html');
-          include(public_path().'/bower_components/paper-header-panel/paper-header-panel.html');
-          include(public_path().'/bower_components/paper-toolbar/paper-toolbar.html');
-          include(public_path().'/bower_components/paper-button/paper-button.html');
-          include(public_path().'/bower_components/paper-fab/paper-fab.html');
-          include(public_path().'/bower_components/iron-icons/social-icons.html');
-          include(public_path().'/bower_components/iron-icons/communication-icons.html');
-          include(public_path().'/bower_components/iron-icons/maps-icons.html');
-          include(public_path().'/bower_components/iron-icons/hardware-icons.html');
-          include(public_path().'/bower_components/paper-icon-button/paper-icon-button.html');
-          include(public_path().'/bower_components/iron-media-query/iron-media-query.html');
-          include(public_path().'/bower_components/paper-menu/paper-menu.html');
-          include(public_path().'/bower_components/paper-item/paper-item.html');
-          include(public_path().'/bower_components/paper-item/paper-icon-item.html');
-          include(public_path().'/bower_components/paper-progress/paper-progress.html');
-          include(public_path().'/bower_components/paper-dialog/paper-dialog.html');
-          include(public_path().'/bower_components/neon-animation/animations/scale-down-animation.html');
-          include(public_path().'/bower_components/gold-email-input/gold-email-input.html');
-          include(public_path().'/bower_components/gold-phone-input/gold-phone-input.html');
-
-
-      ob_end_flush();
+    public function updateUser(Request $request, $id) {
+      $data = $request->all();
+      // $data['profile']['user_id'] = $id;
+      $data['profile']['birth_date'] = date("Y-m-d H:i:s", strtotime($data['profile']['birth_date']));
+      $user = Profile::updateOrCreate(
+        ['user_id' => $id],
+        $data['profile']
+      );
+      return $user;
     }
 }

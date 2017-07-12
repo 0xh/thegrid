@@ -1,0 +1,70 @@
+<link rel="import" href="/bower_components/iron-pages/iron-pages.html">
+
+<dom-module id="grid-right-fold">
+	<style include="iron-flex grid">
+		paper-header-panel {
+			background-color: #fff;
+		}
+		iron-pages, iron-pages section {
+			height: 100%;
+		}
+	</style>
+	<template>
+		<iron-pages id="tabs" selected="{{selectedTab}}" attr-for-selected="data-tab">
+			<section data-tab="addJob">
+				<grid-add-job id="addJob"></grid-add-job>
+			</section>
+		</iron-pages>
+		<div hidden$="[[!isLoading]]" class="spinner-container">
+			<paper-spinner active$="[[isLoading]]"></paper-spinner>
+		</div>
+	</template>
+</dom-module>
+<script>
+	(function(){
+		'use strict'
+
+		Polymer({
+			is: 'grid-right-fold',
+			behaviors: [
+				GridBehaviors.FoldBehavior,
+				GridBehaviors.TabsBehavior,
+				GridBehaviors.PageBehavior
+			],
+			_onClose: function() {
+				this.thirdFold.close();
+			},
+			_initialize: function() {
+				var self = this,
+						tab = self.$$('#'+self.selectedTab);
+				if (tab) {
+						if(Polymer.isInstance(tab)) {
+							return;
+						}
+						self.isLoading = true;
+						var stab = self.selectedTab;
+						stab = stab.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+						console.log(stab);
+						Polymer.Base.importHref(
+							'/elements/the-grid/grid-right-fold/grid-' + stab + '.html',
+							() => {
+								self.isLoading = false;
+								if(!tab.isInit)
+									tab.init();
+							}
+						);
+				}
+			},
+			callParent: function() {
+				this.thirdFold.opened = !this.thirdFold.opened;
+			},
+			ready: function() {
+				// console.log('tab',this.getTab);
+				if(this.getTab) {
+					this.selectedTab = this.getTab;
+					this.secondFold.open();
+				}
+			}
+		});
+	}());
+</script>

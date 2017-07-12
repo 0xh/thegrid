@@ -15,7 +15,7 @@ class JobController extends Controller
     	$job = Job::create([
     		'user_id' => $data['user_id'],
             'name' => $data['name'],
-            'category_id' => 1,
+            'category_id' => $data['category_id'],
             'price' => $data['price'],
             'lat' => $data['lat'],
             'lng' => $data['lng'],
@@ -59,23 +59,23 @@ class JobController extends Controller
     				->groupBy('distance')
     				->get();
     	return response()->json($jobs, 200);
-    	
+
     	//$jobs = DB::table('jobs')->select(DB::raw($f))->having('distance', '<', 25)->groupBy('distance')->get();
     	//dd($jobs);
     	// return $jobs;
-    	// SELECT 
-		// id, 
+    	// SELECT
+		// id,
 		// (
 		//    3959 *
-		//    acos(cos(radians(25.2627866)) * 
-		//    cos(radians(lat)) * 
-		//    cos(radians(lng) - 
-		//    radians(55.3267619)) + 
-		//    sin(radians(25.2627866)) * 
+		//    acos(cos(radians(25.2627866)) *
+		//    cos(radians(lat)) *
+		//    cos(radians(lng) -
+		//    radians(55.3267619)) +
+		//    sin(radians(25.2627866)) *
 		//    sin(radians(lat )))
-		// ) AS distance 
-		// FROM jobs 
-		// HAVING distance < 25 
+		// ) AS distance
+		// FROM jobs
+		// HAVING distance < 25
 		// ORDER BY distance LIMIT 0, 30;
     }
 

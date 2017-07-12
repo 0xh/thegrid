@@ -1,0 +1,281 @@
+<link rel="import" href="/bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="/bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="/bower_components/paper-item/paper-item.html">
+<link rel="import" href="/bower_components/google-map/google-map.html">
+<dom-module id="grid-add-job">
+	<style include="iron-flex grid">
+		:root {
+				--paper-toolbar-background: #FFFFFF;
+				--paper-toolbar-color: #636b6f;
+			}
+			:host {
+				height: 100%;
+			}
+			.sign-up {
+				width: 100%;
+			    margin: 8px 0;
+			    margin-top: 20px;
+			    background-color: #e00008;
+			    color: #FFF;
+			    text-transform: none;
+			    line-height: 28px;
+			}
+      .search {
+        width: 100%;
+  	    line-height: 40px;
+  	    border: none;
+  	    font-size: 16px;
+  	    font-weight: 100;
+  			outline: none;
+      }
+	</style>
+	<template>
+    <paper-scroll-header-panel class="flex h100" fixed>
+		    <paper-toolbar slot="header" class="border-bottom">
+		      <div class="flex">Add Job</div>
+		      <paper-icon-button icon="close" on-tap="close"></paper-icon-button>
+		    </paper-toolbar>
+		    <div>
+			    <div class="container">
+				 	<form id="form" role="form" method="POST" action="#">
+				 		<paper-input id="what" name="what" label="What" type="text" value="{{what}}" required autofocus error-message="{{errorWhat}}"></paper-input>
+				 		<paper-input id="when" name="when" label="When" type="text" value="{{when}}" required error-message="{{errorWhat}}" on-focus="openDatePickerDialog"></paper-input>
+				 		<paper-input id="where" name="where" label="Where" type="text" value="{{where}}" required error-message="{{errorWhat}}" on-focus="openSearchMap"></paper-input>
+				 		<paper-input id="price" name="price" label="Budget" value="{{price}}" required error-message="{{errorWhat}}">
+				 			<div suffix>AED </div>
+				 		</paper-input>
+				 		<paper-dropdown-menu id="category" label="Job Type">
+							<paper-listbox class="dropdown-content" selected="3" attr-for-selected="value">
+								<paper-item value="1">Service</paper-item>
+                <paper-item value="2">Product</paper-item>
+							</paper-listbox>
+						</paper-dropdown-menu>
+				 		<paper-button id="submit" raised class="sign-up" type="submit" on-tap="postJob">
+				 			<template is="dom-if" if="[[isLoading]]">
+				 				<paper-spinner id="spinner" active></paper-spinner>
+							</template>
+							<template is="dom-if" if="[[!isLoading]]">
+				 				<span>Submit</span>
+				 			</template>
+				 		</paper-button>
+				 	</form>
+				 	<paper-toast id="toast" class="fit-bottom"></paper-toast>
+				 </div>
+			 </div>
+		 </paper-scroll-header-panel>
+
+     <paper-dialog id="placeModal" no-cancel-on-outside-click no-cancel-on-esc-key>
+       <input type="search" id="search" class="search" placeholder="Search place..." />
+       <div id="searchContent" style="width: 400px; max-width: 100%; height: 250px; position: relative;">
+         <google-map style="position: absolute; top:0; left:0; right:0; bottom:0; display:flex;align-items: center;justify-content: center;" id="searchMap" class="center-container" api-key="[[apiKey]]" clientID="[[apiKey]]" latitude="25.276987" longitude="55.296249" additional-map-options='{{mapOptions}}' draggable="true" drag-events="true" single-info-window map="{{map}}" fit-to-markers>
+					 <div hidden$="[[isLookingLocation]]">
+						 <iron-icon icon="maps:add-location" style="color: #FFF;"></iron-icon>
+					 </div>
+				 </google-map>
+				 <div hidden$="[[!isLookingLocation]]" style="position: absolute; top:0; left:0; right:0; bottom:0; display:flex;align-items: center;justify-content: center;">
+					 <paper-spinner active$="[[isLookingLocation]]"></paper-spinner>
+				 </div>
+				 <paper-icon-button slot="top" icon="maps:my-location" on-tap="setCurrentLocation" style="color: #FFF; position: absolute; right: 0; top: 0;"></paper-icon-button>
+       </div>
+       <div class="buttons">
+         <paper-button dialog-confirm>Ok</paper-button>
+       </div>
+      </paper-dialog>
+			<app-datepicker-dialog id="datepicker"
+	      theme="goog-theme"
+	      format="mm/dd/yyyy"
+	      date="{{when}}"
+	      view="vertical"
+	      disable-days="[7]"
+	      ></app-datepicker-dialog>
+	</template>
+</dom-module>
+<script>
+	(function(){
+		'use strict'
+
+		Polymer({
+			is: 'grid-add-job',
+			properties: {
+				isLoading: {
+					type: Boolean,
+					value: false
+				},
+				what: String,
+				when: String,
+				where: String,
+				lat: String,
+				lng: String,
+				price: String,
+				isLookingLocation: {
+					type: Boolean,
+					value: false
+				}
+			},
+			behaviors: [
+				GridBehaviors.FoldBehavior,
+				GridBehaviors.TabsBehavior,
+        GridBehaviors.MapBehavior
+			],
+			attached: function() {
+
+			},
+			_updateCredentials: function() {
+				//this.email = this.secondFold.$.auth.email;
+				//this.password = this.secondFold.$.auth.password;
+			},
+			postJob: function() {
+				var self = this;
+				self.isLoading = true;
+        self.category_id = self.$.category.selectedItem.getAttribute('value');
+				axios.post('/job', {
+					user_id: Grid.user_id,
+					name: self.what,
+					price: self.price,
+					lat: self.lat,
+					lng: self.lng,
+					location: self.where,
+					date: self.when,
+          category_id: self.category_id
+				})
+				.then(function (response) {
+					var data = response.data;
+					self.rightFold.close();
+					console.log('new job', data);
+					self.secondFold.selectedTab = 'jobs';
+					self.secondFold.$.jobs.insertJob(data);
+					self.secondFold.open();
+
+					data.fillColor = self.view.markerType.myJob.color;
+					data.isMyPost = true;
+					data.isBidded = false;
+					self.view._newMarker(data);
+
+					socket.emit('new-job', data);
+
+          self.isLoading = false;
+				})
+				.catch(function (error) {
+					if (error.response) {
+						var data = error.response.data;
+
+				    	var err = [];
+				    	for( var key in data) {
+				    		// err += "<br/>" + data[key];
+				    		err.push(data[key]);
+				    	}
+
+				    	// self.error = err.join('<br/>');
+				    	self.$.toast.fitInto = self;
+				    	self.$.toast.innerHTML = err.join('<br/>');
+				    	self.$.toast.open();
+				    } else {
+				      // console.log('Error', error.message);
+				    }
+				    self.isLoading = false;
+				});
+			},
+			openAuth: function() {
+				this.drawer.openAuth();
+			},
+			close: function() {
+				this.rightFold.close();
+			},
+      openSearchMap: function() {
+        this.$.placeModal.open();
+        var self = this;
+        setTimeout(function(){
+          self.$.search.focus();
+          self.map.setZoom(12);
+        }, 200)
+      },
+      geocodeLatLng: function() {
+				var self = this;
+				var latlng = {
+					lat: parseFloat(self.lat),
+					lng: parseFloat(self.lng)
+				};
+				var geocoder = new google.maps.Geocoder;
+				return new Promise(function(resolve,reject) {
+					geocoder.geocode({'location': latlng}, function(results, status) {
+						if (status === 'OK') {
+							if (results[1]) {
+								resolve(results);
+							} else {
+								reject(status);
+							}
+						} else {
+							reject(status);
+						}
+					});
+				});
+			},
+      setCurrentLocation: function() {
+        var searchMap = this.$.searchMap;
+				var self = this;
+				self.isLookingLocation = true;
+				self.getCurrentPosition(function(location) {
+					self.lat = searchMap.latitude = location.coords.latitude;
+					self.lng = searchMap.longitude = location.coords.longitude;
+					self.geocodeLatLng()
+					.then(function(results) {
+						self.where = results[0].formatted_address;
+						self.isLookingLocation = false;
+					})
+					.catch(function(status) {
+						console.log(status);
+						self.isLookingLocation = false;
+					});
+				});
+      },
+			openDatePickerDialog: function() {
+				this.$.datepicker.fitInto = this;
+        this.$.datepicker.open();
+      },
+      ready: function() {
+        var self = this,
+            view = self.view,
+            input = self.$.search,
+            searchMap = self.map;
+
+        if(input) {
+          var searchBox = new google.maps.places.SearchBox(input);
+
+          google.maps.event.addListener(searchBox, 'places_changed', function() {
+            var places = searchBox.getPlaces();
+            self.where = input.value;
+            if (places.length == 0) {
+              return;
+            }
+            var bounds = new google.maps.LatLngBounds();
+            for (var i = 0, place; place = places[i]; i++) {
+              bounds.extend(place.geometry.location);
+            }
+            searchMap.fitBounds(bounds);
+            searchMap.setZoom(12);
+            self.lat = searchMap.getCenter().lat();
+            self.lng = searchMap.getCenter().lng();
+          });
+
+          google.maps.event.addListener(searchMap, 'bounds_changed', function() {
+            var bounds = searchMap.getBounds();
+            searchBox.setBounds(bounds);
+          });
+
+          this.$.searchMap.addEventListener('google-map-dragend', function(e) {
+  					var center = this.map.getCenter();
+  					self.lat = center.lat();
+  					self.lng = center.lng();
+						self.geocodeLatLng()
+						.then(function(results) {
+							self.where = results[0].formatted_address;
+						})
+						.catch(function(status) {
+              console.log("============error===========",status);
+						});
+  				});
+        }
+      }
+		});
+	}());
+</script>

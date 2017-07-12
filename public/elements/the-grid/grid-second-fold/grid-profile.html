@@ -10,11 +10,17 @@
 	</style>
 	<template>
 		<paper-scroll-header-panel class="flex h100">
-		    <paper-toolbar slot="header" class="border-bottom">
-		      <div class="flex">Profile</div>
-		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
-		    </paper-toolbar>
-			    <div role="listbox">
+		   <paper-toolbar slot="header" class="border-bottom">
+				 <paper-icon-button icon="first-page" on-tap="close"></paper-icon-button>
+				 <div class="flex">Profile</div>
+			</paper-toolbar>
+		  <div role="listbox">
+				<paper-item on-tap="openAccount">
+					<paper-item-body>
+						<div>Account</div>
+					</paper-item-body>
+					<paper-ripple></paper-ripple>
+				</paper-item>
 				<paper-item on-tap="logout">
 					<paper-item-body>
 						<div>Logout</div>
@@ -46,6 +52,11 @@
 			},
 			logout: function() {
 				this.$.logoutForm.submit();
+			},
+			openAccount: function() {
+				this.thirdFold.component = 'account'
+				this.thirdFold.$.id = Grid.user.id;
+				this.thirdFold.open();
 			}
 		});
 	}());

@@ -7,7 +7,7 @@
 		--grid-third-fold-width: calc(100% - 456px); /*var(--grid-third-fold-width-comp);*/
 		--grid-third-fold-min-width: 400px;
 		--grid-transition-effect: {
-			transition-property: left;
+			transition-property: all;
 			transform-style: cubic-bezier(0.4, 0, 0.2, 1);
 			transition-duration: 350ms;
 		}
@@ -33,6 +33,22 @@
 			}
 			.border-top {
 				border-top: 1px solid var(--grid-border-color);
+			}
+			.relative {
+				position: relative;
+			}
+			.grid-main-fab {
+				background: linear-gradient(213.81deg, #FF3B30 7.88%, #FF2D55 94.63%);
+			}
+			.spinner-container {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 			}
 		</style>
 	</template>

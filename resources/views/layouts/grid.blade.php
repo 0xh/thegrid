@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Polymer</title>
+        <title>The Grid</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
@@ -26,10 +26,10 @@
                 overflow: hidden;
                 /*user-select: none;*/
             }
-            .pac-container {
+            /*.pac-container {
                 margin-top: -210px;
                 max-height: 186px !important;
-            }
+            }*/
         </style>
         <script>
             @if (Auth::check())
@@ -38,10 +38,11 @@
                 'user_id' => Auth::id(),
                 'csrfToken' => csrf_token(),
                 'session_id' => Session::getId(),
-                'user' => Array(
+                'user' => [
                   'id' => Auth::id(),
-                  'name' => Auth::user()->name
-                )
+                  'name' => Auth::user()->name,
+                  'profile' => Auth::user()->profile ?: json_decode ("{}")
+                ]
             ]) !!};
             @else
             window.Grid = {!! json_encode([

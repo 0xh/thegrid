@@ -42,7 +42,7 @@
 			position: relative;
 			height: 100%;
 			z-index: 4;
-			transition: width 350ms cubic-bezier(0.4, 0, 0.2, 1), right 350ms cubic-bezier(0.4, 0, 0.2, 1);
+			@apply(--grid-transition-effect);
 			background-color: #ffffff;
 			width: var(--grid-drawer-collapse-width);
 		}
@@ -56,13 +56,13 @@
 			width: var(--grid-second-fold-width);
 			background-color: #ffffff;
 			left: calc(var(--grid-drawer-collapse-width) - var(--grid-second-fold-width));
-		    position: absolute;
-		    top: 0px;
-		    height: 100%;
-		    z-index: 3;
-		    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1);
-		    display: block;
-		    border-right: 1px solid #d6d6d6;
+	    position: absolute;
+	    top: 0px;
+	    height: 100%;
+	    z-index: 3;
+	    @apply(--grid-transition-effect);
+	    display: block;
+	    border-right: 1px solid #d6d6d6;
 		}
 		grid-second-fold[opened] {
 			left: 56px;
@@ -152,6 +152,34 @@
       display: block;
     }
 
+		grid-right-fold {
+			width: var(--grid-second-fold-width);
+			background-color: #ffffff;
+			left: 100%;
+	    position: absolute;
+	    top: 0px;
+	    height: 100%;
+	    z-index: 3;
+	    transition: left 350ms cubic-bezier(0.4, 0, 0.2, 1);
+	    display: block;
+	    border-left: 1px solid #d6d6d6;
+		}
+
+		grid-right-fold[opened] {
+			left: calc(100% - var(--grid-second-fold-width));
+		}
+		grid-right-fold[opened] ~ grid-view {
+			left: calc(0px - var(--grid-view-second-fold-left));
+		}
+
+		[mobile] grid-right-fold {
+			width: 100%;
+			border-left: none;
+		}
+		[mobile] grid-right-fold[opened] {
+			left: 0;
+		}
+
 	</style>
 	<dom-bind>
 		<template>
@@ -165,6 +193,7 @@
 				<grid-drawer id="drawer"></grid-drawer>
 				<grid-second-fold id="secondFold"></grid-second-fold>
 				<grid-third-fold id="thirdFold" component=""></grid-third-fold>
+				<grid-right-fold id="rightFold"></grid-right-fold>
 				<grid-view id="view" class="flex"></grid-view>
 			</div>
 		</template>

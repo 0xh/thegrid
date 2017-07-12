@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'phone_number', 'password', 'confirmation_token', 'confirmation_code', 
+        'name', 'email', 'phone_number', 'password', 'confirmation_token', 'confirmation_code',
     ];
 
     /**
@@ -25,7 +25,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token', 'confirmation_token', 'confirmation_code', 
+        'password', 'remember_token', 'confirmation_token', 'confirmation_code',
     ];
 
     public function items() {
@@ -63,4 +63,5 @@ class User extends Authenticatable
     public function skills() {
         return $this->belongsToMany('App\Skill');
     }
+
 }

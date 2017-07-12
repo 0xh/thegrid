@@ -20,7 +20,9 @@
 		}
 	</style>
 	<template>
-		<iron-pages id="tabs" selected="{{selectedTab}}" attr-for-selected="data-tab">
+		<iron-pages id="tabs"
+			selected="{{selectedTab}}"
+			attr-for-selected="data-tab">
 			<section data-tab="auth">
 				<grid-auth id="auth"></grid-auth>
 			</section>
@@ -45,12 +47,14 @@
 			<section data-tab="transactions">
 				<grid-transactions id="transactions"></grid-transactions>
 			</section>
-
-			<section data-tab="add-job">
+			<section data-tab="addJob">
 				<grid-add-job id="addJob"></grid-add-job>
 			</section>
 
 		</iron-pages>
+		<div hidden$="[[!isLoading]]" class="spinner-container">
+			<paper-spinner active$="[[isLoading]]"></paper-spinner>
+		</div>
 	</template>
 </dom-module>
 <script>
@@ -68,14 +72,20 @@
 				this.thirdFold.close();
 			},
 			_initialize: function() {
-				var tab = this.$$('#'+this.selectedTab);
+				var self = this,
+						tab = self.$$('#'+self.selectedTab);
 				if (tab) {
 						if(Polymer.isInstance(tab)) {
 							return;
 						}
+						self.isLoading = true;
+						var stab = self.selectedTab;
+						stab = stab.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+						console.log(stab);
 						Polymer.Base.importHref(
-							'/elements/the-grid/grid-second-fold/grid-' + this.selectedTab + '.html',
+							'/elements/the-grid/grid-second-fold/grid-' + stab + '.html',
 							() => {
+								self.isLoading = false;
 								if(!tab.isInit)
 									tab.init();
 							}

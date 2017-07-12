@@ -386,6 +386,7 @@ class ComposerStaticInitee327130594fce8b1f195c497a61177d
         'AlterMessagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084050_alter_messages_table.php',
         'AlterNotificationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084221_alter_notifications_table.php',
         'AlterProfilesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_082818_alter_profiles_table.php',
+        'AlterProfilesTable2' => __DIR__ . '/../..' . '/database/migrations/2017_07_12_075249_alter_profiles_table2.php',
         'AlterReviewsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084303_alter_reviews_table.php',
         'AlterSettingsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084336_alter_settings_table.php',
         'AlterSkillsTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_22_083736_alter_skills_table.php',

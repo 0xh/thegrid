@@ -1,14 +1,11 @@
 <dom-module id="grid-auth">
-	<style include="iron-flex">
+	<style include="iron-flex grid">
 		:root {
 			--paper-toolbar-background: #FFFFFF;
 			--paper-toolbar-color: #636b6f;
 		}
 		:host {
 			height: 100%;
-		}
-		.container {
-			padding: 8px 16px;
 		}
 		.sign-in {
 			width: 100%;
@@ -43,8 +40,8 @@
 		}
 	</style>
 	<template>
-		<paper-header-panel class="flex">
-		    <paper-toolbar slot="header">
+		<paper-scroll-header-panel class="flex h100" fixed>
+		    <paper-toolbar slot="header" class="border-bottom">
 		      <div class="flex">Sign In</div>
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
@@ -82,7 +79,7 @@
 				 	<paper-toast id="errorToast" class="fit-bottom"></paper-toast>
 				 </div>
 			 </div>
-		 </paper-header-panel>
+		 </paper-ecroll-header-panel>
 	</template>
 </dom-module>
 <script>
