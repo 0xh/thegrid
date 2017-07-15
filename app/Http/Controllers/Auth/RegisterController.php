@@ -243,7 +243,7 @@ class RegisterController extends Controller
             $socialUser = Socialite::driver($provider)->stateless()->user();
             // dd($socialUser);
         } catch(\Exception $e) {
-            return redirect('/');
+            return redirect(env('APP_URL'));
         }
         //check if we have logged provider
         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
@@ -261,6 +261,17 @@ class RegisterController extends Controller
         } else {
             $user = $socialProvider->user;
         }
+
+        $token = $socialUser->token;
+
+        $qs = http_build_query(array(
+              'grant_type' => 'social',
+              'client_id' => env('CLIENT_ID'),
+              'client_secret' => env('CLIENT_SECRET'),
+              'network' => $provider,
+              'access_token' => $token
+        ));
+        return redirect(env('APP_URL').'?'.$qs);
         // dd($user);
         // OAuth Two Providers
         // $token = $socialUser->token;
@@ -271,7 +282,7 @@ class RegisterController extends Controller
         // $token = $socialUser->token;
         // // // $tokenSecret = $socialUser->tokenSecret;
         // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
-        // $response = $http->post(env('APP_URL').'/oauth/token', [
+        // $response = $http->post(env('APP_API_URL').'/oauth/token', [
         //     'form_params' => [
         //         'grant_type' => 'social',
         //         'client_id' => env('CLIENT_ID'),
@@ -281,14 +292,17 @@ class RegisterController extends Controller
         //     ],
         // ]);
         // $account = Socialite::driver($provider)->userFromToken($token);
+
         //dd($account);
         // //$response = $http->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
-        auth()->login($user);
+        // auth()->login($user);
         // return $response;
         // dd($user);
         // if ($request->expectsJson()) {
         //     return response()->json(['user' => $account, 'token' => $response]);
         // }
-        return redirect('/');
+        //dd($response);
+        //exit;
+        //return redirect('/');
     }
 }

@@ -1,1 +1,59 @@
 <script src="/bower_components/axios/dist/axios.min.js"></script>
+
+<script>
+  window.gAxios = null;
+
+  function loggedIn() {
+    if( localStorage.getItem('access_token') ) {
+
+      gAxios = axios.create({
+        baseURL: 'https://api.thegrid.com/api/',
+        headers: {
+          'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
+      });
+    }
+  }
+
+  loggedIn();
+
+  function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+
+  }
+  var grant_type = getParameterByName('grant_type'),
+      client_id = getParameterByName('client_id'),
+      client_secret = getParameterByName('client_secret'),
+      network = getParameterByName('network'),
+      access_token = getParameterByName('access_token');
+
+  if( grant_type && client_id && client_secret && network && access_token ) {
+    axios.post('https://api.thegrid.com/oauth/token', {
+      grant_type: grant_type,
+      client_id: client_id,
+      client_secret: client_secret,
+      network: network,
+      access_token: access_token
+    })
+    .then( response => {
+      localStorage.setItem('access_token', response.data.access_token);
+      loggedIn();
+      gAxios.get('user')
+      .then(response => {
+        window.Grid = response.data;
+        console.log('window.Grid', window.Grid);
+        localStorage.setItem('user', JSON.stringify(response.data));
+        window.location.href = "/";
+      })
+      .catch( response => {
+        console.log('error');
+      });
+    });
+  }
+</script>

@@ -7,33 +7,37 @@ use App\Job;
 use App\User;
 use App\Bid;
 use DB;
+use Cache;
 
 class JobController extends Controller
 {
-    public function add(Request $request) {
+    public function add(Request $request, $id) {
     	$data = $request->all();
     	$job = Job::create([
-    		'user_id' => $data['user_id'],
-            'name' => $data['name'],
-            'category_id' => $data['category_id'],
-            'price' => $data['price'],
-            'lat' => $data['lat'],
-            'lng' => $data['lng'],
-            'location' => $data['location'],
-            'date' => date("Y-m-d H:i:s", strtotime($data['date']))
-        ]);
-    	$user = User::find($job->user_id);
+    		'user_id' => $id,
+        'name' => $data['name'],
+        'category_id' => $data['category_id'],
+        'price' => $data['price'],
+        'lat' => $data['lat'],
+        'lng' => $data['lng'],
+        'location' => $data['location'],
+        'date' => date("Y-m-d H:i:s", strtotime($data['date']))
+      ]);
+    	$user = User::where('id', $id)->first();
     	$bids = Bid::where('job_id', $job->id)->get();
     	$job->user = $user;
     	$job->bids = $bids;
-        return response()->json($job, 200);
+      return response()->json($job);
     }
 
     public function getJobs($id) {
-    	$jobs = Job::where('user_id', $id)
-    				->with('bids')
-    				->orderBy('created_at', 'desc')
-    				->paginate(env('JOBS_PER_PAGE'));
+      $this->id = $id;
+      $jobs = Cache::remember('jobs-'.$id, 15, function() {
+        return Job::where('user_id', $this->id)
+              ->with('bids')
+              ->orderBy('created_at', 'desc')
+              ->paginate(env('JOBS_PER_PAGE'));
+      });
     	return response()->json($jobs, 200);
     }
 

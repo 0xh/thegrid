@@ -229,7 +229,7 @@
 			_getJobDetails: function(id) {
 				var self = this;
 				if(id) {
-					axios.get('/'+Grid.user_id+'/job/'+id)
+					gAxios.get('/users/' + Grid.user.id + '/jobs/' + id)
 						 .then(function(response) {
 						 	// console.log(response.data);
 						 	// self.job = response.data;

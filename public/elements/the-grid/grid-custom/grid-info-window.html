@@ -82,8 +82,8 @@
 			quickBid: function() {
 				var self = this;
 				if(Grid.authenticated) {
-					axios.post('/bid', {
-						'user_id' : Grid.user_id,
+					gAxios.post('/users/' + Grid.user.id + '/bids/', {
+						'user_id' : Grid.user.id,
 						'job_id' : this.data.id,
 						'price_bid' : parseFloat(this.price_bid)
 					}).then(function(response) {

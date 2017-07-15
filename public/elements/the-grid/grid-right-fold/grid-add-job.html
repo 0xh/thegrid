@@ -130,7 +130,7 @@
 				if(self.$.category.selectedItem) {
         	self.category_id = self.$.category.selectedItem.getAttribute('value');
 				}
-				axios.post('/job', {
+				gAxios.post('/users/' + Grid.user.id +'/jobs', {
 					user_id: Grid.user_id,
 					name: self.what,
 					price: self.price,

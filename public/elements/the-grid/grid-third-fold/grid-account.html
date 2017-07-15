@@ -127,7 +127,8 @@
         }
 			},
 			behaviors: [
-			GridBehaviors.FoldBehavior
+			GridBehaviors.FoldBehavior,
+			GridBehaviors.StorageBehavior
 			],
       _birthDateChanged: function(o, n) {
         this.set('tmpUser.profile.birth_date', this.birthDate);
@@ -146,28 +147,32 @@
         return value;
       },
       openEditModal: function() {
-        if(this.user.profile.birth_date) {
-          console.log('setting datepicker');
-          this.birthDate = this.user.profile.birth_date;
-        }
+				if(this.user.profile) {
+	        if(this.user.profile.birth_date) {
+	          console.log('setting datepicker');
+	          this.birthDate = this.user.profile.birth_date;
+	        }
+					for(var i in this.user.profile) {
+	          this.set('tmpUser.profile.' + i, this.user.profile[i]);
+	        }
+				}
         for(var i in this.user) {
           this.set('tmpUser.' + i, this.user[i]);
-        }
-        for(var i in this.user.profile) {
-          this.set('tmpUser.profile.' + i, this.user.profile[i]);
         }
         this.$.editAccountModal.open();
       },
       updateAccountDetails: function() {
         var self = this;
         self.isLoading = true;
-        axios.put('/users/' + Grid.user.id, this.tmpUser)
+        gAxios.put('/users/' + Grid.user.id, this.tmpUser)
         .then(function(response) {
           self.isLoading = false;
           var data = response.data;
           console.log(response.data);
           //for(var i in this.tmpUser.profile) {
             self.set('user.profile', data);
+						Grid.user.profile = data;
+						self.setLocalStorage('user', JSON.stringify(self.user));
           //}
         })
         .catch(function(response) {

@@ -51,7 +51,7 @@
 				 	<form id="form" role="form" method="POST" action="#">
 				 		<paper-input id="email" name="email" label="Email" type="email" value="{{email}}" required autofocus error-message="{{errorEmail}}"></paper-input>
 				 		<paper-input id="password" name="password" label="Password" type="password" value="{{password}}" required error-message="{{errorPassword}}"></paper-input>
-				 		<paper-button id="submit" raised class="sign-in" type="submit" on-tap="signIn">
+				 		<paper-button id="submit" raised class="sign-in" type="submit" on-tap="login">
 				 			<template is="dom-if" if="[[isLoading]]">
 				 				<paper-spinner id="spinner" active></paper-spinner>
 							</template>
@@ -73,7 +73,7 @@
 				 	<a href="/auth/facebook">
 				 		<paper-button raised class="sign-in facebook">Sign In with Facebook</paper-button>
 				 	</a>
-				 	<a href="/auth/google">
+				 	<a href="https://api.thegrid.com/auth/google">
 				 		<paper-button raised class="sign-in google">Sign In with Google</paper-button>
 				 	</a>
 				 	<paper-toast id="errorToast" class="fit-bottom"></paper-toast>
@@ -110,7 +110,8 @@
 			},
 			behaviors: [
 				GridBehaviors.AppSettingsBehavior,
-				GridBehaviors.FoldBehavior
+				GridBehaviors.FoldBehavior,
+				GridBehaviors.StorageBehavior
 			],
 			close: function() {
 				this.secondFold.close();
@@ -131,6 +132,40 @@
 			},
 			_getUsers: function(e, request) {
 				console.log(request.response);
+			},
+			login: function() {
+				var self = this;
+				self.isLoading = true;
+				axios.post(this.app.api_url + '/oauth/token', {
+					grant_type: this.client.grant_type,
+      		client_id: this.client.client_id,
+      		client_secret: this.client.client_secret,
+					username: this.email,
+					password: this.password
+				})
+				.then(response => {
+					var status = response.status,
+							statusText = response.statusText,
+							data = response.data;
+					if( status == 200 || statusText == 'OK') {
+						// successfully get token
+						// store local storage
+						self.setLocalStorage('access_token', data.access_token);
+						loggedIn();
+						gAxios.get('user')
+			      .then(response => {
+			        console.log('instance', response);
+			        window.Grid = response.data;
+			        console.log('window.Grid', window.Grid);
+							self.setLocalStorage('user', JSON.stringify(response.data));
+							window.location.href = "/";
+							self.isLoading = false;
+			      })
+			      .catch( response => {
+			        console.log('error');
+			      });
+					}
+				});
 			},
 			signIn: function() {
 				var self = this;

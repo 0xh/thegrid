@@ -87,7 +87,7 @@
 					<template is="dom-if" if="[[isLoading]]">
 						<paper-progress indeterminate></paper-progress>
 					</template>
-					<div class="container h100">
+					<div class="container h100" hidden$="[[isLoading]]">
 						<div class="layout vertical flex h100">
 							<div id="filler" class="flex"></div>
 							<template is="dom-if" if="[[pagination.next_page_url]]">
@@ -96,10 +96,13 @@
 								</div>
 							</template>
 							<div>
-								<ul class="chat">
+								<ul id="chat" class="chat">
 									<template is="dom-repeat" items="{{messages}}" sort="_sort">
-										<li id="[[item.id]]" data-index$="[[index]]" class$="chat-bubble {{_getClass(item.author_id, index)}}" title="[[item.created_at]]">
-											[[item.message]]
+										<li id$="[[item.id]]" data-index$="[[index]]" class$="chat-bubble {{_getClass(item.author_id, index)}}" title="[[item.created_at]]">
+											<small hidden$="[[!item.sending]]">
+												<paper-spinner active style="width: 12px; height: 12px;"></paper-spinner>
+											</small>
+											<span>[[item.message]]</span>
 										</li>
 									</template>
 								</ul>
@@ -148,7 +151,7 @@
 				recipient: Object,
 				myid: {
 					type: Number,
-					value: Grid.user_id
+					value: Grid.user.id
 				},
 				i: Number,
 				pagination: {
@@ -159,7 +162,7 @@
 					notify: true
 				}
 			},
-			observers: ['_conversationChange(id)'],
+			observers: ['_conversationChange(conversation)'],
 			behaviors: [
 			GridBehaviors.FoldBehavior,
 			GridBehaviors.StorageBehavior
@@ -171,35 +174,33 @@
 				if (d.target.scrollTop <= 0) {
 					this.loadConversation();
 				}
-   			},
-   			restore: function() {
-   				this.$.scroller.scroll(this.$.msgs.scrollHeight - this.previousScrollHeightMinusTop);
-   				console.log('scroll', this.$.msgs.scrollHeight - this.previousScrollHeightMinusTop);
-   			},
-   			prepareFor: function(d) {
-   				this.readyFor = 'up';
-   				this.previousScrollHeightMinusTop = this.$.msgs.scrollHeight - this.$.msgs.scrollTop;
-   				console.log('previousScrollHeightMinusTop', this.previousScrollHeightMinusTop);
-   			},
-   			loadConversation: function() {
-   				var self = this,
-   					pagination = self.pagination;
-					var pg = JSON.parse(self.getSessionStorage('cnv-pg-'+self.id));
-   				if(pg.next_page_url) {
+   		},
+ 			restore: function() {
+ 				this.$.scroller.scroll(this.$.msgs.scrollHeight - this.previousScrollHeightMinusTop);
+ 				//console.log('scroll', this.$.msgs.scrollHeight - this.previousScrollHeightMinusTop);
+ 			},
+ 			prepareFor: function(d) {
+ 				this.readyFor = 'up';
+ 				this.previousScrollHeightMinusTop = this.$.msgs.scrollHeight - this.$.msgs.scrollTop;
+ 				console.log('previousScrollHeightMinusTop', this.previousScrollHeightMinusTop);
+ 			},
+ 			loadConversation: function() {
+ 				var self = this,
+ 					pagination = self.pagination;
+				//var pg = JSON.parse(self.getSessionStorage('cnv-pg-'+self.id));
+ 				if(pagination.next_page_url) {
 					self.isLoading = true;
 					self.prepareFor('up');
-					axios.get(pg.next_page_url)
+					gAxios.get(pagination.next_page_url)
 						.then(function (response) {
 							var data = response.data,
 								c_m = self.messages;
-							// data.data.sort(function(a,b){
-							// 	return new Date(a.created_at) - new Date(b.created_at);
-							// });
+
 							self.messages = data.data.concat(c_m);
 							setTimeout(function() {
 								self.restore();
 							}, 50);
-							self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
+							//self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
 							self.pagination = {
 								total: data.total,
 								per_page: data.per_page,
@@ -211,36 +212,36 @@
 								to: data.to
 							};
 							self.isLoading = false;
-							self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
+							//self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
 						});
-				}
+					}
    			},
-			_conversationChange: function(id) {
+			_conversationChange: function(conversation) {
 				var self = this;
-				if ( id ) {
+				if ( conversation.id ) {
 					self.isLoading = true;
-					if(self.getSessionStorage('cnv-'+self.id)) {
-						self.set('messages', JSON.parse(self.getSessionStorage('cnv-'+self.id)));
-						self.isLoading = false;
-						self.scrollToBottom();
-					} else {
-						self.set('messages', null);
-					}
+					// if(self.getSessionStorage('cnv-'+self.id)) {
+					// 	self.set('messages', JSON.parse(self.getSessionStorage('cnv-'+self.id)));
+					// 	self.isLoading = false;
+					// 	self.scrollToBottom();
+					// } else {
+					// 	self.set('messages', null);
+					// }
 
-					if(self.getSessionStorage('cnv-pg-'+self.id)) {
-
-						self.messages = JSON.parse(self.getSessionStorage('cnv-'+self.id));
-						return;
-
-					}
-					if ( Grid.user_id == self.conversation.user_id_1 ) {
+					// if(self.getSessionStorage('cnv-pg-'+self.id)) {
+					//
+					// 	self.messages = JSON.parse(self.getSessionStorage('cnv-'+self.id));
+					// 	return;
+					//
+					// }
+					if ( Grid.user.id == self.conversation.user_id_1 ) {
 						self.author = self.conversation.user1;
 						self.recipient = self.conversation.user2;
 					} else {
 						self.author = self.conversation.user2;
 						self.recipient = self.conversation.user1;
 					}
-					axios.get('/users/'+Grid.user_id+'/conversations/'+id)
+					gAxios.get('/users/' + Grid.user.id + '/conversations/' + conversation.id)
 					.then(function(response) {
 						var data = response.data,
 							c_m = self.messages;
@@ -268,8 +269,8 @@
 						};
 
 						self.scrollToBottom();
-						self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
-						self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
+						//self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
+						//self.setSessionStorage('cnv-pg-'+self.id, JSON.stringify(self.pagination));
 					})
 					.catch(function(error) {
 
@@ -278,7 +279,7 @@
 			},
 			setAuthor: function(id) {
 				var self = this;
-				axios.get('/users/'+id)
+				gAxios.get('/users/' + id)
 				.then(function(response) {
 					self.author = response.data;
 				})
@@ -288,7 +289,7 @@
 			},
 			setRecipient: function(id) {
 				var self = this;
-				axios.get('/users/'+id)
+				gAxios.get('/users/' + id)
 				.then(function(response) {
 					self.recipient = response.data;
 				})
@@ -297,7 +298,7 @@
 				});
 			},
 			_isMine: function(id) {
-				return Grid.user_id == id;
+				return Grid.user.id == id;
 			},
 			_getClass: function(id, index) {
 				if ( this.i != id ) {
@@ -307,7 +308,7 @@
 						li.className += " chat-bubble-stop";
 					}
 				}
-				if ( Grid.user_id == id ) {
+				if ( Grid.user.id == id ) {
 					return 'chat-bubble-sent';
 				} else {
 					return 'chat-bubble-rcvd';
@@ -315,16 +316,32 @@
 			},
 			sendMessage: function() {
 				var self = this;
-				axios.post('/users/'+Grid.user_id+'/conversations/'+self.id, {
-					message: self.message,
+				var m = self.message;
+				var tmpMessage = {
+					id: 'tmpMessage',
+					message: m,
+					recipient_id: self.recipient.id,
+					author_id: Grid.user.id,
+					created_at: new Date().getTime(),
+					sending: true
+				};
+				self.message = '';
+				self.push('messages', tmpMessage);
+				self.scrollToBottom(true);
+				gAxios.post('/users/' + Grid.user.id + '/conversations/' + self.id, {
+					message: m,
 					recipient_id: self.recipient.id
 				})
 				.then(function(response) {
 					var data = response.data;
-					self.message = '';
-					self.push('messages', data);
+					// self.message = '';
+					// document.getElementById('tmpMessage').remove();
+					// console.log(self.messages.indexOf(tmpMessage));
+					var tmpMessageIndex = self.messages.indexOf(tmpMessage);
+					self.set('messages.' + tmpMessageIndex, data);
+					// self.push('messages', data);
+					// self.scrollToBottom(true);
 					socket.emit('new-message', data);
-					self.scrollToBottom(true);
 					self.setSessionStorage('cnv-'+self.id, JSON.stringify(self.messages));
 				})
 				.catch(function(error) {
@@ -365,7 +382,9 @@
 			},
 			attached: function() {
 				var self = this;
+				console.log('attached');
 				socket.on('receive-message', function(data) {
+					console.log('receive message');
 					if ( ! data ) return;
 					if ( data.conversation_id == self.id ) {
 						self.push('messages', data);
@@ -375,6 +394,7 @@
 					}
 				});
 				socket.on('sender-typing', function(data) {
+					console.log('he is typing');
 					if(data.conversation_id == self.id) {
 						self.isTyping = true;
 						if(self.senderTimeout) clearTimeout(self.senderTimeout);

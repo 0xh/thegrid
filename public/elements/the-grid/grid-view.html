@@ -296,7 +296,11 @@
 				content.isMyPost = data.isMyPost;
 				content.isBidded = data.isBidded;
 
-				this.addMarker({
+				var dups = self.findBy( marker => {
+					return (marker.lat == data.lat) && (marker.lng == data.lng);
+				});
+				console.log('dups', dups);
+				self.addMarker({
 					id: data.id,
 					price: data.price,
 					isBidded: data.isBidded,
@@ -346,15 +350,15 @@
 							data[i].isMyPost = false;
 							data[i].isBidded = false;
 						var bids = data[i].bids;
-						if(Grid.user_id) {
-							if(Grid.user_id == data[i].user_id) {
+						if(Grid.authenticated) {
+							if(Grid.user.id == data[i].user_id) {
 								markerType = self.markerType.myJob;
 								data[i].fillColor = markerType.color;
 								data[i].isMyPost = true;
 							}
 							for(var j = 0; j < bids.length; j++) {
 								// Check if user is already bidded
-								if(Grid.user_id == bids[j].user_id) {
+								if(Grid.user.id == bids[j].user_id) {
 									markerType = self.markerType.biddedJob;
 									data[i].fillColor = markerType.color;
 									data[i].isBidded = true;
@@ -399,7 +403,7 @@
 
 					socket.on('add-marker', function(data) {
 						data.fillColor = self.markerType.newJob.color;
-						if( Grid.user_id == data.user_id ) {
+						if( Grid.user.id == data.user_id ) {
 							data.isMyPost = true;
 							data.fillColor = self.markerType.myJob.color;
 						} else {

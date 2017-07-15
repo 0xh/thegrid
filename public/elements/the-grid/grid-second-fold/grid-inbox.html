@@ -55,7 +55,15 @@
 						</div>
 			      <paper-icon-button icon="search" class="fab-button" on-tap="openSearch"></paper-icon-button>
 			  	</div>
-		      <paper-icon-button icon="more-vert"></paper-icon-button>
+					<paper-menu-button id="menu" vertical-align="bottom" horizontal-align="right" dynamic-align>
+						<paper-icon-button icon="more-vert" slot="dropdown-trigger" class="dropdown-trigger" alt="bottom align"></paper-icon-button>
+						<paper-listbox slot="dropdown-content" class="dropdown-content">
+							<paper-item on-tap="refresh">Refresh</paper-item>
+							<paper-item>Sort by date</paper-item>
+							<paper-item>Sort by title</paper-item>
+							<paper-item>Sort by amount</paper-item>
+						</paper-listbox>
+					</paper-menu-button>
 		    </paper-toolbar>
 		    <div role="listbox">
 		    	<template is="dom-if" if="[[isLoading]]">
@@ -106,18 +114,23 @@
 			closeSearch: function() {
 				this.searching = false;
 			},
-			init: function() {
+			refresh: function() {
 				var self = this;
-				axios.get('/users/'+Grid.user_id+'/conversations')
-					.then(function(response) {
-						var data = response.data;
-						self.inbox = data;
-						self.isLoading = false;
-					})
-					.catch(function(error) {
+				self.isLoading = true;
+				gAxios.get('/users/' + Grid.user.id + '/conversations')
+				.then( response => {
+					var data = response.data;
+					self.inbox = data;
+					self.isLoading = false;
+				})
+				.catch( error => {
 
-					});
-				socket.on('receive-message', function(data) {
+				});
+				self.$.menu.close();
+			},
+			init: function() {
+				this.refresh();
+				socket.on('receive-message', data => {
 					console.log(data);
 				});
 			},

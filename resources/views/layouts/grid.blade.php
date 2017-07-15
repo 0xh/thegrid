@@ -32,6 +32,7 @@
             }*/
         </style>
         <script>
+        /*
             @if (Auth::check())
             window.Grid = {!! json_encode([
                 'authenticated' => true,
@@ -50,6 +51,14 @@
                 'csrfToken' => csrf_token(),
             ]) !!};
             @endif
+          */
+          window.Grid = {
+            'authenticated': false
+          }
+          if ( localStorage.getItem('user') ) {
+            window.Grid.user = JSON.parse(localStorage.getItem('user'));
+            window.Grid.authenticated = true;
+          }
         </script>
         <!-- <link rel="import" href="/bower_components/polymer/polymer.html"> -->
         <!-- <link rel="import" href="/elements/elements.html" /> -->
@@ -59,9 +68,7 @@
         <link rel="import" href="/elements/the-grid/grid-scripts/socket-io.html" />
         <link rel="import" href="/elements/the-grid/grid-scripts/axios.html" />
         <script type="text/javascript">
-            var socket = new io.connect('{{env('SOCKET_HOST')}}:{{env('SOCKET_PORT')}}', {
-              secure: true
-            });
+            var socket = new io.connect('{{env('SOCKET_HOST')}}:{{env('SOCKET_PORT')}}');
             socket.on('connect', function(){
                 console.log('connected to socket');
                 socket.emit('new-user', Grid);

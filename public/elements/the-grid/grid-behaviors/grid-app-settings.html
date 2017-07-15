@@ -11,7 +11,7 @@
 						app_env: "{{env('APP_ENV')}}",
 						app_debug: "{{env('APP_DEBUG')}}",
 						app_url: "{{env('APP_URL')}}",
-						api_url: "https://dev.thegrid.com",
+						api_url: "https://api.thegrid.com",
 						api_socket_host: "{{env('APP_SOCKET_HOST')}}",
 						api_socket_port: "{{env('APP_SOCKET_PORT')}}",
 					};
@@ -21,8 +21,9 @@
 				type: Object,
 				value: function() {
 					return {
-						client_id: "{{env('CLIENT_ID')}}",
-						client_secret: "{{env('CLIENT_SECRET')}}"
+						client_id: "2",
+						client_secret: "xIxcFxQGFbYkSXKmd0MQ4iuC8Ejfw8x6EcuZJpHe",
+						grant_type: "password"
 					};
 				}
 			}

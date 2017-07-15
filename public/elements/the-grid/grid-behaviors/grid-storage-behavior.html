@@ -2,6 +2,7 @@
 	window.GridBehaviors = window.GridBehaviors || {};
 
 	GridBehaviors.StorageBehavior = {
+
 		setSessionStorage: function(name, value) {
 			if (typeof(Storage) !== "undefined") {
 				sessionStorage.setItem(name, value);
@@ -9,22 +10,52 @@
 			}
 			//return false
 		},
+
 		getSessionStorage: function(name) {
 			if (typeof(Storage) !== "undefined") {
 				return sessionStorage.getItem(name);
 			}
 			return false
 		},
+
 		removeSessionStorage: function(name) {
 			if (typeof(Storage) !== "undefined") {
 				sessionStorage.removeItem(name);
 			}
 		},
+
 		clearSessionStorage: function() {
 			if (typeof(Storage) !== "undefined") {
 				sessionStorage.clear();
 			}
-		}
+		},
+
+		setLocalStorage: function(name, value) {
+			if (typeof(Storage) !== "undefined") {
+				localStorage.setItem(name, value);
+				//return true;
+			}
+			//return false
+		},
+
+		getLocalStorage: function(name) {
+			if (typeof(Storage) !== "undefined") {
+				return localStorage.getItem(name);
+			}
+			return false
+		},
+
+		removeLocalStorage: function(name) {
+			if (typeof(Storage) !== "undefined") {
+				localStorage.removeItem(name);
+			}
+		},
+
+		clearLocalStorage: function() {
+			if (typeof(Storage) !== "undefined") {
+				localStorage.clear();
+			}
+		},
 
 	}
 </script>

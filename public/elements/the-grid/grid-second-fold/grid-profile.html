@@ -46,12 +46,19 @@
           value: Grid.csrfToken
         }
       },
-			behaviors: [GridBehaviors.FoldBehavior],
+			behaviors: [
+				GridBehaviors.FoldBehavior,
+				GridBehaviors.StorageBehavior
+			],
 			close: function() {
 				this.secondFold.close();
 			},
 			logout: function() {
-				this.$.logoutForm.submit();
+				// this.$.logoutForm.submit();
+				this.removeLocalStorage('access_token');
+				this.removeLocalStorage('user');
+				this.clearLocalStorage();
+				window.location.href = '/';
 			},
 			openAccount: function() {
 				this.thirdFold.component = 'account'

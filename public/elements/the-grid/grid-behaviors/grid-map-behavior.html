@@ -1,4 +1,5 @@
-<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+<!-- <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script> -->
+<script src="https://cdn.rawgit.com/googlemaps/js-marker-clusterer/gh-pages/src/markerclusterer.js"></script>
 <script>
     window.GridBehaviors = window.GridBehaviors || {};
 
@@ -428,7 +429,7 @@
             length = markers.length,
             matches = [],
             i = 0;
-            console.log('markers', markers);
+            // console.log('markers', markers);
             for(; i < length; i++) {
                 callbackReturn = callback(markers[i], i);
                 if(callbackReturn) {

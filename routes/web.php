@@ -10,9 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/.well-known/acme-challenge/-SrI5nSyUR-1d2yAkt4fwl7Oqou9sfl4xYAvRRp0DsA', function() {
-	return '-SrI5nSyUR-1d2yAkt4fwl7Oqou9sfl4xYAvRRp0DsA.sm-GIm2rFDV7UPT38bE9z5Jd2FbUBYk-zzf-f3YFR4k';
-});
+// Route::get('/.well-known/acme-challenge/-SrI5nSyUR-1d2yAkt4fwl7Oqou9sfl4xYAvRRp0DsA', function() {
+// 	return '-SrI5nSyUR-1d2yAkt4fwl7Oqou9sfl4xYAvRRp0DsA.sm-GIm2rFDV7UPT38bE9z5Jd2FbUBYk-zzf-f3YFR4k';
+// });
 
 Route::get('/', function () {
 	return view('polymer');
@@ -65,7 +65,7 @@ Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
 
 Route::get('/country/{iso}', 'CountryController@getCountryByISO');
 
-Route::get('/users/{id}/conversations', 'ConversationController@getConversations');
-Route::post('/users/{id}/conversations', 'ConversationController@createConversation');
-Route::get('/users/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
-Route::post('/users/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
+// Route::get('/users/{id}/conversations', 'ConversationController@getConversations');
+// Route::post('/users/{id}/conversations', 'ConversationController@createConversation');
+// Route::get('/users/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
+// Route::post('/users/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
