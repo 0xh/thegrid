@@ -26,9 +26,9 @@
 		    </paper-toolbar>
 		    <div role="listbox">
 		    <dom-bind>
-		    	<template is="dom-if" if="[[isLoading]]">
+		    	<!-- <template is="dom-if" if="[[isLoading]]">
 		    		<paper-progress indeterminate class="w100"></paper-progress>
-		    	</template>
+		    	</template> -->
 			 	<template is="dom-repeat" items="{{bids}}" as="bid">
 					<paper-icon-item on-tap="viewBid" data-id$="{{bid.id}}">
 						{{_createRoom(bid.job.id)}}
@@ -53,6 +53,9 @@
 			</dom-bind>
 			</div>
 		 </paper-scroll-header-panel>
+		 <div hidden$="[[!isLoading]]" class="spinner-container">
+ 			<paper-spinner active$="[[isLoading]]"></paper-spinner>
+ 		</div>
 	</template>
 </dom-module>
 <script>
@@ -106,7 +109,7 @@
 			viewBid: function(e) {
 				var bid = e.model.bid;
 				this.thirdFold.component = 'bid'
-				this.thirdFold.$.bid.bid = bid;
+				// this.thirdFold.$.bid.bid = bid;
 				this.thirdFold.$.bid.id = bid.id;
 				this.thirdFold.open();
 				var bids = this.bids;

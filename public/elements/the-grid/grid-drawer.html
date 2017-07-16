@@ -43,10 +43,16 @@
 		paper-material#menu .menu-item.account .profile p {
 			margin: 0;
 		}
-		paper-material#menu .menu-item.account paper-icon-button {
+		paper-material#menu .menu-item.account .circle {
 			transition: height 350ms cubic-bezier(0.4, 0, 0.2, 1), width 350ms cubic-bezier(0.4, 0, 0.2, 1);
+			height: 40px;
+			width: 40px;
+			border-radius: 50%;
+			padding: 8px;
+			text-align: center;
+			overflow: hidden;
 		}
-		:host[opened] paper-material#menu .menu-item.account paper-icon-button {
+		:host[opened] paper-material#menu .menu-item.account .circle {
 			height: 75px;
 			width: 75px;
 		}
@@ -129,6 +135,10 @@
 			position: absolute;
 			bottom: 0;
 		}
+		.circle .img {
+			max-width: 100%;
+			/*max-height: 100%;*/
+		}
 	</style>
 	<template>
 		<paper-material id="menu" elevate="2" class="flex layout vertical">
@@ -138,9 +148,13 @@
 			</div>
 			<div class="menu-item account">
 				<div class="profile-image">
-					<paper-icon-button icon="account-circle" on-tap="openAuth" hidden$="[[isAuth]]"></paper-icon-button>
+					<div class="circle">
+						<img class="img" src="[[ _evaluateProfileImage(user.profile.profile_image_url)]]" on-tap="openProfile"/>
+					</div>
 
-					<paper-icon-button icon="account-circle" on-tap="openProfile" hidden$="[[!isAuth]]"></paper-icon-button>
+					<!-- <paper-icon-button icon="account-circle" on-tap="openAuth" hidden$="[[isAuth]]"></paper-icon-button>
+
+					<paper-icon-button icon="account-circle"  hidden$="[[!isAuth]]"></paper-icon-button> -->
 
 				</div>
 				<div class="profile">
@@ -244,6 +258,13 @@
 				GridBehaviors.PageBehavior
 			],
 
+			_evaluateProfileImage: function(value) {
+				if( value == 'undefined' || !value ) {
+					return 'https://api.thegrid.com/storage/avatars/profile_avatar_placeholder_large.png';
+				}
+				return 'https://api.thegrid.com/storage/avatars/' + value;
+			},
+
 			_closeOtherFolds: function() {
 				this.secondFold.close();
 				this.thirdFold.close();
@@ -276,6 +297,10 @@
 			},
 
 			openProfile: function() {
+				if(!this.isAuth) {
+					this.openAuth();
+					return;
+				}
 				this._selectTab('profile');
 			},
 

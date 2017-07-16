@@ -82,17 +82,17 @@
 			quickBid: function() {
 				var self = this;
 				if(Grid.authenticated) {
-					gAxios.post('/users/' + Grid.user.id + '/bids/', {
+					gAxios.post('/users/' + Grid.user.id + '/bids', {
 						'user_id' : Grid.user.id,
 						'job_id' : this.data.id,
 						'price_bid' : parseFloat(this.price_bid)
-					}).then(function(response) {
+					}).then( response => {
 						self.isBidded = true;
 						console.log(response);
 						var data = response.data;
 						self.secondFold.$.bids.insertBid(data);
 						socket.emit('new-bid', data);
-					}).catch(function(response) {
+					}).catch( error => {
 
 					});
 				} else {

@@ -59,7 +59,7 @@ class JobController extends Controller
     				->with('bids')
     				->whereDate('date', '>', date('Y-m-d'))
     				->select(DB::raw($f))
-    				->having('distance', '<', 50)
+    				// ->having('distance', '<', 50)
     				->groupBy('distance')
     				->get();
     	return response()->json($jobs, 200);

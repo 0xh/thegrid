@@ -66,9 +66,9 @@
 					</paper-menu-button>
 		    </paper-toolbar>
 		    <div role="listbox">
-		    	<template is="dom-if" if="[[isLoading]]">
+		    	<!-- <template is="dom-if" if="[[isLoading]]">
 		    		<paper-progress indeterminate class="w100"></paper-progress>
-		    	</template>
+		    	</template> -->
 			 	<template is="dom-repeat" items="{{inbox}}">
 					<paper-icon-item on-tap="viewConversation">
 						<iron-icon icon="account-circle" item-icon></iron-icon>
@@ -81,6 +81,9 @@
 				</template>
 			</div>
 		 </paper-scroll-header-panel>
+		<div hidden$="[[!isLoading]]" class="spinner-container">
+			<paper-spinner active$="[[isLoading]]"></paper-spinner>
+		</div>
 	</template>
 </dom-module>
 <script>

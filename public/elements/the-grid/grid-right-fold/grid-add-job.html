@@ -143,19 +143,20 @@
 				.then(function (response) {
 					var data = response.data;
 					self.rightFold.close();
-					console.log('new job', data);
-					self.secondFold.selectedTab = 'jobs';
-					self.secondFold.$.jobs.insertJob(data);
-					self.secondFold.open();
 
 					data.fillColor = self.view.markerType.myJob.color;
 					data.isMyPost = true;
 					data.isBidded = false;
+					console.log('new job', data);
 					self.view._newMarker(data);
 
 					socket.emit('new-job', data);
 
           self.isLoading = false;
+
+					self.secondFold.selectedTab = 'jobs';
+					self.secondFold.$.jobs.insertJob(data);
+					self.secondFold.open();
 				})
 				.catch(function (error) {
 					if (error.response) {
@@ -220,11 +221,11 @@
 					self.lat = searchMap.latitude = location.coords.latitude;
 					self.lng = searchMap.longitude = location.coords.longitude;
 					self.geocodeLatLng()
-					.then(function(results) {
+					.then( results => {
 						self.where = results[0].formatted_address;
 						self.isLookingLocation = false;
 					})
-					.catch(function(status) {
+					.catch( status => {
 						console.log(status);
 						self.isLookingLocation = false;
 					});

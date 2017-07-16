@@ -22,7 +22,7 @@
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="">
-		    	<div class="container">
+		    	<div class="container" hidden$="[[isLoading]]" >
 		    		<p><span class="main-price">AED [[job.price]]</span></p>
 		    		<p>[[job.name]]</p>
 		    		<p><strong>Time remaining:</strong> <span>[[timeLeft]]</span></p>
@@ -92,6 +92,9 @@
 		 		<paper-button dialog-confirm autofocus on-tap="approveBid">Yes</paper-button>
 		 	</div>
 		 </paper-dialog>
+		 <div hidden$="[[!isLoading]]" class="spinner-container">
+			 <paper-spinner active$="[[isLoading]]"></paper-spinner>
+		 </div>
 	</template>
 	<script>
 		Polymer({
@@ -229,11 +232,13 @@
 			_getJobDetails: function(id) {
 				var self = this;
 				if(id) {
+					self.isLoading = true;
 					gAxios.get('/users/' + Grid.user.id + '/jobs/' + id)
-						 .then(function(response) {
+						 .then( response => {
 						 	// console.log(response.data);
 						 	// self.job = response.data;
 						 	self._jobChange(response.data);
+							self.isLoading = false;
 						 });
 				}
 			},

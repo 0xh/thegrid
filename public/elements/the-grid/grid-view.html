@@ -299,7 +299,7 @@
 				var dups = self.findBy( marker => {
 					return (marker.lat == data.lat) && (marker.lng == data.lng);
 				});
-				console.log('dups', dups);
+				console.log('new marker', data);
 				self.addMarker({
 					id: data.id,
 					price: data.price,

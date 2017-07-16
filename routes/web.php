@@ -57,11 +57,11 @@ Route::get('/job/{id}', 'JobController@viewJob');
 Route::get('/{id}/jobs', 'JobController@getJobs');
 Route::get('/{id}/job/{job_id}', 'JobController@getJobDetails');
 
-Route::post('/bid', 'BidController@bid');
-Route::post('/bid/approve', 'BidController@approveBid');
-Route::get('/{id}/bids', 'BidController@getBids');
-Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
-Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
+// Route::post('/bid', 'BidController@bid');
+// Route::post('/bid/approve', 'BidController@approveBid');
+// Route::get('/{id}/bids', 'BidController@getBids');
+// Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
+// Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
 
 Route::get('/country/{iso}', 'CountryController@getCountryByISO');
 

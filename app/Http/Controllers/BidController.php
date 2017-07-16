@@ -10,19 +10,19 @@ use App\Winner;
 
 class BidController extends Controller
 {
-    public function bid(Request $request) {
+    public function bid(Request $request, $id) {
     	$data = $request->all();
-    	if( !$this->isBidded( $data['user_id'], $data['job_id'] ) ) {
+    	if( !$this->isBidded( $id, $data['job_id'] ) ) {
 	    	$bid = Bid::create([
-	    		'user_id' => $data['user_id'],
-	            'job_id' => $data['job_id'],
-	            'price_bid' => $data['price_bid']
-	        ]);
-	    	$user = User::find($data['user_id']);
-	    	$job = Job::find($data['job_id']);
+	    		'user_id' => $id,
+            'job_id' => $data['job_id'],
+            'price_bid' => $data['price_bid']
+        ]);
+	    	$user = User::where('id', $id)->first();
+	    	$job = Job::where('id',$data['job_id'])->first();
 	    	$bid->job = $job;
 	    	$bid->user = $user;
-	        return response()->json($bid, 200);
+	      return response()->json($bid, 200);
 	    } else {
 	    	return response()->json(['error' => true, 'message' => 'Already bidded'], 422);
 	    }

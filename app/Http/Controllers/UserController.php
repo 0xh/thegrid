@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use Illuminate\Support\Facades\Storage;
 use Twilio\Rest\CLient;
-
+use App\User;
 use App\Profile;
 
 class UserController extends Controller
@@ -48,6 +48,20 @@ class UserController extends Controller
       $user = Profile::updateOrCreate(
         ['user_id' => $id],
         $data['profile']
+      );
+      return $user;
+    }
+
+    public function upload(Request $request, $id) {
+      Storage::makeDirectory('public/avatars');
+      $file_name = time().'-'.$id.'.'.$request->avatar->extension();
+      $path = Storage::putFileAs(
+        'public/avatars', $request->file('avatar'), $file_name
+      );
+      $data['profile_image_url'] = $file_name;
+      $user = Profile::updateOrCreate(
+        ['user_id' => $id],
+        $data
       );
       return $user;
     }

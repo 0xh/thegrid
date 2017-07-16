@@ -27,10 +27,11 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   });
   Route::get('/{id}', 'UserController@getUser');
   Route::put('/{id}', 'UserController@updateUser');
+  Route::post('/{id}/upload', 'UserController@upload');
 
   Route::get('/{id}/jobs', 'JobController@getJobs');
-  Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
   Route::post('/{id}/jobs', 'JobController@add');
+  Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
 
   // Route::post('/bid', 'BidController@bid');
   Route::post('/bid/approve', 'BidController@approveBid');

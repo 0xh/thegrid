@@ -26,10 +26,10 @@
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="">
-		    	<template is="dom-if" if="[[isLoading]]">
+		    	<!-- <template is="dom-if" if="[[isLoading]]">
 		    		<paper-progress indeterminate></paper-progress>
-		    	</template>
-		    	<div class="container">
+		    	</template> -->
+		    	<div class="container" hidden$="[[isLoading]]">
 		    		<p><span class="main-price">AED [[bid.job.price]]</span></p>
 		    		<p>[[bid.job.name]]</p>
 		    		<p>Posted by: [[bid.job.user.name]]</p>
@@ -47,6 +47,9 @@
 		    	</div>
 			</div>
 		 </paper-scroll-header-panel>
+		 <div hidden$="[[!isLoading]]" class="spinner-container">
+			 <paper-spinner active$="[[isLoading]]"></paper-spinner>
+		 </div>
 	</template>
 	<script>
 		Polymer({
@@ -90,9 +93,10 @@
 			],
 			_bidChange: function(bid) {
 				if(bid) {
+					this.set('bid',{})
+					this.set('bid', bid);
 					this.countDown(bid.job.date);
 					this.getRank();
-					this.bid = bid;
 					// this.set('bid.is_approved', null);
 					// this.set('bid.is_approved', bid.is_approved);
 				}
@@ -151,7 +155,7 @@
 				var self = this;
 				if(id) {
 					self.isLoading = true;
-					axios.get('/'+Grid.user_id+'/bid/'+id)
+					gAxios.get('/users/' + Grid.user.id + '/bid/' + id)
 						 .then(function(response) {
 						 	// console.log(response.data);
 						 	self.isLoading = false;

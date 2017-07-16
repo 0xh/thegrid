@@ -25,9 +25,9 @@
 		      <paper-icon-button icon="chevron-left" on-tap="close"></paper-icon-button>
 		    </paper-toolbar>
 		    <div role="listbox">
-		    	<template is="dom-if" if="[[isLoading]]">
+		    	<!-- <template is="dom-if" if="[[isLoading]]">
 		    		<paper-progress indeterminate class="w100"></paper-progress>
-		    	</template>
+		    	</template> -->
 			 	<template is="dom-repeat" items="{{jobs}}" as="job">
 					<paper-item on-tap="viewJob" data-id$={{job.id}}>
 						<paper-item-body two-line>
@@ -47,6 +47,9 @@
 				</template>
 			</div>
 		 </paper-scroll-header-panel>
+		 <div hidden$="[[!isLoading]]" class="spinner-container">
+ 			<paper-spinner active$="[[isLoading]]"></paper-spinner>
+ 		</div>
 	</template>
 </dom-module>
 <script>
