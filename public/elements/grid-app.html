@@ -43,8 +43,13 @@
 			height: 100%;
 			z-index: 4;
 			@apply(--grid-transition-effect);
-			background-color: #ffffff;
+			background-color: #212121;
+			color: #FFFFFF;
 			width: var(--grid-drawer-collapse-width);
+		}
+		[theme="dark"] grid-drawer {
+			background-color: #212121;
+			color: #FFFFFF;
 		}
 		grid-drawer[opened] {
 			width: var(--grid-drawer-expanded-width);
@@ -208,6 +213,11 @@
 						type: Boolean,
 						value: false,
 						observer: '_mobileChanged'
+					},
+					theme: {
+						type: String,
+						value: "dark",
+						reflectToAttribute: true
 					}
 				},
 				_mobileChanged: function() {

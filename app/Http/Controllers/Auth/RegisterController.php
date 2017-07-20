@@ -62,9 +62,9 @@ class RegisterController extends Controller
     {
         $input = $request->all();
         // trim phone number
-        if($input['phone_number'] != '') {
-            $input['phone_number'] = $input['country_code'].preg_replace('/[\-\s]/','',$input['phone_number']);
-        }
+        // if($input['phone_number'] != '') {
+        //     $input['phone_number'] = $input['country_code'].preg_replace('/[\-\s]/','',$input['phone_number']);
+        // }
 
         $validator = $this->validator($input);
 
@@ -90,7 +90,8 @@ class RegisterController extends Controller
                 $sms = true;
             }
             if( $sms ) {
-                return response()->json(['message' => 'A confirmation code will be send to the mobile number provided', 'user' => $user], 200)->withCookie(Cookie::make('user', $user, 30));
+                // return response()->json(['message' => 'A confirmation code will be send to the mobile number provided', 'user' => $user], 200)->withCookie(Cookie::make('user', $user, 30));
+                return response()->json(['message' => 'A confirmation link will be send to the email address provided', 'user' => $user], 200);
             } else {
                 return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);
             }
@@ -182,9 +183,11 @@ class RegisterController extends Controller
             $user->confirmation_token = '';
             $user->save();
 
-            return redirect(route('login'))->with('status', 'Email Activated');
+            // return redirect(route('login'))->with('status', 'Email Activated');
+            return response()->json(['message' => 'Email has been confirmed!']);
         }
-        return redirect(route('login'))->with('status', 'Something went wrong');
+        // return redirect(route('login'))->with('status', 'Something went wrong');
+        return response()->json(['message' => 'Something went wrong...'], 500);
     }
     /**
      * Get a validator for an incoming registration request.
@@ -196,6 +199,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => 'required|string|unique:users',
             'password' => 'required|string|min:6|confirmed',

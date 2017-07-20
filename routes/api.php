@@ -19,6 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return response()->json($user);
 });
 
+Route::post('/password/email', 'Auth\ForgotPasswordController@getResetToken');
+Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
+Route::post('/users/register', 'Auth\RegisterController@register');
+Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation');
+
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {
     // $user = request()->user();

@@ -1,0 +1,24 @@
+<link rel="import" href="/bower_components/polymer-redux/polymer-redux.html">
+
+<script>
+
+  const intialState = {
+    user: {
+      profile: null
+    }
+  };
+
+  const reducer = (state, action) => {
+    if( !state ) return intialState;
+    switch (action.type) {
+      case 'LOGGED_USER':
+        const user = action.user;
+        console.log(user);
+        return Object.assign({}, state, { user: user } );
+    }
+  };
+
+  const store = Redux.createStore(reducer);
+  const ReduxBehavior = PolymerRedux(store);
+
+</script>

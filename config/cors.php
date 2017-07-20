@@ -16,6 +16,8 @@ return [
         'https://api.thegrid.com',
         'http://dev.thegrid.com',
         'https://dev.thegrid.com',
+        'http://10.0.0.10:8080',
+        'http://127.0.0.1:8080',
     ],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
