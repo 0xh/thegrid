@@ -34,7 +34,15 @@ Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
 Route::get('/test', function() {
-	return Auth::user()->profile;
+	// echo gethostbyname("api.thegrid.com");
+	// var_export (dns_get_record ( "api.thegrid.com") );
+	//
+	// $skills = App\Skill::with('usersCount')->get();//->with('users');
+	//return $skills;
+	// foreach ($skills as $skill) {
+	// 	echo $skill->skill . ' : ' . $skill->usersCount .' <br/ >';
+	// }
+	return App\User::all();
 });
 
 Auth::routes();

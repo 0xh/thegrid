@@ -91,7 +91,8 @@ class RegisterController extends Controller
             }
             if( $sms ) {
                 // return response()->json(['message' => 'A confirmation code will be send to the mobile number provided', 'user' => $user], 200)->withCookie(Cookie::make('user', $user, 30));
-                return response()->json(['message' => 'A confirmation link will be send to the email address provided', 'user' => $user], 200);
+                return response()->json(['message' => 'A confirmation code will be sent to your email', 'user' => $user]);
+                // return response()->json(['message' => 'A confirmation link will be send to the email address provided', 'user' => $user], 200);
             } else {
                 return response()->json(['message' => 'Sorry! Something went wrong while sending SMS'], 500);
             }
@@ -100,15 +101,18 @@ class RegisterController extends Controller
     }
 
     public function submitCode(Request $request) {
-        $userCookie = Cookie::get('user');
-        $input = $request->all();
+        // $userCookie = Cookie::get('user');
+
+        $data = $request->all();
         $user = User::where([
-            ['id', '=', $userCookie['id']],
-            ['confirmation_code', '=', $input['confirmation_code']]
-            ])->first();
+            // ['id', '=', $data['id']],
+            ['email', '=', $data['email']],
+            ['confirmation_code', '=', $data['confirmation_code']]
+        ])->first();
         if( $user ) {
             $user->confirmation_code = '';
-            $user->confirmation_code_confirmed = 1;
+            // $user->confirmation_code_confirmed = 1;
+            $user->confirmed = 1;
             $user->save();
             $user->redirectUrl = route('login');
             return response()->json($user, 200);
@@ -117,12 +121,13 @@ class RegisterController extends Controller
         }
     }
 
-    public function resendCode() {
-        $userCookie = Cookie::get('user');
-        $code = $this->generateCode();
+    public function resendCode(Request $request) {
+        // $userCookie = Cookie::get('user');
+        // $code = $this->generateCode();
+        $data = $request->all();
         if( $userCookie ) {
 
-            $user = User::where('id', $userCookie['id'])->first();
+            $user = User::where('id', $data['id'])->first();
             if( $user ) {
                 $code = $user->confirmation_code;
                 if( env('SMS') ) {
@@ -199,7 +204,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => 'required|string|max:255',
-            'username' => 'required|string|unique:users',
+            'username' => 'required|alpha_dash|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => 'required|string|unique:users',
             'password' => 'required|string|min:6|confirmed',
@@ -216,6 +221,7 @@ class RegisterController extends Controller
     {
         return User::create([
             'name' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
             'phone_number' => $data['phone_number'],
             'password' => bcrypt($data['password']),
@@ -249,19 +255,21 @@ class RegisterController extends Controller
         } catch(\Exception $e) {
             return redirect(env('APP_URL'));
         }
+        $setup_account = false;
         //check if we have logged provider
         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
 
         if(!$socialProvider) {
             //create a new user and provider
             $user = User::firstOrCreate(
-                ['email' => $socialUser->getEmail()],
-                ['name' => $socialUser->getName()],
-                ['confirmed' => 1]
-                );
+              ['email' => $socialUser->getEmail()],
+              ['name' => $socialUser->getName()],
+              ['confirmed' => 1]
+            );
             $user->socialProviders()->create(
-                ['provider_id' => $socialUser->getId(), 'provider' => $provider]
-                );
+              ['provider_id' => $socialUser->getId(), 'provider' => $provider]
+            );
+            $setup_account = true;
         } else {
             $user = $socialProvider->user;
         }
@@ -275,7 +283,10 @@ class RegisterController extends Controller
               'network' => $provider,
               'access_token' => $token
         ));
-        return redirect(env('APP_URL').'?'.$qs);
+        $client_secret = env('CLIENT_SECRET');
+        $_setup_account = ($setup_account) ? 1 : 0;
+
+        return redirect(env('APP_URL')."/login/{$provider}/{$token}/{$client_secret}/{$_setup_account}");
         // dd($user);
         // OAuth Two Providers
         // $token = $socialUser->token;
@@ -284,9 +295,9 @@ class RegisterController extends Controller
 
         // OAuth One Providers
         // $token = $socialUser->token;
-        // // // $tokenSecret = $socialUser->tokenSecret;
-        // $http = new \GuzzleHttp\Client(['defaults' => ['verify' => false]]);
-        // $response = $http->post(env('APP_API_URL').'/oauth/token', [
+        // // // // $tokenSecret = $socialUser->tokenSecret;
+        // $http = new \GuzzleHttp\Client();
+        // $response = $http->post('https://127.0.0.1/oauth/token/', [
         //     'form_params' => [
         //         'grant_type' => 'social',
         //         'client_id' => env('CLIENT_ID'),
@@ -295,10 +306,11 @@ class RegisterController extends Controller
         //         'access_token' => $token,
         //     ],
         // ]);
+        // $response = $http->get('https://127.0.0.1/test');
         // $account = Socialite::driver($provider)->userFromToken($token);
 
         //dd($account);
-        // //$response = $http->request('GET', 'https://api.github.com/repos/guzzle/guzzle');
+        // $response = $http->get('https://api.github.com/repos/guzzle/guzzle');
         // auth()->login($user);
         // return $response;
         // dd($user);

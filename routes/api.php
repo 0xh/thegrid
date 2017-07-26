@@ -23,6 +23,10 @@ Route::post('/password/email', 'Auth\ForgotPasswordController@getResetToken');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/users/register', 'Auth\RegisterController@register');
 Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation');
+Route::get('/users/skills', 'SkillController@getSkills');
+
+Route::post('/account/verify', 'Auth\RegisterController@submitCode');
+Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
 
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {
@@ -49,4 +53,9 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/conversations', 'ConversationController@createConversation');
   Route::get('/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
   Route::post('/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
+
+  Route::get('/{id}/skills', 'UserController@getSkills');
+  Route::post('/{id}/skills', 'UserController@addSkill');
+  Route::delete('/{id}/skills/{skill_id}', 'UserController@removeSkill');
+
 });

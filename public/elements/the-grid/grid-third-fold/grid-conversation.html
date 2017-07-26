@@ -84,9 +84,9 @@
 					<paper-icon-button icon="more-vert"></paper-icon-button>
 				</paper-toolbar>
 				<div id="msgs" role="list-box">
-					<!-- <template is="dom-if" if="[[isLoading]]">
+					<template is="dom-if" if="[[isLoading]]">
 						<paper-progress indeterminate></paper-progress>
-					</template> -->
+					</template>
 					<div class="container h100" hidden$="[[isLoading]]">
 						<div class="layout vertical flex h100">
 							<div id="filler" class="flex"></div>
@@ -121,9 +121,6 @@
 	    data="{{messages}}"
 	    persisted-data="{{persistedData}}">
 		</app-indexeddb-mirror> -->
-		<div hidden$="[[!isLoading]]" class="spinner-container">
-			<paper-spinner active$="[[isLoading]]"></paper-spinner>
-		</div>
 	</template>
 	<script>
 		Polymer({
