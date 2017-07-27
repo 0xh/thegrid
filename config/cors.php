@@ -20,6 +20,8 @@ return [
         'http://127.0.0.1:8080',
         'http://127.0.0.1',
         'https://127.0.0.1',
+        'https://thegridpolymer.azurewebsites.net',
+        'http://thegridpolymer.azurewebsites.net',
     ],
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['*'],
