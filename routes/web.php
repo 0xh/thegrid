@@ -42,7 +42,35 @@ Route::get('/test', function() {
 	// foreach ($skills as $skill) {
 	// 	echo $skill->skill . ' : ' . $skill->usersCount .' <br/ >';
 	// }
-	return App\User::all();
+	// return App\User::all();
+
+
+	try {
+		$http = new \GuzzleHttp\Client(['headers' => [
+			'Content-Type' => 'application/json'
+		]]);
+		$response = $http->post(env('APP_API_URL') . '/oauth/token/', [
+
+				// 'body' => json_encode([
+				// 		'grant_type' => 'password',
+				// 		'client_id' => env('CLIENT_ID'),
+				// 		'client_secret' => env('CLIENT_SECRET'),
+				// 		'username' => 'zachary35@example.com', /// or any other network that your server is able to resolve.
+				// 		'password' => 'secret',
+				// ])
+		]);
+   }
+   catch (\GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+        $result =  $response->getBody();
+
+        //do something with it....
+				var_dump($response);
+   }
+
+
+
+	// curl -d '{"grant_type":"password", "client_id":"2", "client_secret":"xIxcFxQGFbYkSXKmd0MQ4iuC8Ejfw8x6EcuZJpHe","username":"zachary35@example.com","password":"secret"}' -H "Content-Type: application/json" -X POST http:api.thegrid.com/oauth/token/
 });
 
 Auth::routes();

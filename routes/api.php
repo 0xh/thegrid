@@ -19,6 +19,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return response()->json($user);
 });
 
+
+Route::post('/login', 'Auth\LoginController@loginAPI');
+Route::post('/login/google', 'Auth\RegisterController@handleProviderCallbackAPI');
+
+
 Route::post('/password/email', 'Auth\ForgotPasswordController@getResetToken');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/users/register', 'Auth\RegisterController@register');
@@ -34,6 +39,13 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
     // $user->profile = $user->profile;
     // return response()->json($user);
   });
+
+  Route::get('/test', function(Request $request) {
+    $user = $request->user();
+    $user->profile = $request->user()->profile;
+    return response()->json($user);
+  });
+
   Route::get('/{id}', 'UserController@getUser');
   Route::put('/{id}', 'UserController@updateUser');
   Route::post('/{id}/upload', 'UserController@upload');
