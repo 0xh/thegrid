@@ -35,11 +35,10 @@ Route::get('/sendsms', 'UserController@sendSMS');
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
-<<<<<<< HEAD
 Route::get('/test/{input}', function(Request $request, $input) {
 
 	$data = $request->all();
-	
+
 	// $validator = Illuminate\Support\Facades\Validator::make($data, [
 	// 	'email' => 'required|string|email|max:255|unique:users',
 	// ]);
