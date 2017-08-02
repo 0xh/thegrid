@@ -250,6 +250,7 @@ class RegisterController extends Controller
     }
 
     /**
+<<<<<<< HEAD
     * Obtain the user information from Google.
     *
     * @return Response
@@ -361,3 +362,116 @@ class RegisterController extends Controller
 
         }
       }
+=======
+     * Obtain the user information from Google.
+     *
+     * @return Response
+     */
+     public function handleProviderCallback($provider)
+     {
+         try {
+             $socialUser = Socialite::driver($provider)->stateless()->user();
+             // dd($socialUser);
+         } catch(\Exception $e) {
+             return redirect(env('APP_URL'));
+         }
+         $setup_account = false;
+         //check if we have logged provider
+         $socialProvider = SocialProvider::where('provider_id',$socialUser->getId())->first();
+
+         if(!$socialProvider) {
+             //create a new user and provider
+             $user = User::firstOrCreate(
+               ['email' => $socialUser->getEmail()],
+               ['name' => $socialUser->getName()],
+               ['confirmed' => 1]
+             );
+             $user->socialProviders()->create(
+               ['provider_id' => $socialUser->getId(), 'provider' => $provider]
+             );
+             $setup_account = true;
+         } else {
+             $user = $socialProvider->user;
+         }
+
+         $token = $socialUser->token;
+
+         $qs = http_build_query(array(
+               'grant_type' => 'social',
+               'client_id' => env('CLIENT_ID'),
+               'client_secret' => env('CLIENT_SECRET'),
+               'network' => $provider,
+               'access_token' => $token
+         ));
+
+         $client_secret = env('CLIENT_SECRET');
+         $_setup_account = ($setup_account) ? 1 : 0;
+
+         $data['user'] = $user;
+         $data['user']->profile = $user->profile;
+         $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
+
+        //  return response()->json($data);
+
+         return redirect(env('APP_URL')."/login/{$provider}/{$token}/{$client_secret}/{$_setup_account}");
+         // dd($user);
+         // OAuth Two Providers
+         // $token = $socialUser->token;
+         // $refreshToken = $socialUser->refreshToken; // not always provided
+         // $expiresIn = $socialUser->expiresIn;
+
+         // OAuth One Providers
+         // $token = $socialUser->token;
+         // // // $tokenSecret = $socialUser->tokenSecret;
+         // $http = new \GuzzleHttp\Client();
+         // $response = $http->post(env('APP_API_URL') . '/oauth/token/', [
+         //     'form_params' => [
+         //         'grant_type' => 'social',
+         //         'client_id' => env('CLIENT_ID'),
+         //         'client_secret' => env('CLIENT_SECRET'),
+         //         'network' => $provider, /// or any other network that your server is able to resolve.
+         //         'access_token' => $token,
+         //     ]
+         // ]);
+         // $response = $http->get('https://127.0.0.1/test');
+         // $account = Socialite::driver($provider)->userFromToken($token);
+
+         //dd($account);
+         // $response = $http->get('https://api.github.com/repos/guzzle/guzzle');
+         // auth()->login($user);
+         // return $response;
+         // dd($user);
+         // if ($request->expectsJson()) {
+         //     return response()->json(['user' => $account, 'token' => $response]);
+         // }
+         //dd($response);
+         //exit;
+         //return redirect('/');
+     }
+
+     public function handleProviderCallbackAPI(Request $request) {
+
+       $data = $request->all();
+       $socialProvider = SocialProvider::where('provider_id', $data['id'])->first();
+
+       if(!$socialProvider) {
+         //create a new user and provider
+         $user = User::firstOrCreate(
+            ['email' => $data['email']],
+            ['name' => $data['name']],
+            ['confirmed' => 1]);
+        $user->socialProviders()->create(
+          ['provider_id' => $socialUser->getId(), 'provider' => $provider]);
+       } else {
+           $user = $socialProvider->user;
+       }
+
+       $data['user'] = $user;
+       $data['user']->profile = $user->profile;
+       $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
+
+       return response()->json($data);
+
+     }
+}
+>>>>>>> 3c2f6c7ec6ee3ccd370c8a9eb91edf824b99a6f1

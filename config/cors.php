@@ -11,6 +11,7 @@ return [
      |
      */
     'supportsCredentials' => false,
+<<<<<<< HEAD
     'allowedOrigins' => [
         'http://api.thegrid.com',
         'https://api.thegrid.com',

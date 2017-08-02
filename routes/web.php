@@ -35,6 +35,7 @@ Route::get('/sendsms', 'UserController@sendSMS');
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
+<<<<<<< HEAD
 Route::get('/test/{input}', function(Request $request, $input) {
 
 	$data = $request->all();
