@@ -14,6 +14,8 @@
 // 	return '-SrI5nSyUR-1d2yAkt4fwl7Oqou9sfl4xYAvRRp0DsA.sm-GIm2rFDV7UPT38bE9z5Jd2FbUBYk-zzf-f3YFR4k';
 // });
 
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
 	return view('polymer');
 })->name('home');
@@ -33,16 +35,21 @@ Route::get('/sendsms', 'UserController@sendSMS');
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
-Route::get('/test', function() {
-	// echo gethostbyname("api.thegrid.com");
-	// var_export (dns_get_record ( "api.thegrid.com") );
-	//
-	// $skills = App\Skill::with('usersCount')->get();//->with('users');
-	//return $skills;
-	// foreach ($skills as $skill) {
-	// 	echo $skill->skill . ' : ' . $skill->usersCount .' <br/ >';
-	// }
-	return App\User::all();
+Route::get('/test/{input}', function(Request $request, $input) {
+
+	$data = $request->all();
+	
+	// $validator = Illuminate\Support\Facades\Validator::make($data, [
+	// 	'email' => 'required|string|email|max:255|unique:users',
+	// ]);
+
+	$email = Validator::make($data, [
+		$input => 'required|unique:users',
+	]);
+
+	$response = ["passes" => $email->passes() ? 1 : 0];
+	return response()->json($response);
+	// curl -d '{"grant_type":"password", "client_id":"2", "client_secret":"xIxcFxQGFbYkSXKmd0MQ4iuC8Ejfw8x6EcuZJpHe","username":"zachary35@example.com","password":"secret"}' -H "Content-Type: application/json" -X POST http:api.thegrid.com/oauth/token/
 });
 
 Auth::routes();

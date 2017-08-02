@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Twilio\Rest\CLient;
+use Illuminate\Support\Facades\Validator;
+use Twilio\Rest\Client;
 use App\User;
 use App\Profile;
 
@@ -82,5 +83,16 @@ class UserController extends Controller
       $user = User::find($id);
       $user->skills()->detach($skill_id);
       return $user->skills;
+    }
+
+    public function isUnique(Request $request, $input) {
+      $data = $request->all();
+
+      $email = Validator::make($data, [
+        $input => 'required|unique:users',
+      ]);
+
+      $response = ["passes" => $email->passes() ? 1 : 0];
+      return response()->json($response);
     }
 }

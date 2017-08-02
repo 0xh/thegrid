@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\User;
 
+use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
     /*
@@ -36,6 +38,30 @@ class LoginController extends Controller
         }
 
         return $this->sendFailedLoginResponse($request);
+    }
+
+    public function loginAPI(Request $request) {
+
+        $this->validateLogin($request);
+        if ($this->attemptLogin($request)) {
+            return $this->sendLoginResponseAPI($request);
+        }
+
+        return $this->sendFailedLoginResponseAPI($request);
+    }
+
+    protected function sendLoginResponseAPI(Request $request) {
+
+      $data['user'] = Auth::user();
+      $data['user']->profile = Auth::user()->profile;
+      $data['access_token'] =  Auth::user()->createToken('THE GRID')->accessToken;
+
+      return response()->json($data);
+      // return $response;
+    }
+
+    protected function sendFailedLoginResponseAPI(Request $request) {
+      return response()->json(['message' => 'Invalid email or password'], 401);
     }
 
     /**

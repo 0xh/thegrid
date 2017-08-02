@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => '127.0.0.1',//env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
@@ -181,6 +181,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Adaojunior\Passport\SocialGrantServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
+        Clockwork\Support\Laravel\ClockworkServiceProvider::class,
     ],
 
     /*
@@ -230,6 +231,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'Clockwork' => Clockwork\Support\Laravel\Facade::class,
 
     ],
 

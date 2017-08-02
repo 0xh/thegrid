@@ -131,7 +131,6 @@ trait AuthenticatesUsers
         }
 
         return redirect()->back()
-        // return redirect('/login')
             ->withInput($request->only($this->username(), 'remember'))
             ->withErrors($errors);
     }
@@ -156,9 +155,7 @@ trait AuthenticatesUsers
     {
         $this->guard()->logout();
 
-        $request->session()->flush();
-
-        $request->session()->regenerate();
+        $request->session()->invalidate();
 
         return redirect('/');
     }
