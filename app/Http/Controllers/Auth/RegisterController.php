@@ -366,4 +366,20 @@ class RegisterController extends Controller
        return response()->json($data);
 
      }
+
+     public function validateStep1(Request $request) {
+       $input = $request->all();
+       $validator =  Validator::make($input, [
+         'name' => 'required|string|max:255',
+         'email' => 'required|string|email|max:255|unique:users',
+         'phone_number' => 'required|string|unique:users',
+         'password' => 'required|string|min:6',
+       ]);
+
+       if( $validator->passes() ) {
+         return response()->json(['status' => 'OK']);
+       }
+
+       return response()->json($validator->errors(), 422);
+     }
 }

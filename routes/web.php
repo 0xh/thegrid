@@ -37,7 +37,11 @@ Route::get('/grid-elements/{element}', 'ElementsController@element');
 
 Route::get('/test/{input}', function(Request $request, $input) {
 
-	return App\JobCategory::all();
+	echo "Today is " . date("Y/m/d H:i:s") . "<br>";
+echo "Today is " . date("Y.m.d") . "<br>";
+echo "Today is " . date("Y-m-d") . "<br>";
+echo "Today is " . date("l");
+	// return App\JobCategory::all();
 });
 
 Auth::routes();

@@ -33,6 +33,8 @@ Route::get('/users/skills', 'SkillController@getSkills');
 Route::post('/account/verify', 'Auth\RegisterController@submitCode');
 Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
 
+Route::post('/register/step1', 'Auth\RegisterController@validateStep1');
+
 Route::get('/users/unique/{input}', 'UserController@isUnique');
 
 Route::get('/jobs/categories', 'JobCategoryController@getCategories');
