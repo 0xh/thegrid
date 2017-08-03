@@ -37,19 +37,7 @@ Route::get('/grid-elements/{element}', 'ElementsController@element');
 
 Route::get('/test/{input}', function(Request $request, $input) {
 
-	$data = $request->all();
-
-	// $validator = Illuminate\Support\Facades\Validator::make($data, [
-	// 	'email' => 'required|string|email|max:255|unique:users',
-	// ]);
-
-	$email = Validator::make($data, [
-		$input => 'required|unique:users',
-	]);
-
-	$response = ["passes" => $email->passes() ? 1 : 0];
-	return response()->json($response);
-	// curl -d '{"grant_type":"password", "client_id":"2", "client_secret":"xIxcFxQGFbYkSXKmd0MQ4iuC8Ejfw8x6EcuZJpHe","username":"zachary35@example.com","password":"secret"}' -H "Content-Type: application/json" -X POST http:api.thegrid.com/oauth/token/
+	return App\JobCategory::all();
 });
 
 Auth::routes();

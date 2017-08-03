@@ -119,8 +119,8 @@ class LoginController extends Controller
     {
         // return $request->only($this->username(), 'password');
         return ['email' => $request->{$this->username()},
-                'password' => $request->password,
-                'confirmed' => 1];
+                'password' => $request->password];
+                // 'confirmed' => 1];
     }
 
     /**

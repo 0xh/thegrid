@@ -35,6 +35,8 @@ Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
 
 Route::get('/users/unique/{input}', 'UserController@isUnique');
 
+Route::get('/jobs/categories', 'JobCategoryController@getCategories');
+
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {
     // $user = request()->user();

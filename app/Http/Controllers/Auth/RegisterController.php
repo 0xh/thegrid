@@ -224,8 +224,18 @@ class RegisterController extends Controller
     */
     protected function create(array $data)
     {
-      return User::create([
-        'name' => $data['name'],
+      // return User::create([
+      //   'name' => $data['name'],
+      //   'username' => $data['username'],
+      //   'email' => $data['email'],
+      //   'phone_number' => $data['phone_number'],
+      //   'gender' => $data['gender'],
+      //   'birth_date' => date("Y-m-d H:i:s", strtotime($data['birth_date'])),
+      //   'password' => bcrypt($data['password']),
+      // ]);
+      return User::updateOrCreate(
+        ['email' => $data['email']],
+        ['name' => $data['name'],
         'username' => $data['username'],
         'email' => $data['email'],
         'phone_number' => $data['phone_number'],
@@ -276,26 +286,26 @@ class RegisterController extends Controller
              $user = $socialProvider->user;
          }
 
-         $token = $socialUser->token;
+        //  $token = $socialUser->token;
 
-         $qs = http_build_query(array(
-               'grant_type' => 'social',
-               'client_id' => env('CLIENT_ID'),
-               'client_secret' => env('CLIENT_SECRET'),
-               'network' => $provider,
-               'access_token' => $token
-         ));
-
-         $client_secret = env('CLIENT_SECRET');
-         $_setup_account = ($setup_account) ? 1 : 0;
+        //  $qs = http_build_query(array(
+        //        'grant_type' => 'social',
+        //        'client_id' => env('CLIENT_ID'),
+        //        'client_secret' => env('CLIENT_SECRET'),
+        //        'network' => $provider,
+        //        'access_token' => $token
+        //  ));
+         //
+        //  $client_secret = env('CLIENT_SECRET');
+        //  $_setup_account = ($setup_account) ? 1 : 0;
 
          $data['user'] = $user;
          $data['user']->profile = $user->profile;
          $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
 
-        //  return response()->json($data);
+         return response()->json($data);
 
-         return redirect(env('APP_URL')."/login/{$provider}/{$token}/{$client_secret}/{$_setup_account}");
+        //  return redirect(env('APP_URL')."/login/{$provider}/{$token}/{$client_secret}/{$_setup_account}");
          // dd($user);
          // OAuth Two Providers
          // $token = $socialUser->token;
@@ -331,19 +341,20 @@ class RegisterController extends Controller
          //return redirect('/');
      }
 
-     public function handleProviderCallbackAPI(Request $request) {
+     public function handleProviderCallbackAPI(Request $request, $provider) {
 
        $data = $request->all();
        $socialProvider = SocialProvider::where('provider_id', $data['id'])->first();
-
+       $data['new_user'] = 0;
        if(!$socialProvider) {
-         //create a new user and provider
-         $user = User::firstOrCreate(
+          //create a new user and provider
+          $user = User::firstOrCreate(
             ['email' => $data['email']],
             ['name' => $data['name']],
             ['confirmed' => 1]);
-        $user->socialProviders()->create(
-          ['provider_id' => $socialUser->getId(), 'provider' => $provider]);
+          $user->socialProviders()->create(['provider_id' => $data['id'], 'provider' => $provider]);
+
+          $data['new_user'] = 1;
        } else {
            $user = $socialProvider->user;
        }

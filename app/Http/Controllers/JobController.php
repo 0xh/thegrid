@@ -28,18 +28,21 @@ class JobController extends Controller
     	$job->user = $user;
     	$job->bids = $bids;
       return response()->json($job);
-      
+
     }
 
     public function getJobs($id) {
 
       $this->id = $id;
-      $jobs = Cache::remember('jobs-'.$id, 15, function() {
-        return Job::where('user_id', $this->id)
-              // ->with('bids')
-              ->orderBy('created_at', 'desc')
-              ->paginate(env('JOBS_PER_PAGE'));
-      });
+      // $jobs = Cache::remember('jobs-'.$id, 15, function() {
+      //   return Job::where('user_id', $this->id)
+      //         // ->with('bids')
+      //         ->orderBy('created_at', 'desc')
+      //         ->paginate(env('JOBS_PER_PAGE'));
+      // });
+      $jobs = Job::where('user_id', $this->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(env('JOBS_PER_PAGE'));
     	return response()->json($jobs, 200);
     }
 
@@ -59,7 +62,7 @@ class JobController extends Controller
     		$data['lat'], $data['lng'], $data['lat']);
     	$jobs = Job::with('user')
     				->with('bids')
-    				->whereDate('date', '>', date('Y-m-d'))
+    				// ->whereDate('date', '>', date('Y-m-d'))
     				//->select(DB::raw($f))
     				// ->having('distance', '<', 50)
     				//->groupBy('distance')
