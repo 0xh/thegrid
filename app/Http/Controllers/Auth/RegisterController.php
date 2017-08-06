@@ -204,10 +204,14 @@ class RegisterController extends Controller
     */
     protected function validator(array $data)
     {
+      $uniqe = "|unique:users";
+      if($data['user_id']) {
+        $unique = "";
+      }
       return Validator::make($data, [
         'name' => 'required|string|max:255',
         'username' => 'required|alpha_dash|unique:users',
-        'email' => 'required|string|email|max:255|unique:users',
+        'email' => 'required|string|email|max:255'.$unique,
         'phone_number' => 'required|string|unique:users',
         'gender' => 'required',
         'birth_date' => 'required',
@@ -357,6 +361,9 @@ class RegisterController extends Controller
           $data['new_user'] = 1;
        } else {
            $user = $socialProvider->user;
+           if( !$user->username ) {
+             $data['new_user'] = 1;
+           }
        }
 
        $data['user'] = $user;
@@ -369,9 +376,15 @@ class RegisterController extends Controller
 
      public function validateStep1(Request $request) {
        $input = $request->all();
+
+       $uniqe = "|unique:users";
+       if($input['user_id']) {
+         $unique = "";
+       }
+
        $validator =  Validator::make($input, [
          'name' => 'required|string|max:255',
-         'email' => 'required|string|email|max:255|unique:users',
+         'email' => 'required|string|email|max:255'.$unique,
          'phone_number' => 'required|string|unique:users',
          'password' => 'required|string|min:6',
        ]);

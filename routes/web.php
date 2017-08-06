@@ -35,13 +35,9 @@ Route::get('/sendsms', 'UserController@sendSMS');
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
-Route::get('/test/{input}', function(Request $request, $input) {
-
-	echo "Today is " . date("Y/m/d H:i:s") . "<br>";
-echo "Today is " . date("Y.m.d") . "<br>";
-echo "Today is " . date("Y-m-d") . "<br>";
-echo "Today is " . date("l");
-	// return App\JobCategory::all();
+Route::get('/test', function(Request $request) {
+	$q = $request->input('q');
+	return App\Job::latest()->search($q)->get();
 });
 
 Auth::routes();

@@ -38,6 +38,7 @@ Route::post('/register/step1', 'Auth\RegisterController@validateStep1');
 Route::get('/users/unique/{input}', 'UserController@isUnique');
 
 Route::get('/jobs/categories', 'JobCategoryController@getCategories');
+Route::get('/jobs/search', 'JobController@search');
 
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {

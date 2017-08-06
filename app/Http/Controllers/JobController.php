@@ -92,4 +92,12 @@ class JobController extends Controller
     	$job = Job::find($id);
     	return response()->json($job, 200);
     }
+
+    public function search(Request $request) {
+      $q = $request->input('q');
+      return Job::latest()
+                  ->search($q)
+                  ->whereDate('date', '>', date('Y-m-d'))
+                  ->get();
+    }
 }

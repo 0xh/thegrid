@@ -26,4 +26,9 @@ class Job extends Model
     public function only_bids() {
     	return $this->hasMany('App\Bid')->orderBy('price_bid', 'asc');
     }
+
+		public function scopeSearch($query, $s) {
+			return $query->where('name', 'like', '%' . $s . '%')
+									 ->orWhere('location', 'like', '%' . $s . '%');
+		}
 }
