@@ -87,8 +87,11 @@ class RegisterController extends Controller
         });
       }
       // IDEA: Login user after register
-      $data['user'] = $user;
-      $data['user']->profile = $user->profile;
+      $data['user'] = User::find($user->id)
+                      ->withCount('jobs')
+                      ->withCount('bids')
+                      ->with('profile')
+                      ->first();
       $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
 
       return response()->json($data);
@@ -237,6 +240,8 @@ class RegisterController extends Controller
       //   'birth_date' => date("Y-m-d H:i:s", strtotime($data['birth_date'])),
       //   'password' => bcrypt($data['password']),
       // ]);
+
+      // update user if email exist and create if not
       return User::updateOrCreate(
         ['email' => $data['email']],
         ['name' => $data['name'],
@@ -366,8 +371,11 @@ class RegisterController extends Controller
            }
        }
 
-       $data['user'] = $user;
-       $data['user']->profile = $user->profile;
+       $data['user'] = User::find($user->id)
+                       ->withCount('jobs')
+                       ->withCount('bids')
+                       ->with('profile')
+                       ->first();
        $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
 
        return response()->json($data);

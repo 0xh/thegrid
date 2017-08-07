@@ -14,8 +14,11 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-  $user = $request->user();
-  $user->profile = $request->user()->profile;
+  $user = App\User::find($request->user()->id)
+                  ->withCount('jobs')
+                  ->withCount('bids')
+                  ->with('profile')
+                  ->first();
   return response()->json($user);
 });
 

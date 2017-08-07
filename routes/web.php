@@ -36,8 +36,7 @@ Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
 Route::get('/test', function(Request $request) {
-	$q = $request->input('q');
-	return App\Job::latest()->search($q)->get();
+	return App\User::find(2)->withCount('jobs')->withCount('bids')->first();
 });
 
 Auth::routes();
