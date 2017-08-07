@@ -371,7 +371,7 @@ class RegisterController extends Controller
            }
        }
 
-       $data['user'] = User::find($user->id)
+       $data['user'] = User::where('id', $user->id)
                        ->withCount('jobs')
                        ->withCount('bids')
                        ->with('profile')

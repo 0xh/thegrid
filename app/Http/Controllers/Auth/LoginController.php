@@ -52,7 +52,7 @@ class LoginController extends Controller
 
   protected function sendLoginResponseAPI(Request $request) {
 
-    $data['user'] = User::find(Auth::user()->id)
+    $data['user'] = User::where('id', Auth::user()->id)
                     ->withCount('jobs')
                     ->withCount('bids')
                     ->with('profile')
