@@ -87,7 +87,7 @@ class RegisterController extends Controller
         });
       }
       // IDEA: Login user after register
-      $data['user'] = User::find($user->id)
+      $data['user'] = User::where('id', $user->id)
                       ->withCount('jobs')
                       ->withCount('bids')
                       ->with('profile')
@@ -207,9 +207,11 @@ class RegisterController extends Controller
     */
     protected function validator(array $data)
     {
-      $uniqe = "|unique:users";
-      if($data['user_id']) {
-        $unique = "";
+      $unique = "|unique:users";
+      if( isset($data['user_id']) ) {
+        if($data['user_id']) {
+          $unique = "";
+        }
       }
       return Validator::make($data, [
         'name' => 'required|string|max:255',
@@ -361,9 +363,14 @@ class RegisterController extends Controller
             ['email' => $data['email']],
             ['name' => $data['name']],
             ['confirmed' => 1]);
+
           $user->socialProviders()->create(['provider_id' => $data['id'], 'provider' => $provider]);
 
-          $data['new_user'] = 1;
+          // if the user does not have a user name then he is a new user
+          if( !$user->username ) {
+            $data['new_user'] = 1;
+          }
+
        } else {
            $user = $socialProvider->user;
            if( !$user->username ) {
@@ -385,9 +392,11 @@ class RegisterController extends Controller
      public function validateStep1(Request $request) {
        $input = $request->all();
 
-       $uniqe = "|unique:users";
-       if($input['user_id']) {
-         $unique = "";
+       $unique = "|unique:users";
+       if( isset($input['user_id']) ) {
+         if($input['user_id']) {
+           $unique = "";
+         }
        }
 
        $validator =  Validator::make($input, [
