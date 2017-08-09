@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-  $user = App\User::find($request->user()->id)
+  $user = App\User::where('id', $request->user()->id)
                   ->withCount('jobs')
                   ->withCount('bids')
                   ->with('profile')
@@ -42,6 +42,7 @@ Route::get('/users/unique/{input}', 'UserController@isUnique');
 
 Route::get('/jobs/categories', 'JobCategoryController@getCategories');
 Route::get('/jobs/search', 'JobController@search');
+Route::get('/jobs/{id}', 'JobController@getUserJob');
 
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {

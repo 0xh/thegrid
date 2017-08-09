@@ -9,7 +9,7 @@ class Job extends Model
 	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date'];
 
 	public function user() {
-    	return $this->belongsTo('App\User');
+    	return $this->belongsTo('App\User')->with('profile');
     }
 
     public function bids() {

@@ -56,6 +56,14 @@ class JobController extends Controller
     	return $job;
     }
 
+		public function getUserJob($id) {
+			$job = Job::where('id', $id)->with('user')->first();
+			if($job)
+				return response()->json($job);
+			
+			return response()->json(['status' => 'failed'], 422);
+		}
+
     public function all(Request $request) {
     	$data = $request->all();
     	$f = sprintf("*, ( 3959 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
