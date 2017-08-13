@@ -12,6 +12,9 @@ class Skill extends Model
     return $this->belongsToMany('App\User');
   }
 
+  public function jobs() {
+    return $this->belongsToMany('App\Job');
+  }
 
   public function usersCount() {
     return $this->belongsToMany('App\User')

@@ -12,24 +12,34 @@ use Cache;
 class JobController extends Controller
 {
     public function add(Request $request, $id) {
-    	$data = $request->all();
+		$data = $request->all();
+		$skills = $data['skills'];
+
     	$job = Job::create([
     		'user_id' => $id,
-        'name' => $data['name'],
-        'category_id' => $data['category_id'],
-        'price' => $data['price'],
-        'lat' => $data['lat'],
-        'lng' => $data['lng'],
-        'location' => $data['location'],
-        'date' => date("Y-m-d H:i:s", strtotime($data['date']))
-      ]);
+			'name' => $data['name'],
+			'category_id' => $data['category_id'],
+			'price' => $data['price'],
+			'lat' => $data['lat'],
+			'lng' => $data['lng'],
+			'location' => $data['location'],
+			'details' => $data['details'],
+			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
+		]);
+
+		if( is_array($skills) ) {
+			foreach($skills as $skill) {
+				$job->skills()->attach($skill['id']);
+			}
+		}
+		
     	$user = User::where('id', $id)->first();
     	$bids = Bid::where('job_id', $job->id)->get();
     	$job->user = $user;
     	$job->bids = $bids;
       return response()->json($job);
 
-    }
+	}
 
     public function getJobs($id) {
 
@@ -56,13 +66,13 @@ class JobController extends Controller
     	return $job;
     }
 
-		public function getUserJob($id) {
-			$job = Job::where('id', $id)->with('user')->first();
-			if($job)
-				return response()->json($job);
-			
-			return response()->json(['status' => 'failed'], 422);
-		}
+	public function getUserJob($id) {
+		$job = Job::where('id', $id)->with('user')->first();
+		if($job)
+			return response()->json($job);
+		
+		return response()->json(['status' => 'failed'], 422);
+	}
 
     public function all(Request $request) {
     	$data = $request->all();

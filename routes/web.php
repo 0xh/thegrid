@@ -35,8 +35,11 @@ Route::get('/sendsms', 'UserController@sendSMS');
 Route::get('/grid-elements', 'ElementsController@index');
 Route::get('/grid-elements/{element}', 'ElementsController@element');
 
-Route::get('/test', function(Request $request) {
-	return App\User::find(2)->withCount('jobs')->withCount('bids')->first();
+Route::post('/test', function(Request $request) {
+	// $j = App\Job::where('id', 44)->with('skills')->first();
+	// $j->skills()->attach([1,2]);
+
+	return $request->all();
 });
 
 Auth::routes();

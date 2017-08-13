@@ -13,6 +13,13 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('/test', function(Request $request) {
+	// $j = App\Job::where('id', 44)->with('skills')->first();
+	// $j->skills()->attach([1,2]);
+  $data = $request->all();
+	return response()->json($data);
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   $user = App\User::where('id', $request->user()->id)
                   ->withCount('jobs')

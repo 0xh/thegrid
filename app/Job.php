@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date'];
+	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'details'];
 
 	public function user() {
     	return $this->belongsTo('App\User')->with('profile');
@@ -27,8 +27,11 @@ class Job extends Model
     	return $this->hasMany('App\Bid')->orderBy('price_bid', 'asc');
     }
 
-		public function scopeSearch($query, $s) {
-			return $query->where('name', 'like', '%' . $s . '%')
-									 ->orWhere('location', 'like', '%' . $s . '%');
-		}
+	public function scopeSearch($query, $s) {
+		return $query->where('name', 'like', '%' . $s . '%')->orWhere('location', 'like', '%' . $s . '%');
+	}
+
+	public function skills() {
+        return $this->belongsToMany('App\Skill');
+    }
 }

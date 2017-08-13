@@ -68,19 +68,19 @@ class UserController extends Controller
   }
 
   public function getSkills($id) {
-    $skills =  User::find($id)->skills;
+    $skills =  User::where('id', $id)->skills;
     return response()->json($skills);
   }
 
   public function addSkill(Request $request, $id) {
     $data = $request->all();
-    $user = User::find($id);
+    $user = User::where('id', $id);
     $user->skills()->attach($data['id']);
     return $user->skills;
   }
 
   public function removeSkill($id, $skill_id) {
-    $user = User::find($id);
+    $user = User::where('id', $id);
     $user->skills()->detach($skill_id);
     return $user->skills;
   }
