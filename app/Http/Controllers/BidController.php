@@ -11,8 +11,12 @@ use App\Winner;
 class BidController extends Controller
 {
     public function bid(Request $request, $id) {
-    	$data = $request->all();
-    	if( !$this->isBidded( $id, $data['job_id'] ) ) {
+			$data = $request->all();
+			$bidded = Bid::where([
+				['user_id', '=', $id],
+				['job_id', '=', $data['job_id']]
+			])->first();
+    	if( !$bidded ) {
 	    	$bid = Bid::create([
 	    		'user_id' => $id,
             'job_id' => $data['job_id'],
@@ -80,8 +84,8 @@ class BidController extends Controller
     					['job_id', '=', $job_id]
     				])->first();
     	if($bid) {
-    		return true;
+    		return response()->json(['bidded' => true]);
     	}
-    	return false;
+    	return response()->json(['bidded' => false]);
     }
 }
