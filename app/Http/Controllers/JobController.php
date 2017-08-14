@@ -50,18 +50,17 @@ class JobController extends Controller
       //         ->orderBy('created_at', 'desc')
       //         ->paginate(env('JOBS_PER_PAGE'));
       // });
-      $jobs = Job::where('user_id', $this->id)
+      $jobs = Job::info()->where('user_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->paginate(env('JOBS_PER_PAGE'));
     	return response()->json($jobs, 200);
     }
 
     public function getJobDetails($id, $job_id) {
-    	$job = Job::where([
+    	$job = Job::info()->where([
     			['user_id', '=', $id],
     			['id', '=', $job_id]
-    		])->with('bidders')
-    		->first();
+    		])->first();
 
     	return $job;
     }

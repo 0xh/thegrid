@@ -23,7 +23,7 @@ class BidController extends Controller
             'price_bid' => $data['price_bid']
         ]);
 	    	$user = User::where('id', $id)->first();
-	    	$job = Job::where('id',$data['job_id'])->first();
+	    	$job = Job::info()->where('id',$data['job_id'])->first();
 	    	$bid->job = $job;
 	    	$bid->user = $user;
 	      return response()->json($bid, 200);

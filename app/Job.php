@@ -38,6 +38,11 @@ class Job extends Model
 	public function category() {
 		return $this->hasOne('App\JobCategory', 'id', 'category_id');
 	}
+
+	public function scopeInfo($query)
+	{
+			return $query->with('user', 'category', 'skills');
+	}
 	
 
 }
