@@ -67,7 +67,7 @@ class JobController extends Controller
     }
 
 	public function getUserJob($id) {
-		$job = Job::where('id', $id)->with('user')->with('skills')->first();
+		$job = Job::where('id', $id)->with('category')->with('user')->with('skills')->first();
 		if($job)
 			return response()->json($job);
 		
