@@ -15,8 +15,8 @@ class JobController extends Controller
 		$data = $request->all();
 		$skills = $data['skills'];
 
-    	$job = Job::create([
-    		'user_id' => $id,
+    $_job = Job::create([
+  		'user_id' => $id,
 			'name' => $data['name'],
 			'category_id' => $data['category_id'],
 			'price' => $data['price'],
@@ -29,15 +29,14 @@ class JobController extends Controller
 
 		if( is_array($skills) ) {
 			foreach($skills as $skill) {
-				$job->skills()->attach($skill['id']);
+				$_job->skills()->attach($skill['id']);
 			}
 		}
-		
-    	$user = User::where('id', $id)->first();
-    	$bids = Bid::where('job_id', $job->id)->get();
-    	$job->user = $user;
-    	$job->bids = $bids;
-      return response()->json($job);
+
+		$job = Job::info()->where('id', $_job['id'])->first();		
+		$bids = Bid::where('job_id', $_job['id'])->get();
+		$job->bids = $bids;
+		return response()->json($job);
 
 	}
 
