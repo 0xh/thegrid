@@ -13,7 +13,7 @@ class Bid extends Model
     }
 
     public function job() {
-    	return $this->belongsTo('App\Job')->with('only_bids', 'user', 'category');
+    	return $this->belongsTo('App\Job')->with('only_bids', 'user', 'category', 'skills');
     }
 
     public function jobdetails() {

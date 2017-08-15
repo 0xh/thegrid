@@ -12,33 +12,33 @@ use Cache;
 class JobController extends Controller
 {
     public function add(Request $request, $id) {
-		$data = $request->all();
-		$skills = $data['skills'];
+			$data = $request->all();
+			$skills = $data['skills'];
 
-    $_job = Job::create([
-  		'user_id' => $id,
-			'name' => $data['name'],
-			'category_id' => $data['category_id'],
-			'price' => $data['price'],
-			'lat' => $data['lat'],
-			'lng' => $data['lng'],
-			'location' => $data['location'],
-			'details' => $data['details'],
-			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
-		]);
+			$_job = Job::create([
+				'user_id' => $id,
+				'name' => $data['name'],
+				'category_id' => $data['category_id'],
+				'price' => $data['price'],
+				'lat' => $data['lat'],
+				'lng' => $data['lng'],
+				'location' => $data['location'],
+				'details' => $data['details'],
+				'date' => date("Y-m-d H:i:s", strtotime($data['date']))
+			]);
 
-		if( is_array($skills) ) {
-			foreach($skills as $skill) {
-				$_job->skills()->attach($skill['id']);
+			if( is_array($skills) ) {
+				foreach($skills as $skill) {
+					$_job->skills()->attach($skill['id']);
+				}
 			}
+
+			$job = Job::info()->where('id', $_job['id'])->first();		
+			$bids = Bid::where('job_id', $_job['id'])->get();
+			$job->bids = $bids;
+			return response()->json($job);
+
 		}
-
-		$job = Job::info()->where('id', $_job['id'])->first();		
-		$bids = Bid::where('job_id', $_job['id'])->get();
-		$job->bids = $bids;
-		return response()->json($job);
-
-	}
 
     public function getJobs($id) {
 
@@ -84,24 +84,6 @@ class JobController extends Controller
     				//->groupBy('distance')
     				->get();
     	return response()->json($jobs, 200);
-
-    	//$jobs = DB::table('jobs')->select(DB::raw($f))->having('distance', '<', 25)->groupBy('distance')->get();
-    	//dd($jobs);
-    	// return $jobs;
-    	// SELECT
-		// id,
-		// (
-		//    3959 *
-		//    acos(cos(radians(25.2627866)) *
-		//    cos(radians(lat)) *
-		//    cos(radians(lng) -
-		//    radians(55.3267619)) +
-		//    sin(radians(25.2627866)) *
-		//    sin(radians(lat )))
-		// ) AS distance
-		// FROM jobs
-		// HAVING distance < 25
-		// ORDER BY distance LIMIT 0, 30;
     }
 
     public function viewJob($id) {
