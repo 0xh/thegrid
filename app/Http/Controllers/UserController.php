@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Twilio\Rest\Client;
 use App\User;
 use App\Profile;
+use App\Skill;
 
 class UserController extends Controller
 {
@@ -75,6 +76,17 @@ class UserController extends Controller
   public function addSkill(Request $request, $id) {
     $data = $request->all();
     $user = User::where('id', $id)->first();
+    if(isset($data['skill'])) {
+      $_skill = Skill::where('skill', $data['skill'])->first();
+      if( !$_skill ) {
+        $skill = Skill::create([
+          'skill' => ucwords($data['skill'])
+        ]);
+        $user->skills()->attach($skill->id);
+        return $skill;
+      }
+    }
+    
     $user->skills()->attach($data['id']);
     return $user->skills;
   }

@@ -84,7 +84,7 @@ class BidController extends Controller
     					['job_id', '=', $job_id]
     				])->first();
     	if($bid) {
-    		return response()->json(['bidded' => true]);
+    		return response()->json(['bidded' => true, 'bid' => $bid]);
     	}
     	return response()->json(['bidded' => false]);
     }

@@ -8,6 +8,8 @@ class Skill extends Model
 {
   // protected $hidden = ['pivot'];
 
+  protected $fillable = ['skill'];
+
   public function users() {
     return $this->belongsToMany('App\User');
   }
