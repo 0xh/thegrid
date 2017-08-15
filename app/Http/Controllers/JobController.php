@@ -49,14 +49,14 @@ class JobController extends Controller
       //         ->orderBy('created_at', 'desc')
       //         ->paginate(env('JOBS_PER_PAGE'));
       // });
-      $jobs = Job::info()->where('user_id', $this->id)
+      $jobs = Job::infoWithBidders()->where('user_id', $this->id)
             ->orderBy('created_at', 'desc')
             ->paginate(env('JOBS_PER_PAGE'));
     	return response()->json($jobs, 200);
     }
 
     public function getJobDetails($id, $job_id) {
-    	$job = Job::info()->where([
+    	$job = Job::infoWithBidders()->where([
     			['user_id', '=', $id],
     			['id', '=', $job_id]
     		])->first();
@@ -64,13 +64,13 @@ class JobController extends Controller
     	return $job;
     }
 
-	public function getUserJob($id) {
-		$job = Job::where('id', $id)->with('category')->with('user')->with('skills')->first();
-		if($job)
-			return response()->json($job);
-		
-		return response()->json(['status' => 'failed'], 422);
-	}
+		public function getUserJob($id) {
+			$job = Job::info()->where('id', $id)->first();
+			if($job)
+				return response()->json($job);
+			
+			return response()->json(['status' => 'failed'], 422);
+		}
 
     public function all(Request $request) {
     	$data = $request->all();

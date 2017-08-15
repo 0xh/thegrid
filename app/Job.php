@@ -39,9 +39,12 @@ class Job extends Model
 		return $this->hasOne('App\JobCategory', 'id', 'category_id');
 	}
 
-	public function scopeInfo($query)
-	{
+	public function scopeInfo($query) {
 			return $query->with('user', 'category', 'skills');
+	}
+
+	public function scopeInfoWithBidders($query) {
+		return $query->with('user', 'category', 'skills', 'bidders');
 	}
 	
 
