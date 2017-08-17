@@ -23,4 +23,8 @@ class Bid extends Model
     public function isApproved() {
     	return $this->hasOne('App\Winner');
     }
+
+    public function winner() {
+        return $this->hasOne('App\Winner');
+    }
 }

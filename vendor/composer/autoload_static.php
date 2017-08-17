@@ -388,6 +388,7 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'AddIssetupaccountToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_25_113444_add_issetupaccount_to_users_table.php',
         'AddNsnFieldToCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_22_052138_add_nsn_field_to_countries_table.php',
         'AddPhoneNumberFieldToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_052141_add_phone_number_field_to_users_table.php',
+        'AddStatusToJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_17_123310_add_status_to_jobs_table.php',
         'AddUsernameToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_20_090210_add_username_to_users_table.php',
         'AlterBidsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_083936_alter_bids_table.php',
         'AlterConversationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_084144_alter_conversations_table.php',

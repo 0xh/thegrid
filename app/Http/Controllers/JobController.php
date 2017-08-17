@@ -97,5 +97,18 @@ class JobController extends Controller
                   ->search($q)
                   ->whereDate('date', '>', date('Y-m-d'))
                   ->get();
-    }
+		}
+		
+		public function setJobStatus(Request $request, $id, $job_id) {
+			$data = $request->all();
+			$job = Job::where('id', $job_id)
+						->update([
+							'status' => $data['status']
+						]);
+			if($job) {
+				return response()->json($job);
+			}
+
+			return response()->json(['status' => 'failed', 'message' => 'Something went wrong']);
+		}
 }

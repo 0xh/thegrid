@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
-	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'details'];
+	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
 
 	public function user() {
 		return $this->belongsTo('App\User')->with('profile');
@@ -19,8 +19,13 @@ class Job extends Model
 
 	public function bidders() {
 		return $this->hasMany('App\Bid')
+					// ->with('winner')
 					->with('user')
 					->orderBy('price_bid', 'asc');
+	}
+
+	public function winner() {
+		return $this->hasOne('App\Winner')->with('user')->with('bid');
 	}
 
 	public function only_bids() {
@@ -44,7 +49,7 @@ class Job extends Model
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'bidders');
+		return $query->with('user', 'category', 'skills', 'bidders', 'winner');
 	}
 	
 

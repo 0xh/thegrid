@@ -71,14 +71,16 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/jobs', 'JobController@getJobs');
   Route::post('/{id}/jobs', 'JobController@add');
   Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
+  Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
 
   // Route::post('/bid', 'BidController@bid');
-  Route::post('/bid/approve', 'BidController@approveBid');
+  // Route::post('/{id}/bids/approve', 'BidController@approveBid');
   Route::get('/{id}/bids', 'BidController@getBids');
   Route::post('/{id}/bids', 'BidController@bid');
   Route::get('/{id}/bids/{bid_id}', 'BidController@getBidDetails');
   Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
   Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
+  Route::post('/{id}/bids/{bid_id}/approve', 'BidController@approveBid');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::post('/{id}/conversations', 'ConversationController@createConversation');

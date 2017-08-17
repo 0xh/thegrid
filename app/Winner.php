@@ -11,15 +11,15 @@ class Winner extends Model
     ];
 
     public function user() {
-    	return $this->hasOne('App\User');
+    	return $this->belongsTo('App\User');
     }
 
     public function job() {
-    	return $this->hasOne('App\Job');
+    	return $this->belongsTo('App\Job');
     }
 
     public function bid() {
-    	return $this->hasOne('App\Bid');
+    	return $this->belongsTo('App\Bid');
     }
 
 }

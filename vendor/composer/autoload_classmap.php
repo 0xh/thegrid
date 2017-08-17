@@ -16,6 +16,7 @@ return array(
     'AddIssetupaccountToUsersTable' => $baseDir . '/database/migrations/2017_07_25_113444_add_issetupaccount_to_users_table.php',
     'AddNsnFieldToCountriesTable' => $baseDir . '/database/migrations/2017_06_22_052138_add_nsn_field_to_countries_table.php',
     'AddPhoneNumberFieldToUsersTable' => $baseDir . '/database/migrations/2017_06_21_052141_add_phone_number_field_to_users_table.php',
+    'AddStatusToJobsTable' => $baseDir . '/database/migrations/2017_08_17_123310_add_status_to_jobs_table.php',
     'AddUsernameToUsersTable' => $baseDir . '/database/migrations/2017_07_20_090210_add_username_to_users_table.php',
     'AlterBidsTable' => $baseDir . '/database/migrations/2017_05_10_083936_alter_bids_table.php',
     'AlterConversationsTable' => $baseDir . '/database/migrations/2017_05_10_084144_alter_conversations_table.php',
