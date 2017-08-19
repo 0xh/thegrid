@@ -14,7 +14,7 @@ class MessageController extends Controller
     				])
     				->orderBy('created_at', 'DESC')
     				->paginate(50);
-    	return $messages;
+    	return response()->json($messages);
     }
 
     public function createMessage($id, $conversation_id, Request $request) {
@@ -22,6 +22,12 @@ class MessageController extends Controller
     	$input['author_id'] = $id;
     	$input['conversation_id'] = $conversation_id;
 
-    	return Message::create($input);
+			$message = Message::create($input);
+			
+			if( $message ) {
+				return response()->json($message);
+			}
+
+			return response()->json(['status' => 'failed', 'message' => 'Something went wrong']);
     }
 }

@@ -83,9 +83,16 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/bids/{bid_id}/approve', 'BidController@approveBid');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
+  Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::post('/{id}/conversations', 'ConversationController@createConversation');
   Route::get('/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
   Route::post('/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
+
+  Route::get('/{id}/inbox', 'ConversationController@getConversations');
+  Route::get('/{id}/inbox', 'ConversationController@getConversations');
+  Route::post('/{id}/inbox', 'ConversationController@createConversation');
+  Route::get('/{id}/inbox/{conversation_id}', 'MessageController@getMessages');
+  Route::post('/{id}/inbox/{conversation_id}', 'MessageController@createMessage');
 
   Route::get('/{id}/skills', 'UserController@getSkills');
   Route::post('/{id}/skills', 'UserController@addSkill');
