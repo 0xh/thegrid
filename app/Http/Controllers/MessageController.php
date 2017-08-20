@@ -25,7 +25,9 @@ class MessageController extends Controller
 
 			$conversation = Conversation::where('id', $conversation_id)->first();
 
-			$message = Message::create($input);
+			$_message = Message::create($input);
+
+			$message = Message::where('id', $_message->id)->first();
 
 			if($conversation->last_updated_by == $id) {
 				$conversation->unread_count += 1;
