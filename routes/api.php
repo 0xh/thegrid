@@ -87,6 +87,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/conversations', 'ConversationController@createConversation');
   Route::get('/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
   Route::post('/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
+  Route::post('/{id}/conversations/{conversation_id}/read', 'MessageController@readMessage');  
 
   Route::get('/{id}/inbox', 'ConversationController@getConversations');
   Route::get('/{id}/inbox', 'ConversationController@getConversations');

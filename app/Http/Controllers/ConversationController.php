@@ -24,10 +24,11 @@ class ConversationController extends Controller
 			$_conversation = Conversation::firstOrCreate([
 				'job_id' => $data['job_id'],
 				'user_id_1' => $data['user_id_1'],
-				'user_id_2' => $data['user_id_2']
+				'user_id_2' => $data['user_id_2'],
+				'last_updated_by' => $data['user_id_1']
 			]);
 
-			$conversation = Conversation::info()->where('id', $_conversation->id)->first();
+			$conversation = Conversation::infoWithMessages()->where('id', $_conversation->id)->first();
 
 
 			if($conversation) {

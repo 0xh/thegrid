@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Conversation extends Model
 {
-    protected $fillable = ['job_id', 'user_id_1', 'user_id_2', 'is_deleted'];
+    protected $fillable = ['job_id', 'user_id_1', 'user_id_2', 'last_updated_by', 'unread_count', 'is_deleted'];
 
     public function job() {
     	return $this->belongsTo('App\Job');
