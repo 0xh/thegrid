@@ -58,13 +58,10 @@ class BidController extends Controller
 	}
 
 	public function getBids($id) {
-		$bids = Bid::where('user_id', $id)
-					->with('user')
-					->with('job')
-					->with('isApproved')
+		$bids = Bid::info()->where('user_id', $id)
 					->orderBy('created_at', 'desc')
 					->paginate(env('BIDS_PER_PAGE'));
-		return response()->json($bids, 200);
+		return response()->json($bids);
 	}
 
 	public function getBidDetails($id, $bid_id) {

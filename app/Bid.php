@@ -27,4 +27,8 @@ class Bid extends Model
     public function winner() {
         return $this->hasOne('App\Winner');
     }
+
+    public function scopeInfo($query) {
+        return $query->with('job', 'isApproved', 'winner');
+    }
 }
