@@ -19,13 +19,15 @@ class BidController extends Controller
 		if( !$bidded ) {
 			$bid = Bid::create([
 				'user_id' => $id,
-					'job_id' => $data['job_id'],
-					'price_bid' => $data['price_bid']
+				'job_id' => $data['job_id'],
+				'price_bid' => $data['price_bid']
 			]);
-			$user = User::where('id', $id)->first();
-			$job = Job::infoWithBidders()->where('id',$data['job_id'])->first();
-			$bid->job = $job;
-			$bid->user = $user;
+			// $user = User::where('id', $id)->first();
+			// $job = Job::info()->where('id', $data['job_id'])->first();
+			// $bid->job = $job;
+			// $bid->user = $user;
+			$bid = Bid::info()->where('id', $bid->id)->first();
+
 			return response()->json($bid, 200);
 		} else {
 			return response()->json(['error' => true, 'message' => 'Already bidded'], 422);
@@ -65,14 +67,12 @@ class BidController extends Controller
 	}
 
 	public function getBidDetails($id, $bid_id) {
-		$bid = Bid::where([
+		$bid = Bid::info()->where([
 				['id', '=', $bid_id],
 				['user_id', '=', $id]
-			])->with('job')
-			->with('isApproved')
-			->first();
+			])->first();
 
-		return $bid;
+		return response()->json($bid);
 	}
 
 	protected function isBidded($id, $job_id) {
