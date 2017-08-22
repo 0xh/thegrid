@@ -47,14 +47,14 @@ class BidController extends Controller
 			$job->save();
 
 			// $user = User::where('id', $id)->first();
-			$winner->job = $job;
+			// $winner->job = $job;
 			// $winner->user = $user;
 			// $bid = Bid::where('id', $bid_id)
 			// 		->with('user')
 			// 		->with('job')
 			// 		->with('isApproved')
 			// 		->first();
-			return response()->json($job, 200);
+			return response()->json($job);
 		}
 		return response()->json(['error' => true, 'message' => 'An error occured'], 500);
 	}
