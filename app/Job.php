@@ -27,6 +27,10 @@ class Job extends Model
 	public function winner() {
 		return $this->hasOne('App\Winner')->with('user')->with('bid');
 	}
+	
+	public function awarded() {
+		return $this->hasOne('App\Winner');
+	}
 
 	public function only_bids() {
 		return $this->hasMany('App\Bid')->orderBy('price_bid', 'asc');
