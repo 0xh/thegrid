@@ -25,8 +25,16 @@ class UserController extends Controller
   }
 
   public function getUser($id) {
-    return User::where('id', $id)->first();
+    $user = User::where('id', $id)->first();
+
+    return response()->json($user);
   }
+
+  public function getUserInit(Request $request) {
+    $user = User::info()->where('id', $request->user()->id)->first();
+    return response()->json($user);
+  }
+
   public function sendSMS() {
     $to = '+971582507859';
     $message = 'test message from laravel';

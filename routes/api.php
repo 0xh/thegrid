@@ -20,14 +20,16 @@ Route::post('/test', function(Request $request) {
 	return response()->json($data);
 });
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-  $user = App\User::where('id', $request->user()->id)
-                  ->withCount('jobs')
-                  ->withCount('bids')
-                  ->with('profile')
-                  ->first();
-  return response()->json($user);
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//   $user = App\User::where('id', $request->user()->id)
+//                   ->withCount('jobs')
+//                   ->withCount('bids')
+//                   ->with('profile')
+//                   ->with('reviews')
+//                   ->first();
+//   return response()->json($user);
+// });
+Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
 
 
 Route::post('/login', 'Auth\LoginController@loginAPI');

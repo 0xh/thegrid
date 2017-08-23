@@ -66,6 +66,12 @@ class User extends Authenticatable
         return $this->belongsToMany('App\Skill');
     }
 
+    public function reviews() {
+        return $this->hasMany('App\Review');
+    }
 
+    public function scopeInfo($query) {
+        return $query->with('profile', 'reviews')->withCount('jobs')->withCount('bids');
+    }
 
 }
