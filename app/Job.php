@@ -25,7 +25,7 @@ class Job extends Model
 	}
 
 	public function winner() {
-		return $this->hasOne('App\Winner')->with('user')->with('bid');
+		return $this->hasOne('App\Winner')->with('user', 'bid', 'review');
 	}
 	
 	public function awarded() {

@@ -99,4 +99,6 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/skills', 'UserController@addSkill');
   Route::delete('/{id}/skills/{skill_id}', 'UserController@removeSkill');
 
+  Route::post('/{id}/review', 'UserController@reviewUser');
+
 });

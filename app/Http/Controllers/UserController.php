@@ -9,6 +9,8 @@ use Twilio\Rest\Client;
 use App\User;
 use App\Profile;
 use App\Skill;
+use App\Review;
+use App\Job;
 
 class UserController extends Controller
 {
@@ -106,5 +108,26 @@ class UserController extends Controller
 
     $response = ["passes" => $email->passes() ? 1 : 0];
     return response()->json($response);
+  }
+
+  public function reviewUser(Request $request, $id) {
+
+    $data = $request->all();
+
+    $review = Review::Create([
+      'user_id' => $data['user_id'],
+      'job_id' => $data['job_id'],
+      'review' => $data['review'],
+      'stars' => $data['stars']
+    ]);
+
+    if($review) {
+      $job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
+      $job->status = 3;
+      $job->save();
+      return response()->json($job);
+    }
+
+    return response()->json(['status' => 'failed', 'message' => 'Could not review user']);
   }
 }

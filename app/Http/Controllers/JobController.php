@@ -101,10 +101,11 @@ class JobController extends Controller
 		
 		public function setJobStatus(Request $request, $id, $job_id) {
 			$data = $request->all();
-			$job = Job::where('id', $job_id)
-						->update([
-							'status' => $data['status']
-						]);
+			$job = Job::infoWithBidders()->where('id', $job_id)->first();
+
+			$job->status = $data['status'];
+			$job->save();
+
 			if($job) {
 				return response()->json($job);
 			}

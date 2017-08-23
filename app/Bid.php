@@ -25,7 +25,7 @@ class Bid extends Model
     }
 
     public function winner() {
-        return $this->hasOne('App\Winner');
+        return $this->hasOne('App\Winner')->with('review');
     }
 
     public function scopeInfo($query) {

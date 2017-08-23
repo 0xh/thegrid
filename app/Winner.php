@@ -22,4 +22,8 @@ class Winner extends Model
     	return $this->belongsTo('App\Bid');
     }
 
+    public function review() {
+        return $this->hasOne('App\Review', 'job_id', 'job_id');
+    }
+
 }
