@@ -13,7 +13,7 @@ class JobController extends Controller
 {
     public function add(Request $request, $id) {
 			$data = $request->all();
-			$skills = $data['skills'];
+			
 
 			$_job = Job::create([
 				'user_id' => $id,
@@ -27,9 +27,12 @@ class JobController extends Controller
 				'date' => date("Y-m-d H:i:s", strtotime($data['date']))
 			]);
 
-			if( is_array($skills) ) {
-				foreach($skills as $skill) {
-					$_job->skills()->attach($skill['id']);
+			if( isset($data['skills'])) {
+				$skills = $data['skills'];
+				if( is_array($skills) ) {
+					foreach($skills as $skill) {
+						$_job->skills()->attach($skill['id']);
+					}
 				}
 			}
 
