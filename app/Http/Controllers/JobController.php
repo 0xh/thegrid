@@ -78,7 +78,7 @@ class JobController extends Controller
     		$data['lat'], $data['lng'], $data['lat']);
     	$jobs = Job::with('user')
     				->with('bids')
-    				// ->whereDate('date', '>', date('Y-m-d'))
+    				->whereDate('date', '>', date('Y-m-d'))
     				//->select(DB::raw($f))
     				// ->having('distance', '<', 50)
     				//->groupBy('distance')
