@@ -20,6 +20,7 @@ class Conversation extends Model
     	return $this->belongsTo('App\User', 'user_id_2')->with('profile');
     }
 
+
     public function messages() {
         return $this->hasMany('App\Message');
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Twilio\Rest\Client;
 use App\User;
 use App\Profile;
@@ -138,4 +139,69 @@ class UserController extends Controller
 
     return response()->json(['status' => 'failed', 'message' => 'Could not review user']);
   }
+
+  public function updateGeneral(Request $request, $id) {
+    $data = $request->all();
+
+    $validator = Validator::make($data['user'], [
+      'usernmae' => 'required|apha_dash|unique:users'
+    ]);
+
+    if( $validator->passes() ) {
+      $_user = User::where('id', $id)->update($data['user']);
+      $user = Profile::updateOrCreate(
+        ['user_id' => $id],
+        $data['profile']
+      );
+      $user = User::info()->where('id', $id)->first();
+      
+      return response()->json($user);
+    }
+
+    return response()->json($validator->errors(), 422);
+    
+  }
+
+  public function updateAccountEmail(Request $request, $id) {
+    $data = $request->all();
+
+    $validator = Validator::make($data, [
+      'email' => 'required|string|email|max:255|unique:users'
+    ]);
+
+    if($validator->passes()) {
+      $_user = User::where('id', $id)->update($data);
+      
+      $user = User::info()->where('id', $id)->first();
+      return response()->json($user);
+    }
+
+    return response()->json($validator->errors(), 422);
+
+  }
+
+  public function updateAccountPassword(Request $request, $id) {
+    $data = $request->all();
+
+    $u = User::where('id', $id)->first();
+
+    if(!Hash::check($data['old_password'], $u->password)) {
+      return response()->json(['status' => 'failed', 'message' => 'Please enter the correct password'], 422);
+    }
+
+    $validator = Validator::make($data, [
+      'password' => 'required|string|min:6|confirmed'
+    ]);
+
+    if($validator->passes()) {
+      $_user = User::where('id', $id)->update(['password' => bcrypt($data['password'])]);
+      
+      $user = User::info()->where('id', $id)->first();
+      return response()->json($user);
+    }
+
+    return response()->json($validator->errors(), 422);
+
+  }
+
 }

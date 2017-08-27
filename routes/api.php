@@ -103,4 +103,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
 
   Route::post('/{id}/review', 'UserController@reviewUser');
 
+  Route::post('/{id}/settings/general', 'UserController@updateGeneral');
+  Route::post('/{id}/settings/account/email', 'UserController@updateAccountEmail');
+  Route::post('/{id}/settings/account/password', 'UserController@updateAccountPassword');
+
 });
