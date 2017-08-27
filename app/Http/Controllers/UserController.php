@@ -143,11 +143,9 @@ class UserController extends Controller
   public function updateGeneral(Request $request, $id) {
     $data = $request->all();
 
-    $validator = Validator::make($data['user'], [
-      'usernmae' => 'required|apha_dash|unique:users'
-    ]);
+    $u = User::info()->where('id', $id)->first();
 
-    if( $validator->passes() ) {
+    if($u->username == $data['user']['username']) {
       $_user = User::where('id', $id)->update($data['user']);
       $user = Profile::updateOrCreate(
         ['user_id' => $id],
@@ -156,9 +154,25 @@ class UserController extends Controller
       $user = User::info()->where('id', $id)->first();
       
       return response()->json($user);
-    }
+    } else {
 
-    return response()->json($validator->errors(), 422);
+      $validator = Validator::make($data['user'], [
+        'username' => 'required|apha_dash|unique:users'
+      ]);
+
+      if( $validator->passes() ) {
+        $_user = User::where('id', $id)->update($data['user']);
+        $user = Profile::updateOrCreate(
+          ['user_id' => $id],
+          $data['profile']
+        );
+        $user = User::info()->where('id', $id)->first();
+        
+        return response()->json($user);
+      }
+
+      return response()->json($validator->errors(), 422);
+    }
     
   }
 
