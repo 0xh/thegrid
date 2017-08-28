@@ -12,6 +12,7 @@ use App\Profile;
 use App\Skill;
 use App\Review;
 use App\Job;
+use App\Location;
 
 class UserController extends Controller
 {
@@ -33,6 +34,7 @@ class UserController extends Controller
 
   public function getUserInit(Request $request) {
     $user = User::info()->where('id', $request->user()->id)->first();
+    $user->keyedLocations = $user->locations->keyBy('alias');
     return response()->json($user);
   }
 
@@ -215,6 +217,31 @@ class UserController extends Controller
     }
 
     return response()->json($validator->errors(), 422);
+
+  }
+
+  public function updateLocations(Request $request, $id) {
+    $user_id = $request->user()->id;
+
+    $data = $request->all();
+
+    $home = $data['home'];
+    $home['alias'] = 'home';
+    $work = $data['work'];
+    $work['alias'] = 'work';
+
+    Location::updateOrCreate(
+      ['user_id' => $user_id, 'alias' => 'home'],
+      $home
+    );
+
+    Location::updateOrCreate(
+      ['user_id' => $user_id, 'alias' => 'work'],
+      $work
+    );
+
+    $user = User::info()->where('id', $user_id)->first();
+    return response()->json($user);
 
   }
 

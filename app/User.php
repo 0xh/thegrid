@@ -70,8 +70,13 @@ class User extends Authenticatable
         return $this->hasMany('App\Review');
     }
 
-    public function scopeInfo($query) {
-        return $query->with('profile', 'reviews')->withCount('jobs')->withCount('bids');
+    public function locations() {
+        return $this->hasMany('App\Location');
     }
+
+    public function scopeInfo($query) {
+        return $query->with('profile', 'reviews', 'locations')->withCount('jobs')->withCount('bids');
+    }
+    
 
 }
