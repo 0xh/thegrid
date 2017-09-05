@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Job;
+use App\JobFile;
 use App\User;
 use App\Bid;
 use DB;
@@ -26,6 +28,18 @@ class JobController extends Controller
 				'details' => $data['details'],
 				'date' => date("Y-m-d H:i:s", strtotime($data['date']))
 			]);
+
+			if(isset($request->files)) {
+				Storage::disk('public_uploads')->makeDirectory('posts');
+				foreach($request->file('files') as $file) {
+					$_file['path'] = $file->store('posts', 'public_uploads');
+					$_file['name'] = $file->hashName();
+					$_file['file_size'] = $file->getClientSize();
+					$_file['type'] = $file->extension();
+					$_file['job_id'] = $_job->id;
+					JobFile::create($_file);
+				}
+			}
 
 			if( isset($data['skills'])) {
 				$skills = $data['skills'];

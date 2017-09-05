@@ -149,6 +149,7 @@ return array(
     'CreateImagesTable' => $baseDir . '/database/migrations/2017_05_06_110121_create_images_table.php',
     'CreateItemsTable' => $baseDir . '/database/migrations/2017_05_06_073230_create_items_table.php',
     'CreateJobCategoriesTable' => $baseDir . '/database/migrations/2017_05_06_084536_create_job_categories_table.php',
+    'CreateJobFilesTable' => $baseDir . '/database/migrations/2017_09_05_142640_create_job_files_table.php',
     'CreateJobSkillTable' => $baseDir . '/database/migrations/2017_08_13_123001_create_job_skill_table.php',
     'CreateJobsTable' => $baseDir . '/database/migrations/2017_05_06_084121_create_jobs_table.php',
     'CreateMessagesTable' => $baseDir . '/database/migrations/2017_05_06_084407_create_messages_table.php',

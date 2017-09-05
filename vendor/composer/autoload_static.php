@@ -521,6 +521,7 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'CreateImagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_110121_create_images_table.php',
         'CreateItemsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_073230_create_items_table.php',
         'CreateJobCategoriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_084536_create_job_categories_table.php',
+        'CreateJobFilesTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_05_142640_create_job_files_table.php',
         'CreateJobSkillTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_13_123001_create_job_skill_table.php',
         'CreateJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_084121_create_jobs_table.php',
         'CreateMessagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_084407_create_messages_table.php',

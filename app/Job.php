@@ -27,6 +27,10 @@ class Job extends Model
 	public function winner() {
 		return $this->hasOne('App\Winner')->with('user', 'bid', 'review');
 	}
+
+	public function files() {
+		return $this->hasMany('App\JobFile');
+	}
 	
 	public function awarded() {
 		return $this->hasOne('App\Winner');
@@ -49,11 +53,11 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-			return $query->with('user', 'category', 'skills');
+			return $query->with('user', 'category', 'skills', 'files');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'bidders', 'winner');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner');
 	}
 	
 
