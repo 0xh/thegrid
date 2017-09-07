@@ -7,6 +7,7 @@ use App\Job;
 use App\Bid;
 use App\User;
 use App\Winner;
+use App\Notifications\BidToPost;
 
 class BidController extends Controller
 {
@@ -27,6 +28,30 @@ class BidController extends Controller
 			// $bid->job = $job;
 			// $bid->user = $user;
 			$bid = Bid::info()->where('id', $bid->id)->first();
+
+			$notifiable = User::where('id', $bid->job->user_id)->first();
+			
+			$other_bidder_count = count($bid->job->only_bids) - 1;
+
+			if($other_bidder_count < 1) {
+				$title = $request->user()->name . ' bids on your post \'' . $bid->job->name;
+			} else {
+				$title = $request->user()->name . ' and ' . $other_bidder_count . ' others bid on your post \'' . $bid->job->name;
+			}
+
+			$notification_data = [
+				'bid_id' => $bid->id,
+				'job_id' => $bid->job->id,
+				'job_name' => $bid->job->name,
+				'bidder_id' => $request->user()->id,
+				'bidder_name' => $request->user()->name,
+				'other_bidder_count' => count($bid->job->only_bids) - 1,
+				'title' => $title,
+				'body' => '',
+				'bidded_at' => \Carbon\Carbon::now()
+			];
+
+			$notifiable->notify( new BidToPost($notification_data) );
 
 			return response()->json($bid, 200);
 		} else {
