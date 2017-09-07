@@ -12,6 +12,10 @@ class Bid extends Model
     	return $this->belongsTo('App\User');
     }
 
+    public function files() {
+		return $this->hasMany('App\BidFile');
+	}
+
     public function job() {
     	return $this->belongsTo('App\Job')->with('only_bids', 'user', 'category', 'skills', 'awarded');
     }
@@ -29,6 +33,6 @@ class Bid extends Model
     }
 
     public function scopeInfo($query) {
-        return $query->with('job', 'isApproved', 'winner');
+        return $query->with('job', 'isApproved', 'winner', 'files');
     }
 }

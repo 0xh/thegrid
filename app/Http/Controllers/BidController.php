@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Job;
 use App\Bid;
 use App\User;
 use App\Winner;
+use App\BidFile;
 use App\Notifications\BidToPost;
 
 class BidController extends Controller
@@ -23,6 +25,20 @@ class BidController extends Controller
 				'job_id' => $data['job_id'],
 				'price_bid' => $data['price_bid']
 			]);
+
+			if(isset($request->files)) {
+				Storage::disk('public_uploads')->makeDirectory('bids');
+				foreach($request->file('files') as $file) {
+					$_file['path'] = $file->store('bids', 'public_uploads');
+					$_file['name'] = $file->hashName();
+					$_file['original_name'] = $file->getClientOriginalName();
+					$_file['file_size'] = $file->getClientSize();
+					$_file['type'] = $file->extension();
+					$_file['bid_id'] = $bid->id;
+					BidFile::create($_file);
+				}
+			}
+
 			// $user = User::where('id', $id)->first();
 			// $job = Job::info()->where('id', $data['job_id'])->first();
 			// $bid->job = $job;
