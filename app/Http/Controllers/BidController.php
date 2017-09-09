@@ -52,7 +52,7 @@ class BidController extends Controller
 			if($other_bidder_count < 1) {
 				$title = $request->user()->name . ' bids on your post \'' . $bid->job->name;
 			} else {
-				$title = $request->user()->name . ' and ' . $other_bidder_count . ' others bid on your post \'' . $bid->job->name;
+				$title = $request->user()->name . ' and ' . $other_bidder_count . ' others bid on your post \'' . $bid->job->name .'\'';
 			}
 
 			$notification_data = [
