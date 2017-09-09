@@ -40,6 +40,10 @@ class Job extends Model
 		return $this->hasMany('App\Bid')->orderBy('price_bid', 'asc');
 	}
 
+	public function conversation() {
+		return $this->hasOne('App\Conversation');
+	}
+
 	public function scopeSearch($query, $s) {
 		return $query->where('name', 'like', '%' . $s . '%')->orWhere('location', 'like', '%' . $s . '%');
 	}
@@ -57,7 +61,7 @@ class Job extends Model
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation');
 	}
 	
 
