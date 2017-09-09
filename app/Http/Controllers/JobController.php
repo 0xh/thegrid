@@ -39,7 +39,7 @@ class JobController extends Controller
 			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
 		]);
 
-		if(isset($request->files)) {
+		if($request->file('files')) {
 			Storage::disk('public_uploads')->makeDirectory('posts');
 			foreach($request->file('files') as $file) {
 				$_file['path'] = $file->store('posts', 'public_uploads');

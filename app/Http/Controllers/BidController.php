@@ -26,7 +26,7 @@ class BidController extends Controller
 				'price_bid' => $data['price_bid']
 			]);
 
-			if(isset($request->files)) {
+			if($request->file('files')) {
 				Storage::disk('public_uploads')->makeDirectory('bids');
 				foreach($request->file('files') as $file) {
 					$_file['path'] = $file->store('bids', 'public_uploads');
