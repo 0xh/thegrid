@@ -20,7 +20,7 @@ class Job extends Model
 	public function bidders() {
 		return $this->hasMany('App\Bid')
 					// ->with('winner')
-					->with('user')
+					->with('user', 'files')
 					->orderBy('price_bid', 'asc');
 	}
 
