@@ -13,6 +13,7 @@ use App\Skill;
 use App\Review;
 use App\Job;
 use App\Location;
+use App\Notifications\MarkPostReview;
 
 class UserController extends Controller
 {
@@ -136,6 +137,26 @@ class UserController extends Controller
       $job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
       $job->status = 3;
       $job->save();
+
+      $notifiable = User::where('id', $job->winner->user->id)->first();
+      
+      $notification_data = [
+        'job_id' => $job->id,
+        'job_name' => $job->name,
+        'body' => '',
+        'created_at' => \Carbon\Carbon::now()
+      ];
+
+      $title = $request->user()->name . ' gave you ' . $data['stars'] . ' star(s) for the post \'' . $job->name . '\'.';
+
+      $bid_id = $job->winner->bid->id;
+
+      $notification_data['bid_id'] = $bid_id;
+      $notification_data['title'] = $title;
+
+      $notifiable->notify( new MarkPostReview($notification_data) );
+      
+
       return response()->json($job);
     }
 

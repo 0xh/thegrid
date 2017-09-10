@@ -10,6 +10,10 @@ use App\User;
 use App\Bid;
 use DB;
 use Cache;
+use App\Notifications\AwardBid;
+use App\Notifications\MarkPostInProgress;
+use App\Notifications\MarkPostReview;
+use App\Notifications\MarkPostComplete;
 
 class JobController extends Controller
 {
@@ -136,6 +140,50 @@ class JobController extends Controller
 		$job->save();
 
 		if($job) {
+
+			if($job->winner) {
+
+				$notifiable = User::where('id', $job->winner->user->id)->first();
+
+				$notification_data = [
+					'job_id' => $job->id,
+					'job_name' => $job->name,
+					'body' => '',
+					'created_at' => \Carbon\Carbon::now()
+				];
+
+				$title = '';
+
+				if( $data['status'] == 1) {
+					// $title = $request->user()->name . ' awarded the post \'' . $job->name . '\' to you.';
+				} elseif( $data['status'] == 2) {
+					$title = $request->user()->name . ' marked the post \'' . $job->name . '\' as in progress.';
+				} elseif( $data['status'] == 3) {
+					$title = $request->user()->name . ' reviewed the post \'' . $job->name . '\'.';
+				} elseif( $data['status'] == 4) {
+					$title = $request->user()->name . ' marked the post \'' . $job->name . '\'. as completed.';
+				}
+
+				$bid_id = $job->winner->bid->id;
+
+				$notification_data['bid_id'] = $bid_id;
+				$notification_data['title'] = $title;
+
+
+				if( $data['status'] == 2) {
+					$notifiable->notify( new MarkPostInProgress($notification_data) );
+				} elseif( $data['status'] == 3) {
+					$notifiable->notify( new MarkPostReview($notification_data) );
+				} elseif( $data['status'] == 4) {
+					$notifiable->notify( new MarkPostComplete($notification_data) );
+				}
+	
+
+			}
+
+			
+
+
 			return response()->json($job);
 		}
 

@@ -10,6 +10,7 @@ use App\User;
 use App\Winner;
 use App\BidFile;
 use App\Notifications\BidToPost;
+use App\Notifications\AwardBid;
 
 class BidController extends Controller
 {
@@ -50,7 +51,7 @@ class BidController extends Controller
 			$other_bidder_count = count($bid->job->only_bids) - 1;
 
 			if($other_bidder_count < 1) {
-				$title = $request->user()->name . ' bids on your post \'' . $bid->job->name;
+				$title = $request->user()->name . ' bids on your post \'' . $bid->job->name .'\'';
 			} else {
 				$title = $request->user()->name . ' and ' . $other_bidder_count . ' others bid on your post \'' . $bid->job->name .'\'';
 			}
@@ -59,12 +60,12 @@ class BidController extends Controller
 				'bid_id' => $bid->id,
 				'job_id' => $bid->job->id,
 				'job_name' => $bid->job->name,
-				'bidder_id' => $request->user()->id,
-				'bidder_name' => $request->user()->name,
+				'bidder_id' => $notifiable->id,
+				'bidder_name' => $notifiable->name,
 				'other_bidder_count' => count($bid->job->only_bids) - 1,
 				'title' => $title,
 				'body' => '',
-				'bidded_at' => \Carbon\Carbon::now()
+				'created_at' => \Carbon\Carbon::now()
 			];
 
 			$notifiable->notify( new BidToPost($notification_data) );
@@ -87,14 +88,24 @@ class BidController extends Controller
 			$job->status = 1;
 			$job->save();
 
-			// $user = User::where('id', $id)->first();
-			// $winner->job = $job;
-			// $winner->user = $user;
-			// $bid = Bid::where('id', $bid_id)
-			// 		->with('user')
-			// 		->with('job')
-			// 		->with('isApproved')
-			// 		->first();
+			$notifiable = User::where('id', $data['user_id'])->first();
+			
+			$title = $request->user()->name .' awarded the post \'' . $job->name . '\' to you.';
+
+			$notification_data = [
+				'bid_id' => $bid_id,
+				'job_id' => $data['job_id'],
+				'job_name' => $job->name,
+				'bidder_id' => $notifiable->id,
+				'bidder_name' => $notifiable->name,
+				'title' => $title,
+				'body' => '',
+				'created_at' => \Carbon\Carbon::now()
+			];
+
+			$notifiable->notify( new AwardBid($notification_data) );
+
+
 			return response()->json($job);
 		}
 		return response()->json(['error' => true, 'message' => 'An error occured'], 500);
