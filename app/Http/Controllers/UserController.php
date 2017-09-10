@@ -271,6 +271,13 @@ class UserController extends Controller
     $notification = $request->user()->notifications()->where('id',$request->id)->first();
     if($notification) {
       $notification->markAsRead();
+      $o_notifications = $request->user()->unreadNotifications;
+      foreach($o_notifications as $n) {
+        if($n->job_id == $notification->job_id) {
+          $n->markAsRead();
+        }
+      }
+      
       return response()->json(['status' => 'ok']);
     }
 
