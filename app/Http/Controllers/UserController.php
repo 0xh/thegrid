@@ -69,17 +69,34 @@ class UserController extends Controller
   }
 
   public function upload(Request $request, $id) {
-    Storage::makeDirectory('public/avatars');
-    $file_name = time().'-'.$id.'.'.$request->avatar->extension();
-    $path = Storage::putFileAs(
-      'public/avatars', $request->file('avatar'), $file_name
-    );
-    $data['profile_image_url'] = $file_name;
-    $user = Profile::updateOrCreate(
-      ['user_id' => $id],
-      $data
-    );
-    return $user;
+    // Storage::makeDirectory('public/avatars');
+    // $file_name = time().'-'.$id.'.'.$request->avatar->extension();
+    // $path = Storage::putFileAs(
+    //   'public/avatars', $request->file('avatar'), $file_name
+    // );
+    // $data['profile_image_url'] = $file_name;
+    // $user = Profile::updateOrCreate(
+    //   ['user_id' => $id],
+    //   $data
+    // );
+    // return $user;
+    if($request->file('avatar')) {
+      $file = $request->file('avatar');
+      Storage::disk('public_uploads')->makeDirectory('avatars');
+      $path = $file->store('avatars', 'public_uploads');
+      $profile = Profile::updateOrCreate(
+        ['user_id' => $request->user()->id],
+        ['profile_image_url' => $path]
+      );
+      if($profile) {
+        $u = User::info()->where('id', $request->user()->id)->first();
+
+        return response()->json($u);
+      }
+
+      return response()->json(['status' => 'failed'], 422);
+      
+    }
   }
 
   public function getSkills($id) {
@@ -282,6 +299,14 @@ class UserController extends Controller
     }
 
     return response()->json(['status' => 'failed'], 422);
+  }
+
+  public function getUserByUsername($username) {
+
+    $user = User::info()->where('username', $username)->with('skills')->first();
+
+    return response()->json($user);
+
   }
 
 }
