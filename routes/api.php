@@ -110,9 +110,11 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
 
 
   Route::get('/{id}/notifications', function(Request $request, $id) {
-    $notifications = $request->user()->unreadNotifications;
+    $notifications = $request->user()->unreadNotifications->groupBy('data.job_id');
 
     return response()->json($notifications);
   });
+
+  Route::post('/{id}/notifications/read', 'UserController@markNotificationAsRead');
 
 });

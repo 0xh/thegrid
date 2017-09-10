@@ -245,4 +245,15 @@ class UserController extends Controller
 
   }
 
+  public function markNotificationAsRead(Request $request, $id) {
+
+    $notification = $request->user()->notifications()->where('id',$request->id)->first();
+    if($notification) {
+      $notification->markAsRead();
+      return response()->json(['status' => 'ok']);
+    }
+
+    return response()->json(['status' => 'failed'], 422);
+  }
+
 }
