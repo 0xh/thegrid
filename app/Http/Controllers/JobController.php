@@ -109,12 +109,17 @@ class JobController extends Controller
 		$data = $request->all();
 		$f = sprintf("*, ( 3959 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
 			$data['lat'], $data['lng'], $data['lat']);
+
+		$radius = 50;
+		if(isset($data['rad'])) {
+			$radius = $data['rad'];
+		}
 		$jobs = Job::with('user')
 					->with('bids')
 					->whereDate('date', '>', date('Y-m-d'))
-					//->select(DB::raw($f))
-					// ->having('distance', '<', 50)
-					//->groupBy('distance')
+					->select(DB::raw($f))
+					->having('distance', '<', $radius)
+					->groupBy('distance')
 					->get();
 		return response()->json($jobs, 200);
 	}

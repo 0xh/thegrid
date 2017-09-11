@@ -29,6 +29,8 @@ Route::post('/test', function(Request $request) {
 //                   ->first();
 //   return response()->json($user);
 // });
+Route::get('/job/all', 'JobController@all');
+
 Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
 
 Route::get('/users/{username}', 'UserController@getUserByUsername');
