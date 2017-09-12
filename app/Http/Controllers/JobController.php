@@ -111,17 +111,50 @@ class JobController extends Controller
 			$data['lat'], $data['lng'], $data['lat']);
 
 		$radius = 50;
+
 		if(isset($data['rad'])) {
 			$radius = $data['rad'];
 		}
-		$jobs = Job::with('user')
-					->with('bids')
-					->whereDate('date', '>', date('Y-m-d'))
-					->select(DB::raw($f))
-					->having('distance', '<', $radius)
-					->groupBy('distance')
-					->get();
-		return response()->json($jobs, 200);
+
+		$jobs = Job::with('user')->with('bids');
+
+		if(isset($data['from'])) {
+
+			$_f = strtotime($data['from']);
+			$from = date('Y-m-d H:i:s', $_f);
+			
+			if(isset($data['to'])) {
+				$_t = strtotime($data['to']);
+				$to = date('Y-m-d H:i:s', $_t);
+	
+				$jobs->whereBetween('date', [$from, $to]);
+			} else {
+				$jobs->whereDate('date', '>', $from);
+			}
+			
+		} else {
+			$jobs->whereDate('date', '>', date('Y-m-d'));
+		}
+
+		if(isset($data['status'])) {
+			if($data['status'] == 'm_p') {
+				$jobs->where('user_id', $data['user_id']);
+			} elseif($data['status'] == 'm_b') {
+				$jobs->whereHas('bids', function ($query) use($data) {
+					$query->where('user_id', $data['user_id']);
+				});
+			}
+		}
+
+		if(isset($data['price'])) {
+			$jobs->where('price', '>=', $data['price']);
+		}
+					
+		$jobs->select(DB::raw($f))
+		->having('distance', '<', $radius)
+		->groupBy('distance');
+					// ->get();
+		return response()->json($jobs->get(), 200);
 	}
 
 	public function viewJob($id) {
