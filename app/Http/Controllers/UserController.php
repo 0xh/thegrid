@@ -263,20 +263,27 @@ class UserController extends Controller
 
     $data = $request->all();
 
-    $home = $data['home'];
-    $home['alias'] = 'home';
-    $work = $data['work'];
-    $work['alias'] = 'work';
+    foreach($data['locations'] as $location) {
+      Location::updateOrCreate(
+        ['id' => $location['id']],
+        $location
+      );
+    }
 
-    Location::updateOrCreate(
-      ['user_id' => $user_id, 'alias' => 'home'],
-      $home
-    );
+    // $home = $data['home'];
+    // $home['alias'] = 'home';
+    // $work = $data['work'];
+    // $work['alias'] = 'work';
 
-    Location::updateOrCreate(
-      ['user_id' => $user_id, 'alias' => 'work'],
-      $work
-    );
+    // Location::updateOrCreate(
+    //   ['user_id' => $user_id, 'alias' => 'home'],
+    //   $home
+    // );
+
+    // Location::updateOrCreate(
+    //   ['user_id' => $user_id, 'alias' => 'work'],
+    //   $work
+    // );
 
     $user = User::info()->where('id', $user_id)->first();
     return response()->json($user);
