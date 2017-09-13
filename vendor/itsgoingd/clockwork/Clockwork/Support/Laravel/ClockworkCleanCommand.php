@@ -42,7 +42,7 @@ class ClockworkCleanCommand extends Command
      *
      * @return void
      */
-    public function fire()
+    public function handle()
     {
         $data_dir = storage_path() . '/clockwork';
 
@@ -70,5 +70,11 @@ class ClockworkCleanCommand extends Command
         }
 
         $this->info($count . ' files removed.');
+    }
+
+    // compatibility for old Laravel versions
+    public function fire()
+    {
+        return $this->handle();
     }
 }

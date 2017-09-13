@@ -13,8 +13,6 @@ Laravel Socialite provides an expressive, fluent interface to OAuth authenticati
 
 **We are not accepting new adapters.**
 
-**If you are using Laravel 5.3 or below, please use [Socialite 2.0](https://github.com/laravel/socialite/tree/2.0).**
-
 Adapters for other platforms are listed at the community driven [Socialite Providers](https://socialiteproviders.github.io/) website.
 
 ## License
@@ -66,7 +64,7 @@ namespace App\Http\Controllers\Auth;
 
 use Socialite;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     /**
      * Redirect the user to the GitHub authentication page.
@@ -92,25 +90,18 @@ class LoginController extends Controller
 }
 ```
 
-The `redirect` method takes care of sending the user to the OAuth provider, while the `user` method will read the incoming request and retrieve the user's information from the provider. Before redirecting the user, you may also add additional "scopes" on the request using the `scopes` method. This method will merge all existing scopes with the ones you supply:
+The `redirect` method takes care of sending the user to the OAuth provider, while the `user` method will read the incoming request and retrieve the user's information from the provider. Before redirecting the user, you may also set "scopes" on the request using the `scope` method. This method will overwrite all existing scopes:
 
 ```php
 return Socialite::driver('github')
             ->scopes(['scope1', 'scope2'])->redirect();
 ```
 
-You can overwrite all exisiting scopes using the `setScopes` method:
-
-```php
-return Socialite::driver('github')
-            ->setScopes(['scope1', 'scope2'])->redirect();
-```
-
 Of course, you will need to define routes to your controller methods:
 
 ```php
-Route::get('login/github', 'Auth\LoginController@redirectToProvider');
-Route::get('login/github/callback', 'Auth\LoginController@handleProviderCallback');
+Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
+Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
 ```
 
 A number of OAuth providers support optional parameters in the redirect request. To include any optional parameters in the request, call the `with` method with an associative array:

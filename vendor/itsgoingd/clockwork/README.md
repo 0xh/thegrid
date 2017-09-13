@@ -14,13 +14,13 @@ This extension provides out of the box support for Laravel, Slim 2 and CodeIgnit
 
 To install latest version simply add it to your `composer.json`:
 
-```javascript
-"itsgoingd/clockwork": "~1.14"
+```bash
+composer require
 ```
 
 ### Laravel
 
-Once Clockwork is installed, you need to register Laravel service provider, in your `config/app.php`:
+If you are using an older version of Laravel, you'll need to register the service provider, in your `config/app.php`:
 
 ```php
 'providers' => [
@@ -29,14 +29,7 @@ Once Clockwork is installed, you need to register Laravel service provider, in y
 ]
 ```
 
-When using Laravel 5, you need to add Clockwork middleware, in your `app/Http/Kernel.php`:
-
-```php
-protected $middleware = [
-	\Clockwork\Support\Laravel\ClockworkMiddleware::class,
-	...
-]
-```
+Note: If you are using Laravel's route caching you will need to clear the cache using the `php artisan route:cache` as Clockwork adds its own routes for retrieving the data.
 
 By default, Clockwork will only be available in debug mode, you can change this and other settings in the configuration file. Use the following Artisan command to publish the configuration file into your config directory:
 
@@ -94,6 +87,8 @@ By default, Clockwork will only be available in debug mode (`APP_DEBUG` set to t
 Simply specify the setting as environment variable prefixed with `CLOCKWORK_`, eg. `CLOCKWORK_ENABLE`, [full list of available settings](https://raw.githubusercontent.com/itsgoingd/clockwork/v1/Clockwork/Support/Laravel/config/clockwork.php).
 
 Clockwork also comes with a `clock()` helper function (see examples above) and a facade thats automatically registered when you enable facades in your `bootstrap/app.php`.
+
+Please note that for collecting database queries you need to enable `$app->withEloquent()` in `bootstrap/app.php`, this has no performance impact if your app executes database queries on most requests.
 
 ### Slim 2
 

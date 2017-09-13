@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Bid extends Model
 {
+    use LogsActivity;
+
     protected $fillable = ['user_id', 'job_id', 'price_bid'];
+    protected static $logAttributes = ['user_id', 'job_id', 'price_bid'];
 
     public function user() {
     	return $this->belongsTo('App\User');

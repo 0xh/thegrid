@@ -5,10 +5,13 @@ namespace App;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -16,6 +19,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'name', 'username', 'email', 'phone_number',
+        'password', 'gender', 'birth_date',
+        'confirmation_token', 'confirmation_code',
+    ];
+    
+    protected static $logAttributes = [
         'name', 'username', 'email', 'phone_number',
         'password', 'gender', 'birth_date',
         'confirmation_token', 'confirmation_code',
