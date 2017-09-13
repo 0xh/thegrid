@@ -33,9 +33,6 @@ Route::get('/job/all', 'JobController@all');
 
 Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
 
-Route::get('/users/{username}', 'UserController@getUserByUsername');
-
-
 Route::post('/login', 'Auth\LoginController@loginAPI');
 Route::post('/login/{provider}', 'Auth\RegisterController@handleProviderCallbackAPI');
 
@@ -45,6 +42,8 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/users/register', 'Auth\RegisterController@register');
 Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation');
 Route::get('/users/skills', 'SkillController@getSkills');
+
+Route::get('/users/{username}', 'UserController@getUserByUsername');
 
 Route::post('/account/verify', 'Auth\RegisterController@submitCode');
 Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
