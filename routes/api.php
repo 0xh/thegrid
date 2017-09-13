@@ -111,6 +111,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/settings/account/email', 'UserController@updateAccountEmail');
   Route::post('/{id}/settings/account/password', 'UserController@updateAccountPassword');
   Route::post('/{id}/settings/locations', 'UserController@updateLocations');
+  Route::delete('/{id}/settings/locations/{location_id}', 'UserController@deleteLocation');
 
 
   Route::get('/{id}/notifications', function(Request $request, $id) {

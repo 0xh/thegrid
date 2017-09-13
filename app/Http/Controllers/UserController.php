@@ -270,20 +270,15 @@ class UserController extends Controller
       );
     }
 
-    // $home = $data['home'];
-    // $home['alias'] = 'home';
-    // $work = $data['work'];
-    // $work['alias'] = 'work';
+    $user = User::info()->where('id', $user_id)->first();
+    return response()->json($user);
 
-    // Location::updateOrCreate(
-    //   ['user_id' => $user_id, 'alias' => 'home'],
-    //   $home
-    // );
+  }
 
-    // Location::updateOrCreate(
-    //   ['user_id' => $user_id, 'alias' => 'work'],
-    //   $work
-    // );
+  public function deleteLocation(Request $request, $id, $location_id) {
+    $user_id = $request->user()->id;
+
+    $del = Location::destroy($location_id);
 
     $user = User::info()->where('id', $user_id)->first();
     return response()->json($user);
