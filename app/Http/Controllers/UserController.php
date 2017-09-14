@@ -371,7 +371,7 @@ class UserController extends Controller
   }
 
   public function getActiviyLogs(Request $request, $id) {
-    $logs = Activity::where('causer_id', $request->user()->id)->get();
+    $logs = Activity::where('causer_id', $request->user()->id)->orderBy('created_at', 'DESC')->get();
     return response()->json($logs);
   }
 

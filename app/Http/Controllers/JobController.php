@@ -57,7 +57,8 @@ class JobController extends Controller
 		}
 
 		if( isset($data['skills'])) {
-			$skills = $data['skills'];
+			
+			$skills = json_decode($data['skills'], true);
 			if( is_array($skills) ) {
 				foreach($skills as $skill) {
 					$_job->skills()->attach($skill['id']);
