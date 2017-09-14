@@ -3,12 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+// use Spatie\Activitylog\Traits\LogsActivity;
 
 class Skill extends Model
 {
   // protected $hidden = ['pivot'];
+  // use LogsActivity;
 
-  protected $fillable = ['skill'];
+  // protected $fillable = ['skill'];
+  
+  protected static $logAttributes = ['skill'];
 
   public function users() {
     return $this->belongsToMany('App\User');

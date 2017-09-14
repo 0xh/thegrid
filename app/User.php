@@ -26,8 +26,7 @@ class User extends Authenticatable
     
     protected static $logAttributes = [
         'name', 'username', 'email', 'phone_number',
-        'password', 'gender', 'birth_date',
-        'confirmation_token', 'confirmation_code',
+        'gender', 'birth_date'
     ];
 
     /**

@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Twilio\Rest\Client;
+use Mail;
 use App\User;
 use App\Profile;
 use App\Skill;
 use App\Review;
 use App\Job;
 use App\Location;
+use App\Setting;
 use App\Notifications\MarkPostReview;
 
 class UserController extends Controller
@@ -36,6 +38,7 @@ class UserController extends Controller
   public function getUserInit(Request $request) {
     $user = User::info()->where('id', $request->user()->id)->first();
     $user->keyedLocations = $user->locations->keyBy('alias');
+    $user->keyedSettings = $user->settings->keyBy('name');
     return response()->json($user);
   }
 
@@ -307,6 +310,61 @@ class UserController extends Controller
 
     $user = User::info()->where('username', $username)->with('skills')->first();
 
+    return response()->json($user);
+
+  }
+
+  public function resendEmail(Request $request, $id) {
+    
+    $user = User::where('id', $request->user()->id)->first();
+
+    $data['confirmation_token'] = $user->confirmation_token;
+    $data['name'] = $user->name;
+    $data['email'] = $user->email;
+    
+    Mail::send('mails.confirmation', $data, function($message) use($data) {
+      $message->to($data['email']);
+      $message->subject('Email Verification');
+    });
+
+    if(Mail::failures()) {
+      return response()->json(['status' => 'failed'], 422);
+    }
+    
+    return response()->json(['status' => 'ok']);
+    
+  }
+
+  public function updateMobile(Request $request, $id) {
+    
+    $user = User::info()->where('id', $request->user()->id)->first();
+
+    $data = $request->all();
+
+    $user->phone_number = $data['phone_number'];
+
+    $user->save();
+    
+    return response()->json($user);
+    
+  }
+
+  public function updateSetting(Request $request, $id) {
+    $user_id = $request->user()->id;
+
+    $data = $request->all();
+    $data['user_id'] = $user_id;  
+
+    Setting::updateOrCreate(
+      [
+        'user_id' => $user_id,
+        'name' => $data['name']
+      ],
+      $data
+    );
+
+    $user = User::info()->where('id', $user_id)->first();
+    $user->keyedSettings = $user->settings->keyBy('name');
     return response()->json($user);
 
   }

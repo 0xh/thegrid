@@ -111,6 +111,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/settings/account/password', 'UserController@updateAccountPassword');
   Route::post('/{id}/settings/locations', 'UserController@updateLocations');
   Route::delete('/{id}/settings/locations/{location_id}', 'UserController@deleteLocation');
+  Route::post('/{id}/settings/mobile', 'UserController@updateMobile');
+  Route::post('/{id}/settings/privacy', 'UserController@updateSetting');
 
 
   Route::get('/{id}/notifications', function(Request $request, $id) {
@@ -120,5 +122,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   });
 
   Route::post('/{id}/notifications/read', 'UserController@markNotificationAsRead');
+
+  Route::post('/{id}/email/verification/resend', 'UserController@resendEmail');
 
 });
