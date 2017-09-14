@@ -119,6 +119,10 @@ class JobController extends Controller
 
 		$jobs = Job::with('user')->with('bids');
 
+		if($request->user()) {
+			$jobs->with('winner');
+		}
+
 		if(isset($data['from'])) {
 
 			$_f = strtotime($data['from']);

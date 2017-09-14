@@ -69,6 +69,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
     return response()->json($user);
   });
 
+  Route::get('/job/all', 'JobController@all');
+
   Route::get('/{id}', 'UserController@getUser');
   Route::put('/{id}', 'UserController@updateUser');
   Route::post('/{id}/upload', 'UserController@upload');
