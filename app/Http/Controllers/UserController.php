@@ -16,6 +16,7 @@ use App\Job;
 use App\Location;
 use App\Setting;
 use App\Notifications\MarkPostReview;
+use Spatie\Activitylog\Models\Activity;
 
 class UserController extends Controller
 {
@@ -367,6 +368,11 @@ class UserController extends Controller
     $user->keyedSettings = $user->settings->keyBy('name');
     return response()->json($user);
 
+  }
+
+  public function getActiviyLogs(Request $request, $id) {
+    $logs = Activity::where('causer_id', $request->user()->id)->get();
+    return response()->json($logs);
   }
 
 }

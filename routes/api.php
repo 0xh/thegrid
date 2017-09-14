@@ -125,4 +125,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
 
   Route::post('/{id}/email/verification/resend', 'UserController@resendEmail');
 
+
+  Route::get('/{id}/activity/logs', 'UserController@getActiviyLogs');
+
 });
