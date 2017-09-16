@@ -375,4 +375,20 @@ class UserController extends Controller
     return response()->json($logs);
   }
 
+  public function updateBio(Request $request, $id) {
+    
+    $data = $request->all();
+
+    Profile::updateOrCreate(
+      ['user_id' => $request->user()->id],
+      ['bio' => $data['bio']]
+    );
+
+    $user = User::info()->where('id', $request->user()->id)->first();
+    $user->keyedSettings = $user->settings->keyBy('name');
+    
+    return response()->json($user);
+    
+  }
+
 }

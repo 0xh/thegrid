@@ -44,6 +44,7 @@ Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation
 Route::get('/users/skills', 'SkillController@getSkills');
 
 Route::get('/users/{username}', 'UserController@getUserByUsername');
+Route::get('/recent/jobs/{id}', 'JobController@getRecentJobs');
 
 Route::post('/account/verify', 'Auth\RegisterController@submitCode');
 Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
@@ -79,6 +80,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/jobs', 'JobController@add');
   Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
+  
+  Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
 
   // Route::post('/bid', 'BidController@bid');
   // Route::post('/{id}/bids/approve', 'BidController@approveBid');
@@ -115,6 +118,9 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::delete('/{id}/settings/locations/{location_id}', 'UserController@deleteLocation');
   Route::post('/{id}/settings/mobile', 'UserController@updateMobile');
   Route::post('/{id}/settings/privacy', 'UserController@updateSetting');
+
+
+  Route::post('/{id}/profile/about', 'UserController@updateBio');
 
 
   Route::get('/{id}/notifications', function(Request $request, $id) {

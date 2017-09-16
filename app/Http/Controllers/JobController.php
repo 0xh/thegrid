@@ -88,6 +88,17 @@ class JobController extends Controller
 		return response()->json($jobs, 200);
 	}
 
+	public function getRecentJobs(Request $request, $id) {
+		$user_id = $id;
+		if($request->user()) {
+			$user_id = $request->user()->id;
+		}
+		$jobs = Job::info()->where('user_id', $user_id)->limit(5)->orderBy('created_at', 'DESC')->get();
+
+		return response()->json($jobs);
+
+	}
+
 	public function getJobDetails($id, $job_id) {
 		$job = Job::infoWithBidders()->where([
 				['user_id', '=', $id],
