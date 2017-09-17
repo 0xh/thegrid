@@ -165,9 +165,18 @@ class JobController extends Controller
 		if(isset($data['price'])) {
 			$jobs->where('price', '>=', $data['price']);
 		}
+
+		if(!$request->user()) {
+			$jobs->where('status', 0);
+		} else {
+			// $jobs->whereHas('winner', function ($query) use($request) {
+			// 	$query->where('user_id', $request->user()->id);
+			// });
+		}
 					
 		$jobs->select(DB::raw($f))
 		->having('distance', '<', $radius)
+		->orderBy('distance', 'ASC')
 		->groupBy('distance');
 					// ->get();
 		return response()->json($jobs->get(), 200);
