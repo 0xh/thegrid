@@ -13,11 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/test', function(Request $request) {
+Route::get('/test', function(Request $request) {
 	// $j = App\Job::where('id', 44)->with('skills')->first();
 	// $j->skills()->attach([1,2]);
-  $data = $request->all();
-	return response()->json($data);
+  // $data = $request->all();
+  // return response()->json($data);
+  $date = new DateTime('2017-09-17 10:38:54');
+  $date->add(new DateInterval('PT10S'));
+  echo $date->format('Y-m-d H:i:s') . "\n";
+  echo date('Y-m-d H:i:s') . "\n";
+  echo strtotime(date('Y-m-d H:i:s'));
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -118,7 +123,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::delete('/{id}/settings/locations/{location_id}', 'UserController@deleteLocation');
   Route::post('/{id}/settings/mobile', 'UserController@updateMobile');
   Route::post('/{id}/settings/privacy', 'UserController@updateSetting');
-
+  Route::post('/{id}/settings/name', 'UserController@updateName');
 
   Route::post('/{id}/profile/about', 'UserController@updateBio');
 

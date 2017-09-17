@@ -40,6 +40,19 @@ class BidController extends Controller
 				}
 			}
 
+			$job = Job::where('id', $data['job_id'])->first();
+
+			$timeFirst  = strtotime(date('Y-m-d H:i:s'));
+			$timeSecond = strtotime($job->date);
+			$differenceInSeconds = $timeSecond - $timeFirst;
+
+			if($differenceInSeconds <= 10) {
+				$date = new \DateTime($job->date);
+				$date->add(new \DateInterval('PT'. (60 - $differenceInSeconds) .'S'));
+				$job->date = $date;
+				$job->save();
+			}
+
 			// $user = User::where('id', $id)->first();
 			// $job = Job::info()->where('id', $data['job_id'])->first();
 			// $bid->job = $job;

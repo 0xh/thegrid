@@ -391,4 +391,26 @@ class UserController extends Controller
     
   }
 
+  public function updateName(Request $request, $id) {
+    
+    $data = $request->all();
+    $user = User::where('id', $request->user()->id)->first();
+    $user->name = $data['name'];
+    $user->save();
+
+    Profile::updateOrCreate(
+      ['user_id' => $request->user()->id],
+      [
+        'first_name' => $data['first_name'],
+        'last_name' => $data['last_name']
+      ]
+    );
+
+    $user = User::info()->where('id', $request->user()->id)->first();
+    $user->keyedSettings = $user->settings->keyBy('name');
+    
+    return response()->json($user);
+    
+  }
+
 }
