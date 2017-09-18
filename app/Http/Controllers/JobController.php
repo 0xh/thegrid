@@ -119,7 +119,9 @@ class JobController extends Controller
 	public function all(Request $request) {
 
 		$data = $request->all();
-		$f = sprintf("*, ( 3959 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
+		// 3959 ML
+		// 6371 KM
+		$f = sprintf("*, ( 6371 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
 			$data['lat'], $data['lng'], $data['lat']);
 
 		$radius = 50;
