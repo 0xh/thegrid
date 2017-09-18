@@ -66,6 +66,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Message');
     }
 
+    public function unreadMessages() {
+        return $this->hasMany('App\Message', 'recipient_id')->where('status', 0);
+    }
+
     public function settings() {
         return $this->hasMany('App\Setting');
     }
@@ -83,7 +87,10 @@ class User extends Authenticatable
     }
 
     public function scopeInfo($query) {
-        return $query->with('profile', 'reviews', 'locations')->withCount('jobs')->withCount('bids');
+        return $query->with('profile', 'reviews', 'locations')
+                     ->withCount('jobs')
+                     ->withCount('bids')
+                     ->withCount('unreadMessages');
     }
     
 
