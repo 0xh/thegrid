@@ -151,7 +151,7 @@ class JobController extends Controller
 			}
 			
 		} else {
-			$jobs->whereDate('date', '>', date('Y-m-d'));
+			$jobs->whereDate('date', '>', date('Y-m-d H:i:s'));
 		}
 
 		if(isset($data['status'])) {
