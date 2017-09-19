@@ -294,14 +294,16 @@ class UserController extends Controller
     $notification = $request->user()->notifications()->where('id',$request->id)->first();
     if($notification) {
       $notification->markAsRead();
-      $o_notifications = $request->user()->unreadNotifications;
-      foreach($o_notifications as $n) {
-        if($n->job_id == $notification->job_id) {
-          $n->markAsRead();
-        }
-      }
+      // $o_notifications = $request->user()->unreadNotifications;
+      // foreach($o_notifications as $n) {
+      //   if($n->job_id == $notification->job_id) {
+      //     $n->markAsRead();
+      //   }
+      // }
       
-      return response()->json(['status' => 'ok']);
+      $notifications = $request->user()->unreadNotifications->groupBy('data.job_id');
+      
+      return response()->json($notifications);
     }
 
     return response()->json(['status' => 'failed'], 422);
@@ -411,6 +413,18 @@ class UserController extends Controller
     
     return response()->json($user);
     
+  }
+
+  public function getReviews(Request $request, $id) {
+    
+    $user_id = $id;
+    if($request->user()) {
+      $user_id = $request->user()->id;
+    }
+
+    $reviews = Review::where('user_id', $user_id)->with('job')->get();
+    
+    return response()->json($reviews);
   }
 
 }

@@ -47,9 +47,11 @@ Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/users/register', 'Auth\RegisterController@register');
 Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation');
 Route::get('/users/skills', 'SkillController@getSkills');
+Route::get('/users/reviews/{id}', 'UserController@getReviews');
 
 Route::get('/users/{username}', 'UserController@getUserByUsername');
 Route::get('/recent/jobs/{id}', 'JobController@getRecentJobs');
+Route::get('/completed/jobs/{id}', 'JobController@getCompletedJobs');
 
 Route::post('/account/verify', 'Auth\RegisterController@submitCode');
 Route::post('/account/verify/resend', 'Auth\RegisterController@resendCode');
@@ -87,6 +89,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
   
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
+  Route::get('/{id}/completed/jobs', 'JobController@getCompletedJobs');
+  Route::get('/{id}/reviews', 'UserController@getReviews');
 
   // Route::post('/bid', 'BidController@bid');
   // Route::post('/{id}/bids/approve', 'BidController@approveBid');

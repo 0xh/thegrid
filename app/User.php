@@ -86,6 +86,18 @@ class User extends Authenticatable
         return $this->hasMany('App\Location');
     }
 
+    public function completedJobs() {
+        return $this->hasMany('App\Winner')
+                    ->with('job')
+                    ->whereHas('job', function($query) {
+                        $query->where('status', 4);
+                    });
+        // return $this->hasMany('App\Job')
+        //             ->whereHas('winner', function($query) {
+
+        //             });
+    }
+
     public function scopeInfo($query) {
         return $query->with('profile', 'reviews', 'locations')
                      ->withCount('jobs')

@@ -234,7 +234,6 @@ class JobController extends Controller
 				$notification_data['bid_id'] = $bid_id;
 				$notification_data['title'] = $title;
 
-
 				if( $data['status'] == 2) {
 					$notifiable->notify( new MarkPostInProgress($notification_data) );
 				} elseif( $data['status'] == 3) {
@@ -243,15 +242,24 @@ class JobController extends Controller
 					$notifiable->notify( new MarkPostComplete($notification_data) );
 				}
 	
-
 			}
-
-			
-
 
 			return response()->json($job);
 		}
 
 		return response()->json(['status' => 'failed', 'message' => 'Something went wrong']);
 	}
+
+	public function getCompletedJobs(Request $request, $id) {
+
+		$user_id = $id;
+		if($request->user()) {
+			$user_id = $request->user()->id;
+		}
+
+		$job_completed = User::where('id', $user_id)->with('completedJobs')->first();
+		
+		return response()->json($job_completed);
+	}
+	
 }
