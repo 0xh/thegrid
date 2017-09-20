@@ -3183,63 +3183,6 @@
         ]
     },
     {
-        "name": "itsgoingd/clockwork",
-        "version": "v1.14.3",
-        "version_normalized": "1.14.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/itsgoingd/clockwork.git",
-            "reference": "60a17e85a7f24b0161da906ab184d75ab4dceb41"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/60a17e85a7f24b0161da906ab184d75ab4dceb41",
-            "reference": "60a17e85a7f24b0161da906ab184d75ab4dceb41",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.9",
-            "psr/log": "1.*"
-        },
-        "time": "2017-08-30T10:37:49+00:00",
-        "type": "library",
-        "extra": {
-            "laravel": {
-                "providers": [
-                    "Clockwork\\Support\\Laravel\\ClockworkServiceProvider"
-                ],
-                "aliases": {
-                    "Clockwork": "Clockwork\\Support\\Laravel\\Facade"
-                }
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Clockwork\\": "Clockwork/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "itsgoingd",
-                "email": "itsgoingd@luzer.sk",
-                "homepage": "http://twitter.com/itsgoingd"
-            }
-        ],
-        "description": "Server-side component of Clockwork, a Chrome extension for PHP development",
-        "homepage": "http://github.com/itsgoingd/clockwork",
-        "keywords": [
-            "debugging",
-            "laravel",
-            "logging",
-            "profiling"
-        ]
-    },
-    {
         "name": "laravel/socialite",
         "version": "v2.0.21",
         "version_normalized": "2.0.21.0",
@@ -3296,54 +3239,6 @@
         ]
     },
     {
-        "name": "twilio/sdk",
-        "version": "5.14.0",
-        "version_normalized": "5.14.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/twilio/twilio-php.git",
-            "reference": "32f345c5b268bfa1f57bbd3daf73ec8f8d26baf8"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/32f345c5b268bfa1f57bbd3daf73ec8f8d26baf8",
-            "reference": "32f345c5b268bfa1f57bbd3daf73ec8f8d26baf8",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "apigen/apigen": "^4.1",
-            "phpunit/phpunit": "4.5.*"
-        },
-        "time": "2017-09-08T22:15:44+00:00",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Twilio\\": "Twilio/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Twilio API Team",
-                "email": "api@twilio.com"
-            }
-        ],
-        "description": "A PHP wrapper for Twilio's API",
-        "homepage": "http://github.com/twilio/twilio-php",
-        "keywords": [
-            "api",
-            "sms",
-            "twilio"
-        ]
-    },
-    {
         "name": "fzaninotto/faker",
         "version": "v1.7.1",
         "version_normalized": "1.7.1.0",
@@ -3393,60 +3288,6 @@
             "data",
             "faker",
             "fixtures"
-        ]
-    },
-    {
-        "name": "zendframework/zend-diactoros",
-        "version": "1.5.0",
-        "version_normalized": "1.5.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/zendframework/zend-diactoros.git",
-            "reference": "1d23172f9dc1687a97c195a777b0199f14f7b26e"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/1d23172f9dc1687a97c195a777b0199f14f7b26e",
-            "reference": "1d23172f9dc1687a97c195a777b0199f14f7b26e",
-            "shasum": ""
-        },
-        "require": {
-            "php": "^5.6 || ^7.0",
-            "psr/http-message": "^1.0"
-        },
-        "provide": {
-            "psr/http-message-implementation": "1.0"
-        },
-        "require-dev": {
-            "ext-dom": "*",
-            "ext-libxml": "*",
-            "phpunit/phpunit": "^5.7.16 || ^6.0.8",
-            "zendframework/zend-coding-standard": "~1.0"
-        },
-        "time": "2017-08-22T20:38:56+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.5-dev",
-                "dev-develop": "1.6-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Zend\\Diactoros\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-2-Clause"
-        ],
-        "description": "PSR HTTP Message implementations",
-        "homepage": "https://github.com/zendframework/zend-diactoros",
-        "keywords": [
-            "http",
-            "psr",
-            "psr-7"
         ]
     },
     {
@@ -4052,140 +3893,6 @@
             "container-interface",
             "container-interop",
             "psr"
-        ]
-    },
-    {
-        "name": "laravel/framework",
-        "version": "v5.5.3",
-        "version_normalized": "5.5.3.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/laravel/framework.git",
-            "reference": "779a98d3b2ebed2128db1a668dcc10a65c9b01be"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/laravel/framework/zipball/779a98d3b2ebed2128db1a668dcc10a65c9b01be",
-            "reference": "779a98d3b2ebed2128db1a668dcc10a65c9b01be",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/inflector": "~1.1",
-            "erusev/parsedown": "~1.6",
-            "ext-mbstring": "*",
-            "ext-openssl": "*",
-            "league/flysystem": "~1.0",
-            "monolog/monolog": "~1.12",
-            "mtdowling/cron-expression": "~1.0",
-            "nesbot/carbon": "~1.20",
-            "php": ">=7.0",
-            "psr/container": "~1.0",
-            "psr/simple-cache": "^1.0",
-            "ramsey/uuid": "~3.0",
-            "swiftmailer/swiftmailer": "~6.0",
-            "symfony/console": "~3.3",
-            "symfony/debug": "~3.3",
-            "symfony/finder": "~3.3",
-            "symfony/http-foundation": "~3.3",
-            "symfony/http-kernel": "~3.3",
-            "symfony/process": "~3.3",
-            "symfony/routing": "~3.3",
-            "symfony/var-dumper": "~3.3",
-            "tijsverkoyen/css-to-inline-styles": "~2.2",
-            "vlucas/phpdotenv": "~2.2"
-        },
-        "replace": {
-            "illuminate/auth": "self.version",
-            "illuminate/broadcasting": "self.version",
-            "illuminate/bus": "self.version",
-            "illuminate/cache": "self.version",
-            "illuminate/config": "self.version",
-            "illuminate/console": "self.version",
-            "illuminate/container": "self.version",
-            "illuminate/contracts": "self.version",
-            "illuminate/cookie": "self.version",
-            "illuminate/database": "self.version",
-            "illuminate/encryption": "self.version",
-            "illuminate/events": "self.version",
-            "illuminate/exception": "self.version",
-            "illuminate/filesystem": "self.version",
-            "illuminate/hashing": "self.version",
-            "illuminate/http": "self.version",
-            "illuminate/log": "self.version",
-            "illuminate/mail": "self.version",
-            "illuminate/notifications": "self.version",
-            "illuminate/pagination": "self.version",
-            "illuminate/pipeline": "self.version",
-            "illuminate/queue": "self.version",
-            "illuminate/redis": "self.version",
-            "illuminate/routing": "self.version",
-            "illuminate/session": "self.version",
-            "illuminate/support": "self.version",
-            "illuminate/translation": "self.version",
-            "illuminate/validation": "self.version",
-            "illuminate/view": "self.version",
-            "tightenco/collect": "self.version"
-        },
-        "require-dev": {
-            "aws/aws-sdk-php": "~3.0",
-            "doctrine/dbal": "~2.5",
-            "filp/whoops": "^2.1.4",
-            "mockery/mockery": "~1.0",
-            "orchestra/testbench-core": "3.5.*",
-            "pda/pheanstalk": "~3.0",
-            "phpunit/phpunit": "~6.0",
-            "predis/predis": "^1.1.1",
-            "symfony/css-selector": "~3.3",
-            "symfony/dom-crawler": "~3.3"
-        },
-        "suggest": {
-            "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (~3.0).",
-            "doctrine/dbal": "Required to rename columns and drop SQLite columns (~2.5).",
-            "fzaninotto/faker": "Required to use the eloquent factory builder (~1.4).",
-            "guzzlehttp/guzzle": "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~6.0).",
-            "laravel/tinker": "Required to use the tinker console command (~1.0).",
-            "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (~1.0).",
-            "league/flysystem-rackspace": "Required to use the Flysystem Rackspace driver (~1.0).",
-            "nexmo/client": "Required to use the Nexmo transport (~1.0).",
-            "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
-            "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
-            "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
-            "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
-            "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
-            "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
-        },
-        "time": "2017-09-07T13:50:21+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "5.5-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "src/Illuminate/Foundation/helpers.php",
-                "src/Illuminate/Support/helpers.php"
-            ],
-            "psr-4": {
-                "Illuminate\\": "src/Illuminate/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Taylor Otwell",
-                "email": "taylor@laravel.com"
-            }
-        ],
-        "description": "The Laravel Framework.",
-        "homepage": "https://laravel.com",
-        "keywords": [
-            "framework",
-            "laravel"
         ]
     },
     {
@@ -5296,6 +5003,299 @@
             "log",
             "spatie",
             "user"
+        ]
+    },
+    {
+        "name": "itsgoingd/clockwork",
+        "version": "v1.14.5",
+        "version_normalized": "1.14.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/itsgoingd/clockwork.git",
+            "reference": "55ec557cc8cc60944de0eefbe27f905d538a8f70"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/itsgoingd/clockwork/zipball/55ec557cc8cc60944de0eefbe27f905d538a8f70",
+            "reference": "55ec557cc8cc60944de0eefbe27f905d538a8f70",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.9",
+            "psr/log": "1.*"
+        },
+        "time": "2017-09-15T14:50:14+00:00",
+        "type": "library",
+        "extra": {
+            "laravel": {
+                "providers": [
+                    "Clockwork\\Support\\Laravel\\ClockworkServiceProvider"
+                ],
+                "aliases": {
+                    "Clockwork": "Clockwork\\Support\\Laravel\\Facade"
+                }
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Clockwork\\": "Clockwork/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "itsgoingd",
+                "email": "itsgoingd@luzer.sk",
+                "homepage": "http://twitter.com/itsgoingd"
+            }
+        ],
+        "description": "Server-side component of Clockwork, a Chrome extension for PHP development",
+        "homepage": "http://github.com/itsgoingd/clockwork",
+        "keywords": [
+            "debugging",
+            "laravel",
+            "logging",
+            "profiling"
+        ]
+    },
+    {
+        "name": "laravel/framework",
+        "version": "v5.5.4",
+        "version_normalized": "5.5.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/laravel/framework.git",
+            "reference": "d3e0493bead126cf7fb9a005c64e6b58a9190e51"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/laravel/framework/zipball/d3e0493bead126cf7fb9a005c64e6b58a9190e51",
+            "reference": "d3e0493bead126cf7fb9a005c64e6b58a9190e51",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/inflector": "~1.1",
+            "erusev/parsedown": "~1.6",
+            "ext-mbstring": "*",
+            "ext-openssl": "*",
+            "league/flysystem": "~1.0",
+            "monolog/monolog": "~1.12",
+            "mtdowling/cron-expression": "~1.0",
+            "nesbot/carbon": "~1.20",
+            "php": ">=7.0",
+            "psr/container": "~1.0",
+            "psr/simple-cache": "^1.0",
+            "ramsey/uuid": "~3.0",
+            "swiftmailer/swiftmailer": "~6.0",
+            "symfony/console": "~3.3",
+            "symfony/debug": "~3.3",
+            "symfony/finder": "~3.3",
+            "symfony/http-foundation": "~3.3",
+            "symfony/http-kernel": "~3.3",
+            "symfony/process": "~3.3",
+            "symfony/routing": "~3.3",
+            "symfony/var-dumper": "~3.3",
+            "tijsverkoyen/css-to-inline-styles": "~2.2",
+            "vlucas/phpdotenv": "~2.2"
+        },
+        "replace": {
+            "illuminate/auth": "self.version",
+            "illuminate/broadcasting": "self.version",
+            "illuminate/bus": "self.version",
+            "illuminate/cache": "self.version",
+            "illuminate/config": "self.version",
+            "illuminate/console": "self.version",
+            "illuminate/container": "self.version",
+            "illuminate/contracts": "self.version",
+            "illuminate/cookie": "self.version",
+            "illuminate/database": "self.version",
+            "illuminate/encryption": "self.version",
+            "illuminate/events": "self.version",
+            "illuminate/exception": "self.version",
+            "illuminate/filesystem": "self.version",
+            "illuminate/hashing": "self.version",
+            "illuminate/http": "self.version",
+            "illuminate/log": "self.version",
+            "illuminate/mail": "self.version",
+            "illuminate/notifications": "self.version",
+            "illuminate/pagination": "self.version",
+            "illuminate/pipeline": "self.version",
+            "illuminate/queue": "self.version",
+            "illuminate/redis": "self.version",
+            "illuminate/routing": "self.version",
+            "illuminate/session": "self.version",
+            "illuminate/support": "self.version",
+            "illuminate/translation": "self.version",
+            "illuminate/validation": "self.version",
+            "illuminate/view": "self.version",
+            "tightenco/collect": "self.version"
+        },
+        "require-dev": {
+            "aws/aws-sdk-php": "~3.0",
+            "doctrine/dbal": "~2.5",
+            "filp/whoops": "^2.1.4",
+            "mockery/mockery": "~1.0",
+            "orchestra/testbench-core": "3.5.*",
+            "pda/pheanstalk": "~3.0",
+            "phpunit/phpunit": "~6.0",
+            "predis/predis": "^1.1.1",
+            "symfony/css-selector": "~3.3",
+            "symfony/dom-crawler": "~3.3"
+        },
+        "suggest": {
+            "aws/aws-sdk-php": "Required to use the SQS queue driver and SES mail driver (~3.0).",
+            "doctrine/dbal": "Required to rename columns and drop SQLite columns (~2.5).",
+            "fzaninotto/faker": "Required to use the eloquent factory builder (~1.4).",
+            "guzzlehttp/guzzle": "Required to use the Mailgun and Mandrill mail drivers and the ping methods on schedules (~6.0).",
+            "laravel/tinker": "Required to use the tinker console command (~1.0).",
+            "league/flysystem-aws-s3-v3": "Required to use the Flysystem S3 driver (~1.0).",
+            "league/flysystem-rackspace": "Required to use the Flysystem Rackspace driver (~1.0).",
+            "nexmo/client": "Required to use the Nexmo transport (~1.0).",
+            "pda/pheanstalk": "Required to use the beanstalk queue driver (~3.0).",
+            "predis/predis": "Required to use the redis cache and queue drivers (~1.0).",
+            "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
+            "symfony/css-selector": "Required to use some of the crawler integration testing tools (~3.3).",
+            "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (~3.3).",
+            "symfony/psr-http-message-bridge": "Required to psr7 bridging features (~1.0)."
+        },
+        "time": "2017-09-13T13:36:29+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "5.5-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "src/Illuminate/Foundation/helpers.php",
+                "src/Illuminate/Support/helpers.php"
+            ],
+            "psr-4": {
+                "Illuminate\\": "src/Illuminate/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Taylor Otwell",
+                "email": "taylor@laravel.com"
+            }
+        ],
+        "description": "The Laravel Framework.",
+        "homepage": "https://laravel.com",
+        "keywords": [
+            "framework",
+            "laravel"
+        ]
+    },
+    {
+        "name": "twilio/sdk",
+        "version": "5.14.1",
+        "version_normalized": "5.14.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twilio/twilio-php.git",
+            "reference": "64499d90cbf23be4fc00476af42c122ec8e33b5b"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/twilio/twilio-php/zipball/64499d90cbf23be4fc00476af42c122ec8e33b5b",
+            "reference": "64499d90cbf23be4fc00476af42c122ec8e33b5b",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "apigen/apigen": "^4.1",
+            "phpunit/phpunit": "4.5.*"
+        },
+        "time": "2017-09-16T00:00:53+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Twilio\\": "Twilio/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Twilio API Team",
+                "email": "api@twilio.com"
+            }
+        ],
+        "description": "A PHP wrapper for Twilio's API",
+        "homepage": "http://github.com/twilio/twilio-php",
+        "keywords": [
+            "api",
+            "sms",
+            "twilio"
+        ]
+    },
+    {
+        "name": "zendframework/zend-diactoros",
+        "version": "1.6.0",
+        "version_normalized": "1.6.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/zendframework/zend-diactoros.git",
+            "reference": "2faa791b66bac33ca40031d8bce03b7dc8143490"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/2faa791b66bac33ca40031d8bce03b7dc8143490",
+            "reference": "2faa791b66bac33ca40031d8bce03b7dc8143490",
+            "shasum": ""
+        },
+        "require": {
+            "php": "^5.6 || ^7.0",
+            "psr/http-message": "^1.0"
+        },
+        "provide": {
+            "psr/http-message-implementation": "1.0"
+        },
+        "require-dev": {
+            "ext-dom": "*",
+            "ext-libxml": "*",
+            "phpunit/phpunit": "^5.7.16 || ^6.0.8",
+            "zendframework/zend-coding-standard": "~1.0"
+        },
+        "time": "2017-09-13T14:47:08+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.6-dev",
+                "dev-develop": "1.7-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Zend\\Diactoros\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-2-Clause"
+        ],
+        "description": "PSR HTTP Message implementations",
+        "homepage": "https://github.com/zendframework/zend-diactoros",
+        "keywords": [
+            "http",
+            "psr",
+            "psr-7"
         ]
     }
 ]

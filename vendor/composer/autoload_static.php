@@ -18,9 +18,9 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
         'e91d0dc994644828154ae2387ede1ca8' => __DIR__ . '/..' . '/spatie/string/src/string_functions.php',
+        '72b1e3f4a2af9b30b3f137b3ec2057fc' => __DIR__ . '/..' . '/spatie/laravel-activitylog/src/helpers.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
-        '72b1e3f4a2af9b30b3f137b3ec2057fc' => __DIR__ . '/..' . '/spatie/laravel-activitylog/src/helpers.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -571,12 +571,14 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'Clockwork\\Support\\Swift\\SwiftPluginClockworkTimeline' => __DIR__ . '/..' . '/itsgoingd/clockwork/Clockwork/Support/Swift/SwiftPluginClockworkTimeline.php',
         'CorsKernel' => __DIR__ . '/..' . '/barryvdh/laravel-cors/tests/CorsKernel.php',
         'CorsServiceTest' => __DIR__ . '/..' . '/barryvdh/laravel-cors/tests/CorsServiceTest.php',
+        'CreateActivityLogTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_13_155037_create_activity_log_table.php',
         'CreateBidFilesTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_07_155304_create_bid_files_table.php',
         'CreateBidsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_10_083651_create_bids_table.php',
         'CreateConversationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_093559_create_conversations_table.php',
         'CreateCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_101423_create_countries_table.php',
         'CreateCountryCallingCodesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_115240_create_country_calling_codes_table.php',
         'CreateCurrenciesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_091231_create_currencies_table.php',
+        'CreateFeedbacksTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_20_105032_create_feedbacks_table.php',
         'CreateGalleriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_105930_create_galleries_table.php',
         'CreateImagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_110121_create_images_table.php',
         'CreateItemsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_06_073230_create_items_table.php',

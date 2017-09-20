@@ -48,6 +48,7 @@ Route::post('/users/register', 'Auth\RegisterController@register');
 Route::post('/users/confirmation/{token}', 'Auth\RegisterController@confirmation');
 Route::get('/users/skills', 'SkillController@getSkills');
 Route::get('/users/reviews/{id}', 'UserController@getReviews');
+Route::post('/users/feedback', 'UserController@newFeedback');
 
 Route::get('/users/{username}', 'UserController@getUserByUsername');
 Route::get('/recent/jobs/{id}', 'JobController@getRecentJobs');
@@ -144,5 +145,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
 
 
   Route::get('/{id}/activity/logs', 'UserController@getActiviyLogs');
+
+  Route::post('/{id}/feedback', 'UserController@newFeedback');
 
 });

@@ -15,6 +15,7 @@ use App\Review;
 use App\Job;
 use App\Location;
 use App\Setting;
+use App\Feedback;
 use App\Notifications\MarkPostReview;
 use Spatie\Activitylog\Models\Activity;
 
@@ -425,6 +426,28 @@ class UserController extends Controller
     $reviews = Review::where('user_id', $user_id)->with('job')->get();
     
     return response()->json($reviews);
+  }
+
+  public function newFeedback(Request $request) {
+    $user_id = 0;
+    $data = $request->all();
+    if($request->user()) {
+      $user_id = $request->user()->id;
+    }
+
+    $feedback = Feedback::create([
+      'user_id' => $user_id,
+      'name' => $data['name'],
+      'email' => $data['email'],
+      'feedback' => $data['feedback']
+    ]);
+
+    if($feedback) {
+      return response()->json($feedback);
+    }
+
+    return response()->json(['status' => 'failed'], 422);
+
   }
 
 }
