@@ -8,6 +8,7 @@ use App\Job;
 use App\JobFile;
 use App\User;
 use App\Bid;
+use App\Transaction;
 use DB;
 use Cache;
 use App\Notifications\AwardBid;
@@ -240,6 +241,15 @@ class JobController extends Controller
 					$notifiable->notify( new MarkPostReview($notification_data) );
 				} elseif( $data['status'] == 4) {
 					$notifiable->notify( new MarkPostComplete($notification_data) );
+					Transaction::create([
+						'supplier_id' => $job->winner->user->id,
+						'customer_id' => $request->user()->id,
+						'amount' => $job->winner->bid->price_bid,
+						'job_id' => $job->id,
+						'bid_id' => $bid_id,
+						'status' => '1',
+						'payment_type' => 'cod'
+					]);
 				}
 	
 			}
