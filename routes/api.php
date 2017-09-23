@@ -147,5 +147,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/activity/logs', 'UserController@getActiviyLogs');
 
   Route::post('/{id}/feedback', 'UserController@newFeedback');
+  
+  Route::post('/{id}/transactions', 'UserController@newTransaction');
+  Route::get('/{id}/transactions', 'UserController@getTransactions');
 
 });

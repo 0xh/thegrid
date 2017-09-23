@@ -193,7 +193,7 @@ class JobController extends Controller
 		$q = $request->input('q');
 		return Job::latest()
 								->search($q)
-								->whereDate('date', '>', date('Y-m-d'))
+								->whereDate('date', '>', date('Y-m-d H:i:s'))
 								->get();
 	}
 		

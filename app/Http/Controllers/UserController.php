@@ -16,6 +16,7 @@ use App\Job;
 use App\Location;
 use App\Setting;
 use App\Feedback;
+use App\Transaction;
 use App\Notifications\MarkPostReview;
 use Spatie\Activitylog\Models\Activity;
 
@@ -448,6 +449,43 @@ class UserController extends Controller
 
     return response()->json(['status' => 'failed'], 422);
 
+  }
+
+  public function newTransaction(Request $request, $id) {
+    $user_id = $request->user()->id;
+
+    $data = $request->all();
+
+    $transaction = Transaction::create([
+      'supplier_id' => $data['supplier_id'],
+      'customer_id' => $data['customer_id'],
+      'amount' => $data['amount'],
+      'job_id' => $data['job_id'],
+      'bid_id' => $data['bid_id'],
+      'status' => $data['status'],
+      'payment_type' => $data['payment_type']
+    ]);
+
+    if($transaction) {
+      return response()->json($transaction);
+    }
+
+    return response()->json(['status' => 'failed'], 422);
+  }
+
+  public function getTransactions(Request $request, $id) {
+    $user_id = $request->user()->id;
+    
+    $transactions = Transaction::info()
+                    ->where('supplier_id', $user_id)
+                    ->orWhere('customer_id', $user_id)
+                    ->paginate(env('JOBS_PER_PAGE'));
+
+    if($transactions) {
+      return response()->json($transactions);
+    }
+
+    return response()->json(['status' => 'failed'], 422);
   }
 
 }
