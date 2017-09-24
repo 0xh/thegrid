@@ -429,6 +429,14 @@ class UserController extends Controller
     return response()->json($reviews);
   }
 
+  public function getMyFeedback(Request $request) {
+    $feedbacks = Feedback::where('user_id', $request->user()->id)
+                      ->orderBy('created_at', 'DESC')            
+                      ->get();
+
+    return response()->json($feedbacks);
+  }
+
   public function newFeedback(Request $request) {
     $user_id = 0;
     $data = $request->all();
@@ -436,12 +444,9 @@ class UserController extends Controller
       $user_id = $request->user()->id;
     }
 
-    $feedback = Feedback::create([
-      'user_id' => $user_id,
-      'name' => $data['name'],
-      'email' => $data['email'],
-      'feedback' => $data['feedback']
-    ]);
+    $data['user_id'] = $user_id;
+
+    $feedback = Feedback::create($data);
 
     if($feedback) {
       return response()->json($feedback);
@@ -479,6 +484,7 @@ class UserController extends Controller
     $transactions = Transaction::info()
                     ->where('supplier_id', $user_id)
                     ->orWhere('customer_id', $user_id)
+                    ->orderBy('created_at', 'DESC')
                     ->paginate(env('JOBS_PER_PAGE'));
 
     if($transactions) {
