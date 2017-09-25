@@ -40,6 +40,8 @@ class MessageController extends Controller
 			if( $message ) {
 				$conversation->save();
 				$message->conversation = $conversation;
+
+				$this->sendNotification($input['recipient_id'], $input['message'], $conversation->id);
 			
 				return response()->json($message);
 			}
@@ -64,5 +66,40 @@ class MessageController extends Controller
 			}
 
 			return response()->json($conversation);
+		}
+
+		public function sendNotification($user_id, $message, $conversation_id) {
+			$content = array(
+					"en" => $message
+			);
+
+			$heading = array(
+				'en' => 'New message'
+			);
+		
+			$fields = array(
+					'app_id' => env('ONESIGNAL_APP_ID'),
+					'filters' => array(array("field" => "tag", "key" => "user_id", "relation" => "=", "value" => "$user_id")),
+					'contents' => $content,
+					'headings' => $heading,
+					'url' => env('APP_URL') . '/inbox/' . $conversation_id
+			);
+		
+			$fields = json_encode($fields);
+		
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+					'Authorization: Basic ' . env('ONESIGNAL_API_KEY')));
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+			curl_setopt($ch, CURLOPT_HEADER, FALSE);
+			curl_setopt($ch, CURLOPT_POST, TRUE);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+		
+			$response = curl_exec($ch);
+			curl_close($ch);
+
+			return $response;
 		}
 }

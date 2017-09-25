@@ -18,11 +18,41 @@ Route::get('/test', function(Request $request) {
 	// $j->skills()->attach([1,2]);
   // $data = $request->all();
   // return response()->json($data);
-  $date = new DateTime('2017-09-17 10:38:54');
-  $date->add(new DateInterval('PT10S'));
-  echo $date->format('Y-m-d H:i:s') . "\n";
-  echo date('Y-m-d H:i:s') . "\n";
-  echo strtotime(date('Y-m-d H:i:s'));
+  // $date = new DateTime('2017-09-17 10:38:54');
+  // $date->add(new DateInterval('PT10S'));
+  // echo $date->format('Y-m-d H:i:s') . "\n";
+  // echo date('Y-m-d H:i:s') . "\n";
+  // echo strtotime(date('Y-m-d H:i:s'));
+  $message = 'aaaa';
+  $user_id =  7;
+  $content = array(
+      "en" => "$message"
+  );
+
+  $fields = array(
+      'app_id' => "4ab53490-5824-4613-8c96-9484221bf6db",
+      'filters' => array(array("field" => "tag", "key" => "user_id", "relation" => "=", "value" => "$user_id")),
+      'contents' => $content
+  );
+
+  $fields = json_encode($fields);
+  print("\nJSON sent:\n");
+  print($fields);
+
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_URL, "https://onesignal.com/api/v1/notifications");
+  curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json; charset=utf-8',
+      'Authorization: Basic NWQxMGIwNmYtNzE1Yy00Y2E5LTlhYjUtZjFhMjEyMDVmMzBk'));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+  curl_setopt($ch, CURLOPT_HEADER, FALSE);
+  curl_setopt($ch, CURLOPT_POST, TRUE);
+  curl_setopt($ch, CURLOPT_POSTFIELDS, $fields);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+
+  $response = curl_exec($ch);
+  curl_close($ch);
+
+  dd($response);
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
