@@ -15,6 +15,7 @@ use App\Notifications\AwardBid;
 use App\Notifications\MarkPostInProgress;
 use App\Notifications\MarkPostReview;
 use App\Notifications\MarkPostComplete;
+use OneSignal;
 
 class JobController extends Controller
 {
@@ -251,6 +252,8 @@ class JobController extends Controller
 						'payment_type' => 'cod'
 					]);
 				}
+
+				$this->sendNotification($notifiable->id, $title, $bid_id);
 	
 			}
 
@@ -270,6 +273,17 @@ class JobController extends Controller
 		$job_completed = User::where('id', $user_id)->with('completedJobs')->first();
 		
 		return response()->json($job_completed);
+	}
+
+	public function sendNotification($user_id, $message, $bid_id) {
+		// $author = User::where('id', $author_id)->first();
+		
+		OneSignal::sendNotificationUsingTags(
+			$message, 
+			array(
+				array('key' => 'user_id', 'relation' => '=', 'value' => $user_id,)
+			),
+			$url = env('APP_URL') . '/bids/' . $bid_id);
 	}
 	
 }

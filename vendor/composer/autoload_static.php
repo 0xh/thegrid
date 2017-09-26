@@ -134,6 +134,7 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         ),
         'B' => 
         array (
+            'Berkayk\\OneSignal\\' => 18,
             'Barryvdh\\Cors\\' => 14,
         ),
         'A' => 
@@ -375,6 +376,10 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
+        'Berkayk\\OneSignal\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/berkayk/onesignal-laravel/src',
+        ),
         'Barryvdh\\Cors\\' => 
         array (
             0 => __DIR__ . '/..' . '/barryvdh/laravel-cors/src',
@@ -523,6 +528,9 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'Barryvdh\\Cors\\LumenServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/LumenServiceProvider.php',
         'Barryvdh\\Cors\\OriginMatcher' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/OriginMatcher.php',
         'Barryvdh\\Cors\\ServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/ServiceProvider.php',
+        'Berkayk\\OneSignal\\OneSignalClient' => __DIR__ . '/..' . '/berkayk/onesignal-laravel/src/OneSignalClient.php',
+        'Berkayk\\OneSignal\\OneSignalFacade' => __DIR__ . '/..' . '/berkayk/onesignal-laravel/src/OneSignalFacade.php',
+        'Berkayk\\OneSignal\\OneSignalServiceProvider' => __DIR__ . '/..' . '/berkayk/onesignal-laravel/src/OneSignalServiceProvider.php',
         'Carbon\\Carbon' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Carbon.php',
         'Carbon\\CarbonInterval' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/CarbonInterval.php',
         'Carbon\\Exceptions\\InvalidDateException' => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon/Exceptions/InvalidDateException.php',

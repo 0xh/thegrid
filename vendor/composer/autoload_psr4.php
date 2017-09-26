@@ -63,6 +63,7 @@ return array(
     'Cron\\' => array($vendorDir . '/mtdowling/cron-expression/src/Cron'),
     'Clockwork\\' => array($vendorDir . '/itsgoingd/clockwork/Clockwork'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
+    'Berkayk\\OneSignal\\' => array($vendorDir . '/berkayk/onesignal-laravel/src'),
     'Barryvdh\\Cors\\' => array($vendorDir . '/barryvdh/laravel-cors/src'),
     'App\\' => array($baseDir . '/app'),
     'Adaojunior\\Passport\\' => array($vendorDir . '/adaojunior/passport-social-grant/src'),

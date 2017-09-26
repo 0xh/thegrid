@@ -5297,5 +5297,61 @@
             "psr",
             "psr-7"
         ]
+    },
+    {
+        "name": "berkayk/onesignal-laravel",
+        "version": "0.9.8",
+        "version_normalized": "0.9.8.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/berkayk/laravel-onesignal.git",
+            "reference": "d682a5b5b911df5de5e6342178a009ebaef6b3c1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/berkayk/laravel-onesignal/zipball/d682a5b5b911df5de5e6342178a009ebaef6b3c1",
+            "reference": "d682a5b5b911df5de5e6342178a009ebaef6b3c1",
+            "shasum": ""
+        },
+        "require": {
+            "guzzlehttp/guzzle": "^6.2",
+            "illuminate/support": "4.*|5.*",
+            "php": ">=5.4.0",
+            "symfony/psr-http-message-bridge": "1.*"
+        },
+        "require-dev": {
+            "vlucas/phpdotenv": "^2.2"
+        },
+        "time": "2017-09-19T19:57:43+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Berkayk\\OneSignal\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Maykonn Welington Candido",
+                "email": "maykonn@outlook.com"
+            },
+            {
+                "name": "Berkay Kaya",
+                "email": "berkayk@gmail.com",
+                "homepage": "http://berkaykaya.com"
+            }
+        ],
+        "description": "OneSignal Push Wrapper Laravel",
+        "keywords": [
+            "WebPush",
+            "laravel",
+            "laravel 5",
+            "onesignal",
+            "push"
+        ]
     }
 ]

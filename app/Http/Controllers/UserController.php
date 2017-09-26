@@ -19,6 +19,7 @@ use App\Feedback;
 use App\Transaction;
 use App\Notifications\MarkPostReview;
 use Spatie\Activitylog\Models\Activity;
+use OneSignal;
 
 class UserController extends Controller
 {
@@ -179,6 +180,7 @@ class UserController extends Controller
 
       $notifiable->notify( new MarkPostReview($notification_data) );
       
+      $this->sendNotification($notifiable->id, $title, $bid_id);
 
       return response()->json($job);
     }
@@ -493,5 +495,15 @@ class UserController extends Controller
 
     return response()->json(['status' => 'failed'], 422);
   }
+
+  public function sendNotification($user_id, $message, $bid_id) {
+		
+		OneSignal::sendNotificationUsingTags(
+			$message, 
+			array(
+				array('key' => 'user_id', 'relation' => '=', 'value' => $user_id,)
+			),
+			$url = env('APP_URL') . '/bids/' . $bid_id);
+	}
 
 }

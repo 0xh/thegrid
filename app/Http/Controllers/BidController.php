@@ -11,6 +11,7 @@ use App\Winner;
 use App\BidFile;
 use App\Notifications\BidToPost;
 use App\Notifications\AwardBid;
+use OneSignal;
 
 class BidController extends Controller
 {
@@ -83,6 +84,8 @@ class BidController extends Controller
 
 			$notifiable->notify( new BidToPost($notification_data) );
 
+			$this->sendBidNotification($notifiable->id, $title, $bid->job->id);
+
 			return response()->json($bid, 200);
 		} else {
 			return response()->json(['error' => true, 'message' => 'Already bidded'], 422);
@@ -118,6 +121,8 @@ class BidController extends Controller
 
 			$notifiable->notify( new AwardBid($notification_data) );
 
+			$this->sendAwardedNotification($notifiable->id, $title, $bid_id);
+
 
 			return response()->json($job);
 		}
@@ -150,4 +155,26 @@ class BidController extends Controller
 		}
 		return response()->json(['bidded' => false]);
 	}
+
+	public function sendAwardedNotification($user_id, $message, $bid_id) {
+		// $author = User::where('id', $author_id)->first();
+		
+		OneSignal::sendNotificationUsingTags(
+			$message, 
+			array(
+				array('key' => 'user_id', 'relation' => '=', 'value' => $user_id,)
+			),
+			$url = env('APP_URL') . '/bids/' . $bid_id);
+	}
+
+	public function sendBidNotification($user_id, $message, $post_id) {
+		
+		OneSignal::sendNotificationUsingTags(
+			$message, 
+			array(
+				array('key' => 'user_id', 'relation' => '=', 'value' => $user_id,)
+			),
+			$url = env('APP_URL') . '/posts/' . $post_id);
+	}
+
 }

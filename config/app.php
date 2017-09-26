@@ -182,6 +182,7 @@ return [
         Adaojunior\Passport\SocialGrantServiceProvider::class,
         Barryvdh\Cors\ServiceProvider::class,
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
+        Berkayk\OneSignal\OneSignalServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
+        'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
 
     ],
 
