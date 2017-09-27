@@ -57,17 +57,54 @@ Route::get('/test', function(Request $request) {
   // $d = OneSignal::sendNotificationToUser("Some Message", '449329ac-9c31-456d-abfc-54bf8d54c188', $url = null, $data = null, $buttons = null, $schedule = null);
   // $d = OneSignal::sendNotificationUsingTags("Some Message", array(array("key" => "user_id", "relation" => "=", "value" => 2)), $url = null, $data = null, $buttons = null, $schedule = null);
 
-  $heading = array(
-    'en' => 'Testing'
-  );
+  // $heading = array(
+  //   'en' => 'Testing'
+  // );
   
-  OneSignal::setParam('headings', $heading)->sendNotificationUsingTags(
-    'Hello', 
-    array(
-      array('key' => 'user_id', 'relation' => '=', 'value' => 2,)
-    ),
-    $url = env('APP_URL') . '/inbox/' . 2);
+  // OneSignal::setParam('headings', $heading)->sendNotificationUsingTags(
+  //   'Hello', 
+  //   array(
+  //     array('key' => 'user_id', 'relation' => '=', 'value' => 2,)
+  //   ),
+  //   $url = env('APP_URL') . '/inbox/' . 2);
+
+  $lat = 25.16007598042906;
+  $lng = 55.23407940422977;
+ 
+  //Earth’s radius, sphere
+  $R=6378137;
+ 
+  //offsets in meters
+  $dn = 1000;
+  $de = 1000;
+ 
+  //Coordinate offsets in radians
+  $dLat = $dn/$R;
+  $dLng = $de/($R*cos(pi()*$lat/180));
+ 
+  //OffsetPosition, decimal degrees
+  $latAdd = $lat + $dLat * 180/pi();
+  $lngAdd = $lng + $dLng * 180/pi();
+  
+  $latSub = $lat - $dLat * 180/pi();
+  $lngSub = $lng - $dLng * 180/pi();
+
+  echo $latAdd .'<br/>'. $lngAdd;
+  echo '<br/>';
+  echo $latSub .'<br/>'. $lngSub;
   // dd($d);
+
+  OneSignal::sendNotificationUsingTags(
+    'New post within your location', 
+    array(
+      array('key' => 'lat', 'relation' => '<', 'value' => $latAdd),
+      array('key' => 'lat', 'relation' => '>', 'value' => $latSub),
+      array('key' => 'lng', 'relation' => '<', 'value' => $lngAdd),
+      array('key' => 'lng', 'relation' => '>', 'value' => $lngSub),
+      array('key' => 'user_id', 'relation' => '!=', 'value' => 2),
+      
+    ),
+    $url = env('APP_URL') .'/@macbook/posts/111');
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {

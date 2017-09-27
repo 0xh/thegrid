@@ -32,9 +32,10 @@ class JobController extends Controller
 	public function add(Request $request, $id) {
 		$data = $request->all();
 		
+		$user_id = $request->user()->id;
 
 		$_job = Job::create([
-			'user_id' => $id,
+			'user_id' => $user_id,
 			'name' => $data['name'],
 			'category_id' => $data['category_id'],
 			'price' => $data['price'],
@@ -71,6 +72,9 @@ class JobController extends Controller
 		$job = Job::info()->where('id', $_job['id'])->first();		
 		$bids = Bid::where('job_id', $_job['id'])->get();
 		$job->bids = $bids;
+
+		$this->sendNotificationWithin1km($data['lat'], $data['lng'], $job->id, $job->user->username, $user_id);
+
 		return response()->json($job);
 
 	}
@@ -284,6 +288,38 @@ class JobController extends Controller
 				array('key' => 'user_id', 'relation' => '=', 'value' => $user_id,)
 			),
 			$url = env('APP_URL') . '/bids/' . $bid_id);
+	}
+
+	public function sendNotificationWithin1km($lat, $lng, $post_id, $username, $user_id) {
+		
+		//Earth’s radius, sphere
+		$R = 6378137;
+		
+		//offsets in meters
+		$dn = 1000;
+		$de = 1000;
+	
+		//Coordinate offsets in radians
+		$dLat = $dn/$R;
+		$dLng = $de/($R*cos(pi()*$lat/180));
+	
+		//OffsetPosition, decimal degrees
+		$latAdd = $lat + $dLat * 180/pi();
+		$lngAdd = $lng + $dLng * 180/pi();
+		
+		$latSub = $lat - $dLat * 180/pi();
+		$lngSub = $lng - $dLng * 180/pi();
+
+		OneSignal::sendNotificationUsingTags(
+			'New post within your location', 
+			array(
+				array('key' => 'lat', 'relation' => '<', 'value' => $latAdd),
+				array('key' => 'lat', 'relation' => '>', 'value' => $latSub),
+				array('key' => 'lng', 'relation' => '<', 'value' => $lngAdd),
+				array('key' => 'lng', 'relation' => '>', 'value' => $lngSub),
+				array('key' => 'user_id', 'relation' => '!=', 'value' => $user_id),
+			),
+			$url = env('APP_URL') .'/@'. $username .'/posts/'. $post_id);
 	}
 	
 }
