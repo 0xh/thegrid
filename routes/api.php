@@ -168,6 +168,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
 
   Route::get('/{id}/jobs', 'JobController@getJobs');
   Route::post('/{id}/jobs', 'JobController@add');
+  Route::post('/{id}/jobs/edit', 'JobController@edit');
   Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
   

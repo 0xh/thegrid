@@ -79,6 +79,56 @@ class JobController extends Controller
 
 	}
 
+	public function edit(Request $request, $id) {
+		$data = $request->all();
+		
+		$user_id = $request->user()->id;
+
+		$_job = Job::where('id', $data['id'])->update([
+			'user_id' => $user_id,
+			'name' => $data['name'],
+			'category_id' => $data['category_id'],
+			'price' => $data['price'],
+			'lat' => $data['lat'],
+			'lng' => $data['lng'],
+			'location' => $data['location'],
+			'details' => $data['details'],
+			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
+		]);
+
+		// if($request->file('files')) {
+		// 	Storage::disk('public_uploads')->makeDirectory('posts');
+		// 	foreach($request->file('files') as $file) {
+		// 		$_file['path'] = $file->store('posts', 'public_uploads');
+		// 		$_file['name'] = $file->hashName();
+		// 		$_file['original_name'] = $file->getClientOriginalName();
+		// 		$_file['file_size'] = $file->getClientSize();
+		// 		$_file['type'] = $file->extension();
+		// 		$_file['job_id'] = $_job->id;
+		// 		JobFile::create($_file);
+		// 	}
+		// }
+
+		// if( isset($data['skills'])) {
+			
+		// 	$skills = json_decode($data['skills'], true);
+		// 	if( is_array($skills) ) {
+		// 		foreach($skills as $skill) {
+		// 			$_job->skills()->attach($skill['id']);
+		// 		}
+		// 	}
+		// }
+
+		$job = Job::info()->where('id', $data['id'])->first();		
+		$bids = Bid::where('job_id', $data['id'])->get();
+		$job->bids = $bids;
+
+		// $this->sendNotificationWithin1km($data['lat'], $data['lng'], $job->id, $job->user->username, $user_id);
+
+		return response()->json($job);
+
+	}
+
 	public function getJobs($id) {
 
 		$this->id = $id;
