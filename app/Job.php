@@ -33,7 +33,7 @@ class Job extends Model
 	}
 
 	public function files() {
-		return $this->hasMany('App\JobFile');
+		return $this->hasMany('App\JobFile')->where('status', 0);
 	}
 	
 	public function awarded() {

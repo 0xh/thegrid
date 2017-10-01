@@ -96,28 +96,51 @@ class JobController extends Controller
 			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
 		]);
 
-		// if($request->file('files')) {
-		// 	Storage::disk('public_uploads')->makeDirectory('posts');
-		// 	foreach($request->file('files') as $file) {
-		// 		$_file['path'] = $file->store('posts', 'public_uploads');
-		// 		$_file['name'] = $file->hashName();
-		// 		$_file['original_name'] = $file->getClientOriginalName();
-		// 		$_file['file_size'] = $file->getClientSize();
-		// 		$_file['type'] = $file->extension();
-		// 		$_file['job_id'] = $_job->id;
-		// 		JobFile::create($_file);
-		// 	}
-		// }
+		$_job = Job::where('id', $data['id'])->first();
 
-		// if( isset($data['skills'])) {
+		if(isset($data['files'])) {
 			
-		// 	$skills = json_decode($data['skills'], true);
-		// 	if( is_array($skills) ) {
-		// 		foreach($skills as $skill) {
-		// 			$_job->skills()->attach($skill['id']);
-		// 		}
-		// 	}
-		// }
+			foreach($_job->files()->get() as $_file) {
+				$inFiles = false;
+				foreach($data['files'] as $file) {
+					$file = json_decode($file, true);
+					if(isset($file['id'])) {
+						if($_file->id == $file['id']) {
+							$inFiles = true;
+						}
+					}
+				}
+
+				if(!$inFiles) {
+					JobFile::where('id', $_file->id)->update(['status' => 1]);
+				}
+			}
+			// return response()->json($_job->files()->get());
+		}
+
+		if($request->file('files')) {
+			Storage::disk('public_uploads')->makeDirectory('posts');
+			foreach($request->file('files') as $file) {
+				$_file['path'] = $file->store('posts', 'public_uploads');
+				$_file['name'] = $file->hashName();
+				$_file['original_name'] = $file->getClientOriginalName();
+				$_file['file_size'] = $file->getClientSize();
+				$_file['type'] = $file->extension();
+				$_file['job_id'] = $_job->id;
+				JobFile::create($_file);
+			}
+		}
+
+		if( isset($data['skills'])) {
+			
+			$skills = json_decode($data['skills'], true);
+			if( is_array($skills) ) {
+				$_job->skills()->detach();
+				foreach($skills as $skill) {
+					$_job->skills()->attach($skill['id']);
+				}
+			}
+		}
 
 		$job = Job::info()->where('id', $data['id'])->first();		
 		$bids = Bid::where('job_id', $data['id'])->get();
