@@ -99,9 +99,10 @@ class JobController extends Controller
 		$_job = Job::where('id', $data['id'])->first();
 
 		if(isset($data['files'])) {
-			
 			foreach($_job->files()->get() as $_file) {
+
 				$inFiles = false;
+
 				foreach($data['files'] as $file) {
 					$file = json_decode($file, true);
 					if(isset($file['id'])) {
@@ -115,19 +116,20 @@ class JobController extends Controller
 					JobFile::where('id', $_file->id)->update(['status' => 1]);
 				}
 			}
-			// return response()->json($_job->files()->get());
+		} else {
+			JobFile::where('job_id', $_job->id)->update(['status' => 1]);
 		}
 
 		if($request->file('files')) {
 			Storage::disk('public_uploads')->makeDirectory('posts');
 			foreach($request->file('files') as $file) {
-				$_file['path'] = $file->store('posts', 'public_uploads');
-				$_file['name'] = $file->hashName();
-				$_file['original_name'] = $file->getClientOriginalName();
-				$_file['file_size'] = $file->getClientSize();
-				$_file['type'] = $file->extension();
-				$_file['job_id'] = $_job->id;
-				JobFile::create($_file);
+				$new_file['path'] = $file->store('posts', 'public_uploads');
+				$new_file['name'] = $file->hashName();
+				$new_file['original_name'] = $file->getClientOriginalName();
+				$new_file['file_size'] = $file->getClientSize();
+				$new_file['type'] = $file->extension();
+				$new_file['job_id'] = $_job->id;
+				JobFile::create($new_file);
 			}
 		}
 
