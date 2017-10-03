@@ -72,6 +72,17 @@ class MessageController extends Controller
 		}
 
 		public function sendNotification($author_id, $user_id, $message, $conversation_id) {
+			
+			$user = User::where('id', $user_id)->with('settings')->first();
+			
+			$settings = $user->settings->keyBy('name');
+	
+			if(isset($settings['notifications'])) {
+				if($settings['notifications']['value'] != 1) {
+					return;
+				}
+			}
+
 			$author = User::where('id', $author_id)->first();
 			
 			OneSignal::sendNotificationUsingTags(

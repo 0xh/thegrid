@@ -366,6 +366,16 @@ class JobController extends Controller
 	}
 
 	public function sendNotificationWithin1km($lat, $lng, $post_id, $username, $user_id) {
+
+		$user = User::where('id', $user_id)->with('settings')->first();
+		
+		$settings = $user->settings->keyBy('name');
+
+		if(isset($settings['notifications'])) {
+			if($settings['notifications']['value'] != 1) {
+				return;
+			}
+		}
 		
 		//Earth’s radius, sphere
 		$R = 6378137;

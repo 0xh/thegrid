@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::get('/app-version', function() {
+  return response()->json(['v' => '1.2']);
+});
+
 Route::get('/test', function(Request $request) {
 	// $j = App\Job::where('id', 44)->with('skills')->first();
 	// $j->skills()->attach([1,2]);
@@ -211,6 +215,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::delete('/{id}/settings/locations/{location_id}', 'UserController@deleteLocation');
   Route::post('/{id}/settings/mobile', 'UserController@updateMobile');
   Route::post('/{id}/settings/privacy', 'UserController@updateSetting');
+  Route::post('/{id}/settings/notifications', 'UserController@updateSetting');
   Route::post('/{id}/settings/name', 'UserController@updateName');
 
   Route::post('/{id}/profile/about', 'UserController@updateBio');
