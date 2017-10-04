@@ -9,6 +9,7 @@ use App\Bid;
 use App\User;
 use App\Winner;
 use App\BidFile;
+use App\Transaction;
 use App\Notifications\BidToPost;
 use App\Notifications\AwardBid;
 use OneSignal;
@@ -145,6 +146,35 @@ class BidController extends Controller
 		return response()->json($bid);
 	}
 
+	public function setJobStatus(Request $request, $id, $bid_id) {
+		$data = $request->all();
+		$job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
+
+		$job->status = $data['status'];
+
+		$job->save();
+
+		$bid = Bid::info()->where('id', $bid_id)->first();
+
+		if($data['status'] == 2) {
+			$this->sendBidNotification($job->user->id, 'Your post has been marked in progress', $job->id);
+		} elseif( $data['status'] == 4) {
+			$this->sendBidNotification($job->user->id, 'Your post has been marked completed', $job->id);
+			Transaction::create([
+				'supplier_id' => $job->winner->user->id,
+				'customer_id' => $job->user->id,
+				'amount' => $job->winner->bid->price_bid,
+				'job_id' => $job->id,
+				'bid_id' => $bid_id,
+				'status' => '1',
+				'payment_type' => 'cod'
+			]);
+		}
+
+
+		return response()->json($bid);
+	}
+
 	protected function isBidded($id, $job_id) {
 		$bid = Bid::where([
 						['user_id', '=', $id],
@@ -196,5 +226,6 @@ class BidController extends Controller
 			),
 			$url = env('APP_URL') . '/posts/' . $post_id);
 	}
+	
 
 }

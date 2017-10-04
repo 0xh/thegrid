@@ -355,7 +355,15 @@ class JobController extends Controller
 	}
 
 	public function sendNotification($user_id, $message, $bid_id) {
-		// $author = User::where('id', $author_id)->first();
+		$user = User::where('id', $user_id)->with('settings')->first();
+		
+		$settings = $user->settings->keyBy('name');
+
+		if(isset($settings['notifications'])) {
+			if($settings['notifications']['value'] != 1) {
+				return;
+			}
+		}
 		
 		OneSignal::sendNotificationUsingTags(
 			$message, 
