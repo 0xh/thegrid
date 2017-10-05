@@ -113,7 +113,8 @@ class UserController extends Controller
 
   public function addSkill(Request $request, $id) {
     $data = $request->all();
-    $user = User::where('id', $id)->first();
+    $user_id = $request->user()->id;
+    $user = User::where('id', $user_id)->first();
     if(isset($data['skill'])) {
       $_skill = Skill::where('skill', $data['skill'])->first();
       if( !$_skill ) {
@@ -121,18 +122,21 @@ class UserController extends Controller
           'skill' => ucwords($data['skill'])
         ]);
         $user->skills()->attach($skill->id);
-        return $skill;
+        return response()->json($skill);
+      } else {
+        $user->skills()->attach($_skill->id);
+        return response()->json($_skill);
       }
     }
     
     $user->skills()->attach($data['id']);
-    return $user->skills;
+    return response()->json($user->skills);
   }
 
   public function removeSkill($id, $skill_id) {
     $user = User::where('id', $id)->first();
     $user->skills()->detach($skill_id);
-    return $user->skills;
+    return response()->json($user->skills);
   }
 
   public function isUnique(Request $request, $input) {
