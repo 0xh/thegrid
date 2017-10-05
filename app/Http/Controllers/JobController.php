@@ -248,6 +248,10 @@ class JobController extends Controller
 		if(isset($data['price'])) {
 			$jobs->where('price', '>=', $data['price']);
 		}
+		
+		if(isset($data['category'])) {
+			$jobs->where('category_id', $data['category']);
+		}
 
 		if(!$request->user()) {
 			$jobs->where('status', 0);
