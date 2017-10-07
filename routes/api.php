@@ -189,6 +189,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
   Route::post('/{id}/bids/{bid_id}/approve', 'BidController@approveBid');
   Route::post('/{id}/bids/{bid_id}/status', 'BidController@setJobStatus');
+  Route::post('/{id}/bids/{bid_id}/rebid', 'BidController@rebid');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::get('/{id}/conversations', 'ConversationController@getConversations');

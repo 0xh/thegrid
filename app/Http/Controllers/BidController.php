@@ -93,6 +93,38 @@ class BidController extends Controller
 		}
 	}
 
+	public function rebid(Request $request, $id, $bid_id) {
+		$data = $request->all();
+
+		if($data['bid']) {
+			$bid = Bid::where('id', $data['bid_id'])->first();
+			$bid->price_bid = $data['bid'];
+			$bid->save();
+
+			$job = Job::where('id', $bid->job_id)->first();
+			
+			$timeFirst  = strtotime(date('Y-m-d H:i:s'));
+			$timeSecond = strtotime($job->date);
+			$differenceInSeconds = $timeSecond - $timeFirst;
+
+			if($differenceInSeconds <= 10) {
+				$date = new \DateTime($job->date);
+				$date->add(new \DateInterval('PT'. (60 - $differenceInSeconds) .'S'));
+				$job->date = $date;
+				$job->save();
+			}
+
+			$bid = Bid::info()->where('id', $data['bid_id'])->first();
+
+			$bid->differenceInSeconds = $differenceInSeconds;
+			$bid->currentTime = date('Y-m-d H:i:s');
+
+			return response()->json($bid);
+		} else {
+			return response()->json(['status' => 'failed', 'message' => 'Something went wrong'], 422);
+		}
+	}
+
 	public function approveBid(Request $request, $id, $bid_id) {
 		$data = $request->all();
 		$winner = Winner::create([
