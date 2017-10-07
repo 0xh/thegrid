@@ -275,11 +275,22 @@ class JobController extends Controller
 	}
 
 	public function search(Request $request) {
-		$q = $request->input('q');
-		return Job::latest()
-								->search($q)
-								->whereDate('date', '>', date('Y-m-d H:i:s'))
-								->get();
+		$data = $request->all();
+		$q = $data['q'];
+
+		$job = Job::search($q)->whereDate('date', '>', date('Y-m-d H:i:s'));
+
+		if($data['lat'] && $data['lng']) {
+			$f = sprintf("*, ( 6371 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
+			$data['lat'], $data['lng'], $data['lat']);
+
+			$job->select(DB::raw($f))
+					->having('distance', '<', 50)
+					->orderBy('distance', 'ASC')
+					->groupBy('distance');
+		}
+
+		return response()->json($job->get());
 	}
 		
 	public function setJobStatus(Request $request, $id, $job_id) {

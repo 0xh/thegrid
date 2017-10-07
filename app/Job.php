@@ -49,7 +49,9 @@ class Job extends Model
 	}
 
 	public function scopeSearch($query, $s) {
-		return $query->where('name', 'like', '%' . $s . '%')->orWhere('location', 'like', '%' . $s . '%');
+		return $query->where('name', 'like', '%' . $s . '%')
+								 ->orWhere('location', 'like', '%' . $s . '%')
+								 ->with('user', 'bids', 'files');
 	}
 
 	public function skills() {

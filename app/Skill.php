@@ -12,7 +12,7 @@ class Skill extends Model
 
   protected $fillable = ['skill'];
   
-  // protected static $logAttributes = ['skill'];
+  // protected static $logAttributes = ['skill']; 
 
   public function users() {
     return $this->belongsToMany('App\User');
