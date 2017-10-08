@@ -263,8 +263,8 @@ class JobController extends Controller
 					
 		$jobs->select(DB::raw($f))
 		->having('distance', '<', $radius)
-		->orderBy('distance', 'ASC')
-		->groupBy('distance');
+		->orderBy('distance', 'ASC');
+		// ->groupBy('distance');
 					// ->get();
 		return response()->json($jobs->get(), 200);
 	}
@@ -286,8 +286,8 @@ class JobController extends Controller
 
 			$job->select(DB::raw($f))
 					->having('distance', '<', 50)
-					->orderBy('distance', 'ASC')
-					->groupBy('distance');
+					->orderBy('distance', 'ASC');
+					// ->groupBy('distance');
 		}
 
 		return response()->json($job->get());

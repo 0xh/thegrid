@@ -120,6 +120,11 @@ Route::get('/test', function(Request $request) {
 //                   ->first();
 //   return response()->json($user);
 // });
+Route::get('/get_server_time', function() {
+  $server_time = ['date' => date('Y-m-d H:i:s')];
+
+  return response()->json($server_time);
+});
 Route::get('/job/all', 'JobController@all');
 
 Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
