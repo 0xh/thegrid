@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/app-version', function() {
-  return response()->json(['v' => '1.2']);
+  return response()->json(['version' => env('APP_VERSION')]);
 });
 
 Route::get('/test', function(Request $request) {
