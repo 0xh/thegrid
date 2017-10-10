@@ -48,6 +48,10 @@ class Job extends Model
 		return $this->hasOne('App\Conversation');
 	}
 
+	public function flags() {
+		return $this->hasMany('App\FlagJob');
+	}
+
 	public function scopeSearch($query, $s) {
 		return $query->where('name', 'like', '%' . $s . '%')
 								 ->orWhere('location', 'like', '%' . $s . '%')
@@ -63,11 +67,11 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-			return $query->with('user', 'category', 'skills', 'files');
+			return $query->with('user', 'category', 'skills', 'files', 'flags');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags');
 	}
 	
 

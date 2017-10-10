@@ -162,6 +162,7 @@ return array(
     'CreateCountryCallingCodesTable' => $baseDir . '/database/migrations/2017_05_06_115240_create_country_calling_codes_table.php',
     'CreateCurrenciesTable' => $baseDir . '/database/migrations/2017_05_06_091231_create_currencies_table.php',
     'CreateFeedbacksTable' => $baseDir . '/database/migrations/2017_09_20_105032_create_feedbacks_table.php',
+    'CreateFlagJobs' => $baseDir . '/database/migrations/2017_10_08_121903_create_flag_jobs.php',
     'CreateGalleriesTable' => $baseDir . '/database/migrations/2017_05_06_105930_create_galleries_table.php',
     'CreateImagesTable' => $baseDir . '/database/migrations/2017_05_06_110121_create_images_table.php',
     'CreateItemsTable' => $baseDir . '/database/migrations/2017_05_06_073230_create_items_table.php',

@@ -9,6 +9,7 @@ use App\JobFile;
 use App\User;
 use App\Bid;
 use App\Transaction;
+use App\FlagJob;
 use DB;
 use Cache;
 use App\Notifications\AwardBid;
@@ -428,6 +429,22 @@ class JobController extends Controller
 				array('key' => 'user_id', 'relation' => '!=', 'value' => $user_id),
 			),
 			$url = env('APP_URL') .'/@'. $username .'/posts/'. $post_id);
+	}
+
+	public function flag(Request $request, $id, $job_id) {
+		$data = $request->all();
+
+		$user_id = $request->user()->id;
+
+		$flag = FlagJob::create([
+			'job_id' => $job_id,
+			'user_id' => $user_id,
+			'reason' => $data['reason']
+		]);
+
+		$job = Job::info()->where('id', $job_id)->first();
+
+		return response()->json($job);
 	}
 	
 }

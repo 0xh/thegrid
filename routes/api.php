@@ -180,6 +180,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/jobs/edit', 'JobController@edit');
   Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
+  Route::post('/{id}/jobs/{job_id}/flag', 'JobController@flag');
   
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
   Route::get('/{id}/completed/jobs', 'JobController@getCompletedJobs');
