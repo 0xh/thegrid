@@ -16,7 +16,8 @@
         "laravel/socialite": "^2.0",
         "laravel/tinker": "~1.0",
         "spatie/laravel-activitylog": "^2.1",
-        "twilio/sdk": "^5.11"
+        "twilio/sdk": "^5.11",
+        "stevebauman/location": "2.0.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -1,6 +1,58 @@
 twilio-php Changelog
 ====================
 
+[2017-10-13] Version 5.15.2
+----------------------------
+**Api**
+- Add `smart_encoded` param for Messages
+- Add `identity_sid` param to IncomingPhoneNumbers create and update
+
+**Preview**
+- Make 'address_sid' and 'email' optional fields when creating a HostedNumberOrder
+- Add AuthorizationDocuments preview API.
+
+**Proxy**
+- Initial Release
+
+**Wireless**
+- Added `ip_address` to sim resource
+
+
+[2017-10-06] Version 5.15.1
+----------------------------
+**Preview**
+- Add `acc_security` (authy-phone-verification) initial api-definitions
+
+**Taskrouter**
+- [bi] Less verbose naming of cumulative and real time statistics
+
+
+[2017-09-28] Version 5.15.0
+----------------------------
+**Library**
+- Add warnings when trying to import/use objects from legacy versions of the library.
+
+**Chat**
+- Make member accessible through identity
+- Make channel subresources accessible by channel unique name
+- Set get list 'max_page_size' parameter to 100
+- Add service instance webhook retry configuration
+- Add media message capability
+- Make `body` an optional parameter on Message creation. *(breaking change)*
+
+**Notify**
+- `data`, `apn`, `gcm`, `fcm`, `sms` parameters in `Notifications` create resource now accept objects instead of strings. Passing manually stringified json objects will continue to work.
+
+**Taskrouter**
+- Add new query ability by TaskChannelSid or TaskChannelUniqueName
+- Move Events, Worker, Workers endpoint over to CPR
+- Add new RealTime and Cumulative Statistics endpoints
+
+**Video**
+- Create should allow an array of video_codecs.
+- Add video_codecs as a property of room to make it externally visible.
+
+
 [2017-09-15] Version 5.14.1
 ----------------------------
 **Api**

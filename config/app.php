@@ -183,6 +183,7 @@ return [
         Barryvdh\Cors\ServiceProvider::class,
         Clockwork\Support\Laravel\ClockworkServiceProvider::class,
         Berkayk\OneSignal\OneSignalServiceProvider::class,
+        Stevebauman\Location\LocationServiceProvider::class,
     ],
 
     /*
@@ -234,6 +235,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'Clockwork' => Clockwork\Support\Laravel\Facade::class,
         'OneSignal' => Berkayk\OneSignal\OneSignalFacade::class,
+        'Location' => Stevebauman\Location\Facades\Location::class,
 
     ],
 

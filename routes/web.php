@@ -16,51 +16,56 @@
 
 use Illuminate\Http\Request;
 
-Route::get('/', function () {
-	return view('polymer');
-})->name('home');
-
-
-Route::get('/users', function() {
-	$users = App\User::all();
-
-	// foreach ($users as $user) {
-	// 	echo $user->name . ' : ' . $user->items().join(',');
-	// }
-	return response()->json(request()->user());
-})->middleware('auth:api');
-
-Route::get('/sendsms', 'UserController@sendSMS');
-
-Route::get('/grid-elements', 'ElementsController@index');
-Route::get('/grid-elements/{element}', 'ElementsController@element');
-
-Route::post('/test', function(Request $request) {
-	// $j = App\Job::where('id', 44)->with('skills')->first();
-	// $j->skills()->attach([1,2]);
-
-	return $request->all();
+Route::get('/', function(Request $request) {
+	echo $request->ip();
+	 var_dump(Location::get('83.110.226.117'));
 });
 
-Auth::routes();
+// Route::get('/', function () {
+// 	return view('polymer');
+// })->name('home');
 
-Route::get('/bower_components/polymer/bundles', 'UserController@min');
-Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/auth/{provider}', 'Auth\RegisterController@redirectToProvider');
-Route::get('/auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
-Route::get('/user/confirmation/{token}', 'Auth\RegisterController@confirmation')->name('confirmation');
-Route::post('/submitCode', 'Auth\RegisterController@submitCode');
-Route::post('/resendCode', 'Auth\RegisterController@resendCode');
+// Route::get('/users', function() {
+// 	$users = App\User::all();
 
-Route::get('/users/{id}', 'UserController@getUser');
-Route::put('/users/{id}', 'UserController@updateUser');
+// 	// foreach ($users as $user) {
+// 	// 	echo $user->name . ' : ' . $user->items().join(',');
+// 	// }
+// 	return response()->json(request()->user());
+// })->middleware('auth:api');
 
-Route::post('/job', 'JobController@add');
+// Route::get('/sendsms', 'UserController@sendSMS');
+
+// Route::get('/grid-elements', 'ElementsController@index');
+// Route::get('/grid-elements/{element}', 'ElementsController@element');
+
+// Route::post('/test', function(Request $request) {
+// 	// $j = App\Job::where('id', 44)->with('skills')->first();
+// 	// $j->skills()->attach([1,2]);
+
+// 	return $request->all();
+// });
+
+// Auth::routes();
+
+// Route::get('/bower_components/polymer/bundles', 'UserController@min');
+// Route::get('/home', 'HomeController@index')->name('home');
+
+// Route::get('/auth/{provider}', 'Auth\RegisterController@redirectToProvider');
+// Route::get('/auth/{provider}/callback', 'Auth\RegisterController@handleProviderCallback');
+// Route::get('/user/confirmation/{token}', 'Auth\RegisterController@confirmation')->name('confirmation');
+// Route::post('/submitCode', 'Auth\RegisterController@submitCode');
+// Route::post('/resendCode', 'Auth\RegisterController@resendCode');
+
+// Route::get('/users/{id}', 'UserController@getUser');
+// Route::put('/users/{id}', 'UserController@updateUser');
+
+// Route::post('/job', 'JobController@add');
 Route::get('/job/all', 'JobController@all');
-Route::get('/job/{id}', 'JobController@viewJob');
-Route::get('/{id}/jobs', 'JobController@getJobs');
-Route::get('/{id}/job/{job_id}', 'JobController@getJobDetails');
+// Route::get('/job/{id}', 'JobController@viewJob');
+// Route::get('/{id}/jobs', 'JobController@getJobs');
+// Route::get('/{id}/job/{job_id}', 'JobController@getJobDetails');
 
 // Route::post('/bid', 'BidController@bid');
 // Route::post('/bid/approve', 'BidController@approveBid');
@@ -68,7 +73,7 @@ Route::get('/{id}/job/{job_id}', 'JobController@getJobDetails');
 // Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
 // Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
 
-Route::get('/country/{iso}', 'CountryController@getCountryByISO');
+// Route::get('/country/{iso}', 'CountryController@getCountryByISO');
 
 // Route::get('/users/{id}/conversations', 'ConversationController@getConversations');
 // Route::post('/users/{id}/conversations', 'ConversationController@createConversation');

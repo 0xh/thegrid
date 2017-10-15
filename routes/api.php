@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Job;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,10 @@ Route::get('/get_server_time', function() {
 
   return response()->json($server_time);
 });
+
+Route::get('/opengraph/{id}', 'HomeController@getOG');
+Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
+
 Route::get('/job/all', 'JobController@all');
 
 Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
