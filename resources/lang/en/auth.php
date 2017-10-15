@@ -15,5 +15,6 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'blocked_deleted' => 'The account you tried to access is either blocked or deleted.',
 
 ];

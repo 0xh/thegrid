@@ -53,10 +53,14 @@ class LoginController extends Controller
   protected function sendLoginResponseAPI(Request $request) {
 
     $data['user'] = User::where('id', Auth::user()->id)
-                    ->withCount('jobs')
-                    ->withCount('bids')
-                    ->with('profile')
-                    ->first();
+      ->withCount('jobs')
+      ->withCount('bids')
+      ->with('profile')
+      ->first();
+
+    if($data['user']->deleted_at || $data['user']->blocked_at) {
+      return response()->json(['message' => __('auth.blocked_deleted')], 401);
+    }
     $data['access_token'] =  Auth::user()->createToken('THE GRID')->accessToken;
 
     return response()->json($data);
@@ -121,8 +125,10 @@ class LoginController extends Controller
   protected function credentials(Request $request)
   {
     // return $request->only($this->username(), 'password');
-    return ['email' => $request->{$this->username()},
-    'password' => $request->password];
+    return [
+      'email' => $request->{$this->username()},
+      'password' => $request->password
+    ];
     // 'confirmed' => 1];
   }
 

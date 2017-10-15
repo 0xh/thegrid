@@ -379,6 +379,11 @@ class RegisterController extends Controller
     }
 
     $data['user'] = User::info()->where('id', $user->id)->first();
+
+    if($data['user']->deleted_at || $data['user']->blocked_at) {
+      return response()->json(['message' => __('auth.blocked_deleted')], 401);
+    }
+
     $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
 
     return response()->json($data);
