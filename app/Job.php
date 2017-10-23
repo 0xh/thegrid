@@ -4,13 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Job extends Model
 {
-	use LogsActivity;
+	use LogsActivity, SoftDeletes;
 
 	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
 	protected static $logAttributes = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
+	protected $dates = ['deleted_at'];
 
 	public function user() {
 		return $this->belongsTo('App\User')->with('profile');
@@ -52,6 +54,10 @@ class Job extends Model
 		return $this->hasMany('App\FlagJob');
 	}
 
+	public function views() {
+		return $this->hasMany('App\View');
+	}
+
 	public function scopeSearch($query, $s) {
 		return $query->where('name', 'like', '%' . $s . '%')
 								 ->orWhere('location', 'like', '%' . $s . '%')
@@ -71,7 +77,7 @@ class Job extends Model
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views');
 	}
 	
 

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Job;
+use App\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +130,7 @@ Route::get('/get_server_time', function() {
 
 Route::get('/opengraph/{id}', 'HomeController@getOG');
 Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
+Route::get('/users/getlocationbyip', 'HomeController@getLocationByIp')->middleware('auth:api');
 
 Route::get('/job/all', 'JobController@all');
 
@@ -174,6 +176,8 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
     return response()->json($user);
   });
 
+  // Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
+
   Route::get('/job/all', 'JobController@all');
 
   Route::get('/{id}', 'UserController@getUser');
@@ -186,6 +190,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/jobs/{job_id}', 'JobController@getJobDetails');
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
   Route::post('/{id}/jobs/{job_id}/flag', 'JobController@flag');
+  Route::get('/jobs/{id}/view', 'JobController@getUserJob');
   
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
   Route::get('/{id}/completed/jobs', 'JobController@getCompletedJobs');
@@ -252,5 +257,6 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   
   Route::post('/{id}/transactions', 'UserController@newTransaction');
   Route::get('/{id}/transactions', 'UserController@getTransactions');
+
 
 });

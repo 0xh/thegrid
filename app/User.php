@@ -86,6 +86,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Location');
     }
 
+    public function country() {
+        return $this->hasOne('App\Country');
+    }
+
     public function completedJobs() {
         return $this->hasMany('App\Winner')
                     ->with('job')

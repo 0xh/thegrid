@@ -10,6 +10,7 @@ use App\User;
 use App\Bid;
 use App\Transaction;
 use App\FlagJob;
+use App\View;
 use DB;
 use Cache;
 use App\Notifications\AwardBid;
@@ -181,19 +182,37 @@ class JobController extends Controller
 
 	}
 
-	public function getJobDetails($id, $job_id) {
+	public function getJobDetails(Request $request, $id, $job_id) {
 		$job = Job::infoWithBidders()->where([
 				['user_id', '=', $id],
 				['id', '=', $job_id]
 			])->first();
 
-		return $job;
+		return response()->json($job);
 	}
 
-	public function getUserJob($id) {
+	public function addViewJob($user, $job, $ip) {
+		
+		if($user) {
+			if($user->id == $job->user_id) return;
+		}
+
+		View::create([
+			'job_id' => $job->id,
+			'user_id' => $user ? $user->id : null,
+			'ip' => $ip
+		]);
+	}
+
+	public function getUserJob(Request $request, $id) {
 		$job = Job::info()->where('id', $id)->first();
-		if($job)
+
+		if($job) {
+
+			$this->addViewJob($request->user(), $job, $request->ip());
+			
 			return response()->json($job);
+		}
 		
 		return response()->json(['status' => 'failed'], 422);
 	}

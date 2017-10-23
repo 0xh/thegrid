@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Job;
+use App\User;
+use App\Country;
 use Location;
 
 class HomeController extends Controller
@@ -17,6 +19,22 @@ class HomeController extends Controller
         }
 
         $location = Location::get($ip);
+
+        if($request->user()) {
+            $user = User::where('id', $request->user()->id)->first();
+            $country = Country::where('iso', $location->countryCode)->first();
+            $user->country_id = $country->id;
+            $user->save();
+
+            // return response()->json($user);
+        }
+
+        return response()->json([
+            'ip' => $ip,
+            'user' => $request->user()
+        ]);
+
+        // $location->user = $request->user();
 
         return response()->json($location);
     }
