@@ -191,6 +191,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/jobs/{job_id}/status', 'JobController@setJobStatus');
   Route::post('/{id}/jobs/{job_id}/flag', 'JobController@flag');
   Route::get('/jobs/{id}/view', 'JobController@getUserJob');
+  Route::post('{id}/jobs/{job_id}/delete', 'JobController@delete');
   
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
   Route::get('/{id}/completed/jobs', 'JobController@getCompletedJobs');

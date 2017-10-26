@@ -29,10 +29,10 @@ class HomeController extends Controller
             // return response()->json($user);
         }
 
-        return response()->json([
-            'ip' => $ip,
-            'user' => $request->user()
-        ]);
+        // return response()->json([
+        //     'ip' => $ip,
+        //     'user' => $request->user()
+        // ]);
 
         // $location->user = $request->user();
 

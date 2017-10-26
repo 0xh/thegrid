@@ -465,5 +465,18 @@ class JobController extends Controller
 
 		return response()->json($job);
 	}
+
+	public function delete(Request $request, $id, $job_id) {
+		$job = Job::where('id', $job_id)->first();
+		// must much job->user_id to $request->user()->id
+		if( $request->user()->id == $job->user_id ) {
+			// soft delete the job
+			$job->delete();
+
+			return response()->json(['status' => 'success', 'message' => 'Successfully deleted']);
+		}
+
+		return response()->json(['status' => 'failed', 'message' => 'Something went wrong'], 400);
+	}
 	
 }
