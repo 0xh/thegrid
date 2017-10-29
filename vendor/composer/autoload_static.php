@@ -471,6 +471,7 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'AddPhoneNumberFieldToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_052141_add_phone_number_field_to_users_table.php',
         'AddSoftDeleteToJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_16_161643_add_soft_delete_to_jobs_table.php',
         'AddStarsToReviewsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_23_113510_add_stars_to_reviews_table.php',
+        'AddStatusToFeedbacksTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_28_155226_add_status_to_feedbacks_table.php',
         'AddStatusToJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_17_123310_add_status_to_jobs_table.php',
         'AddUnreadCountToConversationsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_19_144026_add_unread_count_to_conversations_table.php',
         'AddUsernameToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_20_090210_add_username_to_users_table.php',

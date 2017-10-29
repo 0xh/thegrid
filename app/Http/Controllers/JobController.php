@@ -98,14 +98,14 @@ class JobController extends Controller
 			'date' => date("Y-m-d H:i:s", strtotime($data['date']))
 		]);
 
-		$_job = Job::where('id', $data['id'])->first();
+		$_job = Job::where('id', $data['id'])->with('files')->first();
 
-		if(isset($data['files'])) {
-			foreach($_job->files()->get() as $_file) {
+		if(isset($data['_files'])) {
+			foreach($_job->files as $_file) {
 
 				$inFiles = false;
 
-				foreach($data['files'] as $file) {
+				foreach($data['_files'] as $file) {
 					$file = json_decode($file, true);
 					if(isset($file['id'])) {
 						if($_file->id == $file['id']) {
@@ -118,6 +118,7 @@ class JobController extends Controller
 					JobFile::where('id', $_file->id)->update(['status' => 1]);
 				}
 			}
+			
 		} else {
 			JobFile::where('job_id', $_job->id)->update(['status' => 1]);
 		}
