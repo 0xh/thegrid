@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
+use DB;
 
 class Job extends Model
 {
@@ -58,6 +60,34 @@ class Job extends Model
 		return $this->hasMany('App\View');
 	}
 
+	public function viewsThisWeek() {
+		return $this->hasMany('App\View')//->select([DB::raw('count(job_id) as count'), DB::raw('Date(created_at) as day')])->groupBy('day');
+			->select([
+				'job_id',
+				// This aggregates the data and makes available a 'count' attribute
+				DB::raw('count(id) as `count`'), 
+				// This throws away the timestamp portion of the date
+				DB::raw('DATE(created_at) as day')
+			// Group these records according to that day
+			])->groupBy('day')
+			// And restrict these results to only those created in the last week
+			->where('created_at', '>=', Carbon::now()->subWeeks(1));
+	}
+
+	public function viewsThisMonth() {
+		return $this->hasMany('App\View')
+			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(created_at) as day')])
+			->groupBy('day')
+			->where('created_at', '>=', Carbon::now()->subMonths(1));
+	}
+
+	public function offersThisWeek() {
+		return $this->hasMany('App\Bid')
+			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(created_at) as day')])
+			->groupBy('day')
+			->where('created_at', '>=', Carbon::now()->subWeeks(1));
+	}
+
 	public function scopeSearch($query, $s) {
 		return $query->where('name', 'like', '%' . $s . '%')
 								 ->orWhere('location', 'like', '%' . $s . '%')
@@ -73,12 +103,11 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-			return $query->with('user', 'category', 'skills', 'files', 'flags');
+			return $query->with('user', 'category', 'skills', 'files', 'flags', 'views');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views', 'viewsThisWeek', 'offersThisWeek');
 	}
-	
 
 }

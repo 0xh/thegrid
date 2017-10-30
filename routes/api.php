@@ -74,43 +74,47 @@ Route::get('/test', function(Request $request) {
   //   ),
   //   $url = env('APP_URL') . '/inbox/' . 2);
 
-  $lat = 25.16007598042906;
-  $lng = 55.23407940422977;
+  // $lat = 25.16007598042906;
+  // $lng = 55.23407940422977;
  
-  //Earth’s radius, sphere
-  $R=6378137;
+  // //Earth’s radius, sphere
+  // $R=6378137;
  
-  //offsets in meters
-  $dn = 1000;
-  $de = 1000;
+  // //offsets in meters
+  // $dn = 1000;
+  // $de = 1000;
  
-  //Coordinate offsets in radians
-  $dLat = $dn/$R;
-  $dLng = $de/($R*cos(pi()*$lat/180));
+  // //Coordinate offsets in radians
+  // $dLat = $dn/$R;
+  // $dLng = $de/($R*cos(pi()*$lat/180));
  
-  //OffsetPosition, decimal degrees
-  $latAdd = $lat + $dLat * 180/pi();
-  $lngAdd = $lng + $dLng * 180/pi();
+  // //OffsetPosition, decimal degrees
+  // $latAdd = $lat + $dLat * 180/pi();
+  // $lngAdd = $lng + $dLng * 180/pi();
   
-  $latSub = $lat - $dLat * 180/pi();
-  $lngSub = $lng - $dLng * 180/pi();
+  // $latSub = $lat - $dLat * 180/pi();
+  // $lngSub = $lng - $dLng * 180/pi();
 
-  echo $latAdd .'<br/>'. $lngAdd;
-  echo '<br/>';
-  echo $latSub .'<br/>'. $lngSub;
-  // dd($d);
+  // echo $latAdd .'<br/>'. $lngAdd;
+  // echo '<br/>';
+  // echo $latSub .'<br/>'. $lngSub;
+  // // dd($d);
 
-  OneSignal::sendNotificationUsingTags(
-    'New post within your location', 
-    array(
-      array('key' => 'lat', 'relation' => '<', 'value' => $latAdd),
-      array('key' => 'lat', 'relation' => '>', 'value' => $latSub),
-      array('key' => 'lng', 'relation' => '<', 'value' => $lngAdd),
-      array('key' => 'lng', 'relation' => '>', 'value' => $lngSub),
-      array('key' => 'user_id', 'relation' => '!=', 'value' => 2),
+  // OneSignal::sendNotificationUsingTags(
+  //   'New post within your location', 
+  //   array(
+  //     array('key' => 'lat', 'relation' => '<', 'value' => $latAdd),
+  //     array('key' => 'lat', 'relation' => '>', 'value' => $latSub),
+  //     array('key' => 'lng', 'relation' => '<', 'value' => $lngAdd),
+  //     array('key' => 'lng', 'relation' => '>', 'value' => $lngSub),
+  //     array('key' => 'user_id', 'relation' => '!=', 'value' => 2),
       
-    ),
-    $url = env('APP_URL') .'/@macbook/posts/111');
+  //   ),
+  //   $url = env('APP_URL') .'/@macbook/posts/111');
+
+  $post = App\Job::with('viewsThisWeek', 'viewsThisMonth')->where('id', '121')->first();
+
+  return $post;
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
