@@ -82,6 +82,12 @@ class User extends Authenticatable
         return $this->hasMany('App\Review');
     }
 
+    public function rating() {
+        return $this->reviews()
+            ->selectRaw('avg(stars) as star, user_id')
+            ->groupBy('user_id');
+    }
+
     public function locations() {
         return $this->hasMany('App\Location');
     }
@@ -107,6 +113,17 @@ class User extends Authenticatable
                      ->withCount('jobs')
                      ->withCount('bids')
                      ->withCount('unreadMessages');
+    }
+
+    public function getRatingAttribute()
+    {
+        if ( ! array_key_exists('rating', $this->relations)) {
+           $this->load('rating');
+        }
+    
+        $relation = $this->getRelation('rating')->first();
+    
+        return ($relation) ? $relation->star : null;
     }
     
 

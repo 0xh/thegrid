@@ -112,7 +112,7 @@ Route::get('/test', function(Request $request) {
   //   ),
   //   $url = env('APP_URL') .'/@macbook/posts/111');
 
-  $post = App\Job::with('viewsThisWeek', 'viewsThisMonth')->where('id', '121')->first();
+  $post = App\Job::infoWithBidders()->where('user_id', '7')->orderBy('id', 'desc')->get();
 
   return $post;
 });

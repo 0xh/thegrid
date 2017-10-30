@@ -13,7 +13,7 @@ class Bid extends Model
     protected static $logAttributes = ['user_id', 'job_id', 'price_bid'];
 
     public function user() {
-    	return $this->belongsTo('App\User');
+    	return $this->belongsTo('App\User')->with('profile', 'reviews', 'rating');
     }
 
     public function files() {
