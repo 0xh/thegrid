@@ -13,6 +13,7 @@ use App\Transaction;
 use App\Notifications\BidToPost;
 use App\Notifications\AwardBid;
 use OneSignal;
+use Carbon\Carbon;
 
 class BidController extends Controller
 {
@@ -99,6 +100,7 @@ class BidController extends Controller
 		if($data['bid']) {
 			$bid = Bid::where('id', $data['bid_id'])->first();
 			$bid->price_bid = $data['bid'];
+			$bid->times += 1;
 			$bid->save();
 
 			$job = Job::where('id', $bid->job_id)->first();
@@ -121,59 +123,137 @@ class BidController extends Controller
 
 			return response()->json($bid);
 		} else {
-			return response()->json(['status' => 'failed', 'message' => 'Something went wrong'], 422);
+			return response()->json(['status' => 'failed', 'message' => 'Something went wrong'], 400);
 		}
 	}
 
 	public function approveBid(Request $request, $id, $bid_id) {
 		$data = $request->all();
+			
+		$bid = Bid::where('id', $bid_id)->first();
+		$bid->status = 1;
+		$bid->save();
+		
+		$job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
+		$job->status = 1;
+		$job->is_awarded = true;
+		$job->save();
+
+		$notifiable = User::where('id', $data['user_id'])->first();
+		
+		$title = $request->user()->name .' awarded the post \'' . $job->name . '\' to you.';
+
+		$notification_data = [
+			'bid_id' => $bid_id,
+			'job_id' => $data['job_id'],
+			'job_name' => $job->name,
+			'bidder_id' => $notifiable->id,
+			'bidder_name' => $notifiable->name,
+			'title' => $title,
+			'body' => '',
+			'created_at' => Carbon::now()
+		];
+
+		$notifiable->notify( new AwardBid($notification_data) );
+
+		$this->sendAwardedNotification($notifiable->id, $title, $bid_id);
+
+		return response()->json($job);
+		
+	}
+
+	public function cancelApproveBid(Request $request, $id, $bid_id) {
+		$data = $request->all();
+			
+		$bid = Bid::where('id', $bid_id)->first();
+		$bid->status = 0;
+		$bid->save();
+		
+		$job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
+		$job->status = 0;
+		$job->is_awarded = false;
+		$job->save();
+
+		$notifiable = User::where('id', $data['user_id'])->first();
+		
+		$title = $request->user()->name .' canceled the post \'' . $job->name . '\'.';
+
+		$notification_data = [
+			'bid_id' => $bid_id,
+			'job_id' => $data['job_id'],
+			'job_name' => $job->name,
+			'bidder_id' => $notifiable->id,
+			'bidder_name' => $notifiable->name,
+			'title' => $title,
+			'body' => '',
+			'created_at' => Carbon::now()
+		];
+
+		$notifiable->notify( new AwardBid($notification_data) );
+
+		$this->sendAwardedNotification($notifiable->id, $title, $bid_id);
+
+		return response()->json($job);
+		
+	}
+
+	public function acceptJob(Request $request, $id, $bid_id) {
+		$user = $request->user();
+
 		$winner = Winner::create([
-				'bid_id' => $bid_id,
-				'user_id' => $data['user_id'],
-				'job_id' => $data['job_id']
-			]);
-		if($winner) {
-			$job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
-			$job->status = 1;
+			'bid_id' => $bid_id,
+			'user_id' => $user->id,
+			'job_id' => $request->job_id
+		]);
+
+		if( $winner ) {
+			$bid = Bid::where('id', $bid_id)->first();
+			$bid->status = 2;
+			$bid->save();
+
+			$job = Job::where('id', $request->job_id)->first();
+			$job->is_accepted = true;
 			$job->save();
 
-			$notifiable = User::where('id', $data['user_id'])->first();
-			
-			$title = $request->user()->name .' awarded the post \'' . $job->name . '\' to you.';
+			$bid = Bid::info()->where('id', $bid_id)->first();
 
-			$notification_data = [
-				'bid_id' => $bid_id,
-				'job_id' => $data['job_id'],
-				'job_name' => $job->name,
-				'bidder_id' => $notifiable->id,
-				'bidder_name' => $notifiable->name,
-				'title' => $title,
-				'body' => '',
-				'created_at' => \Carbon\Carbon::now()
-			];
-
-			$notifiable->notify( new AwardBid($notification_data) );
-
-			$this->sendAwardedNotification($notifiable->id, $title, $bid_id);
-
-
-			return response()->json($job);
+			return response()->json($bid);
 		}
-		return response()->json(['error' => true, 'message' => 'An error occured'], 500);
+
+		return response()->json(['error' => true, 'message' => 'An error occured'], 400);
+
+	}
+
+	public function declineJob(Request $request, $id, $bid_id) {
+		$user = $request->user();
+
+		$bid = Bid::where('id', $bid_id)->first();
+		$bid->status = 0;
+		$bid->save();
+
+		$job = Job::where('id', $request->job_id)->first();
+		$job->is_accepted = false;
+		$job->is_awarded = false;
+		$job->save();
+
+		$bid = Bid::info()->where('id', $bid_id)->first();
+
+		return response()->json($bid);
+
 	}
 
 	public function getBids($id) {
 		$bids = Bid::info()->where('user_id', $id)
-					->orderBy('created_at', 'desc')
-					->paginate(env('BIDS_PER_PAGE'));
+			->orderBy('created_at', 'desc')
+			->paginate(env('BIDS_PER_PAGE'));
 		return response()->json($bids);
 	}
 
 	public function getBidDetails($id, $bid_id) {
 		$bid = Bid::info()->where([
-				['id', '=', $bid_id],
-				['user_id', '=', $id]
-			])->first();
+			['id', '=', $bid_id],
+			['user_id', '=', $id]
+		])->first();
 
 		return response()->json($bid);
 	}
@@ -183,6 +263,16 @@ class BidController extends Controller
 		$job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
 
 		$job->status = $data['status'];
+
+		if( $request->is_moving ) {
+			$job->is_moving = true;
+		}
+		if( $request->is_reviewed ) {
+			$job->is_reviewed = true;
+		}
+		if( $request->is_completed ) {
+			$job->is_completed = true;
+		}
 
 		$job->save();
 

@@ -155,15 +155,17 @@ class UserController extends Controller
     $data = $request->all();
 
     $review = Review::Create([
-      'user_id' => $data['user_id'],
-      'job_id' => $data['job_id'],
-      'review' => $data['review'],
-      'stars' => $data['stars']
+      'user_id' => $request->user_id,
+      'job_id' => $request->job_id,
+      'review' => $request->review,
+      'stars' => $request->stars
     ]);
 
     if($review) {
       $job = Job::infoWithBidders()->where('id', $data['job_id'])->first();
-      $job->status = 3;
+      $job->status = 4;
+      $job->is_reviewed = true;
+      $job->is_completed = true;
       $job->save();
 
       $notifiable = User::where('id', $job->winner->user->id)->first();

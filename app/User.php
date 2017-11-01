@@ -93,14 +93,14 @@ class User extends Authenticatable
     }
 
     public function country() {
-        return $this->hasOne('App\Country');
+        return $this->belongsTo('App\Country');
     }
 
     public function completedJobs() {
         return $this->hasMany('App\Winner')
                     ->with('job')
                     ->whereHas('job', function($query) {
-                        $query->where('status', 4);
+                        $query->where('is_completed', true);
                     });
         // return $this->hasMany('App\Job')
         //             ->whereHas('winner', function($query) {
@@ -109,7 +109,7 @@ class User extends Authenticatable
     }
 
     public function scopeInfo($query) {
-        return $query->with('profile', 'reviews', 'locations')
+        return $query->with('profile', 'reviews', 'locations', 'country')
                      ->withCount('jobs')
                      ->withCount('bids')
                      ->withCount('unreadMessages');

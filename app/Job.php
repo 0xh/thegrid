@@ -17,7 +17,7 @@ class Job extends Model
 	protected $dates = ['deleted_at'];
 
 	public function user() {
-		return $this->belongsTo('App\User')->with('profile', 'rating');
+		return $this->belongsTo('App\User')->with('profile', 'rating', 'country');
 	}
 
 	public function bids() {
@@ -83,16 +83,16 @@ class Job extends Model
 
 	public function offersThisWeek() {
 		return $this->hasMany('App\Bid')
-			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(created_at) as day')])
+			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(updated_at) as day')])
 			->groupBy('day')
-			->where('created_at', '>=', Carbon::now()->subWeeks(1));
+			->where('updated_at', '>=', Carbon::now()->subWeeks(1));
 	}
 	
 	public function offersThisMonth() {
 		return $this->hasMany('App\Bid')
-			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(created_at) as day')])
+			->select(['job_id', DB::raw('count(id) as `count`'),DB::raw('DATE(updated_at) as day')])
 			->groupBy('day')
-			->where('created_at', '>=', Carbon::now()->subMonths(1));
+			->where('updated_at', '>=', Carbon::now()->subMonths(1));
 	}
 
 	public function scopeSearch($query, $s) {

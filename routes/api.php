@@ -209,8 +209,11 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
   Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
   Route::post('/{id}/bids/{bid_id}/approve', 'BidController@approveBid');
+  Route::post('/{id}/bids/{bid_id}/cancel', 'BidController@cancelApproveBid');
   Route::post('/{id}/bids/{bid_id}/status', 'BidController@setJobStatus');
   Route::post('/{id}/bids/{bid_id}/rebid', 'BidController@rebid');
+  Route::post('/{id}/bids/{bid_id}/accept', 'BidController@acceptJob');
+  Route::post('/{id}/bids/{bid_id}/decline', 'BidController@declineJob');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::get('/{id}/conversations', 'ConversationController@getConversations');

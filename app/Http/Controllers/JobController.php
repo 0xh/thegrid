@@ -167,7 +167,7 @@ class JobController extends Controller
 		//         ->paginate(env('JOBS_PER_PAGE'));
 		// });
 		$jobs = Job::infoWithBidders()->where('user_id', $this->id)
-					->orderBy('created_at', 'desc')
+					->orderBy('updated_at', 'desc')
 					->paginate(env('JOBS_PER_PAGE'));
 		return response()->json($jobs, 200);
 	}
@@ -319,6 +319,17 @@ class JobController extends Controller
 		$job = Job::infoWithBidders()->where('id', $job_id)->first();
 
 		$job->status = $data['status'];
+		
+		if( $request->is_moving ) {
+			$job->is_moving = true;
+		}
+		if( $request->is_reviewed ) {
+			$job->is_reviewed = true;
+		}
+		if( $request->is_completed ) {
+			$job->is_completed = true;
+		}
+
 		$job->save();
 
 		if($job) {
