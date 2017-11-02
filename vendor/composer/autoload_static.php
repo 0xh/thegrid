@@ -473,6 +473,7 @@ class ComposerStaticInitfe924dd4aff435650956443a4ec4225f
         'AddNsnFieldToCountriesTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_22_052138_add_nsn_field_to_countries_table.php',
         'AddOriginalNameToJobFilesTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_06_122525_add_original_name_to_job_files_table.php',
         'AddPhoneNumberFieldToUsersTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_21_052141_add_phone_number_field_to_users_table.php',
+        'AddSoftDeleteToBidsTable' => __DIR__ . '/../..' . '/database/migrations/2017_11_02_104030_add_soft_delete_to_bids_table.php',
         'AddSoftDeleteToJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_16_161643_add_soft_delete_to_jobs_table.php',
         'AddStarsToReviewsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_23_113510_add_stars_to_reviews_table.php',
         'AddStatusToFeedbacksTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_28_155226_add_status_to_feedbacks_table.php',

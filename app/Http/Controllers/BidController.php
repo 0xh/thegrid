@@ -19,7 +19,7 @@ class BidController extends Controller
 {
 	public function bid(Request $request, $id) {
 		$data = $request->all();
-		$bidded = Bid::where([
+		$bidded = Bid::withTrashed()->where([
 			['user_id', '=', $id],
 			['job_id', '=', $data['job_id']]
 		])->first();
@@ -90,7 +90,31 @@ class BidController extends Controller
 
 			return response()->json($bid, 200);
 		} else {
-			return response()->json(['error' => true, 'message' => 'Already bidded'], 422);
+			$bid = Bid::withTrashed()->where('id', $bidded->id)->first();
+			$bid->restore();
+			$bid->price_bid = $data['price_bid'];
+			$bid->times += 1;
+			$bid->save();
+
+			$job = Job::where('id', $bid->job_id)->first();
+			
+			$timeFirst  = strtotime(date('Y-m-d H:i:s'));
+			$timeSecond = strtotime($job->date);
+			$differenceInSeconds = $timeSecond - $timeFirst;
+
+			if($differenceInSeconds <= 10) {
+				$date = new \DateTime($job->date);
+				$date->add(new \DateInterval('PT'. (60 - $differenceInSeconds) .'S'));
+				$job->date = $date;
+				$job->save();
+			}
+
+			$bid = Bid::info()->where('id', $bidded->id)->first();
+
+			$bid->differenceInSeconds = $differenceInSeconds;
+			$bid->currentTime = date('Y-m-d H:i:s');
+
+			return response()->json($bid);
 		}
 	}
 
@@ -195,6 +219,12 @@ class BidController extends Controller
 
 		return response()->json($job);
 		
+	}
+
+	public function removeBid(Request $request, $id, $bid_id) {
+		$bid = Bid::where('id', $bid_id)->first();
+		$bid->delete();
+		return response()->json(['status' => 'success', 'message' => 'Successfully deleted']);
 	}
 
 	public function acceptJob(Request $request, $id, $bid_id) {

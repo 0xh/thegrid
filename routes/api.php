@@ -15,9 +15,7 @@ use App\User;
 |
 */
 
-Route::get('/app-version', function() {
-  return response()->json(['version' => env('APP_VERSION')]);
-});
+Route::get('/app-version', 'HomeController@getAppVersion');
 
 Route::get('/test', function(Request $request) {
 	// $j = App\Job::where('id', 44)->with('skills')->first();
@@ -214,6 +212,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/bids/{bid_id}/rebid', 'BidController@rebid');
   Route::post('/{id}/bids/{bid_id}/accept', 'BidController@acceptJob');
   Route::post('/{id}/bids/{bid_id}/decline', 'BidController@declineJob');
+  Route::post('/{id}/bids/{bid_id}/remove', 'BidController@removeBid');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::get('/{id}/conversations', 'ConversationController@getConversations');

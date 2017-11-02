@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bid extends Model
 {
-    use LogsActivity;
+    use LogsActivity, SoftDeletes;
 
     protected $fillable = ['user_id', 'job_id', 'price_bid'];
     protected static $logAttributes = ['user_id', 'job_id', 'price_bid'];
@@ -21,7 +22,7 @@ class Bid extends Model
 	}
 
     public function job() {
-    	return $this->belongsTo('App\Job')->with('only_bids', 'user', 'category', 'skills', 'awarded', 'conversation');
+    	return $this->belongsTo('App\Job')->with('only_bids', 'user', 'category', 'skills', 'awarded', 'conversation', 'files');
     }
 
     public function jobdetails() {
