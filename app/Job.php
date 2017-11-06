@@ -109,12 +109,17 @@ class Job extends Model
 		return $this->hasOne('App\JobCategory', 'id', 'category_id');
 	}
 
+	public function questions() {
+		return $this->hasMany('App\Query')
+			->with('user', 'reply', 'likes', 'dislikes');
+	}
+
 	public function scopeInfo($query) {
-			return $query->with('user', 'category', 'skills', 'files', 'flags', 'views');
+		return $query->with('user', 'category', 'skills', 'files', 'flags', 'views', 'questions');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth');
+		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions');
 	}
 
 }
