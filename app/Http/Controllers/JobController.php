@@ -206,8 +206,15 @@ class JobController extends Controller
 	}
 
 	public function getUserJob(Request $request, $id) {
-		$job = Job::info()->where('id', $id)->first();
-
+		if( $request->user() ) {
+			$job = Job::info()->where('id', $id)->first();
+			$bid = Bid::where([['job_id', '=', $id],['user_id', '=', $request->user()->id]])
+				->first();
+			$job->bid = $bid;
+		} else {
+			$job = Job::info()->where('id', $id)->first();
+		}
+		
 		if($job) {
 
 			$this->addViewJob($request->user(), $job, $request->ip());
@@ -215,7 +222,7 @@ class JobController extends Controller
 			return response()->json($job);
 		}
 		
-		return response()->json(['status' => 'failed'], 422);
+		return response()->json(['status' => 'failed'], 400);
 	}
 
 	public function all(Request $request) {

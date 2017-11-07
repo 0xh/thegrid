@@ -168,6 +168,16 @@ class UserController extends Controller
       $job->is_completed = true;
       $job->save();
 
+      Transaction::create([
+        'supplier_id' => $job->winner->user->id,
+        'customer_id' => $request->user()->id,
+        'amount' => $job->winner->bid->price_bid,
+        'job_id' => $job->id,
+        'bid_id' => $job->winner->bid->id,
+        'status' => '1',
+        'payment_type' => 'cod'
+      ]);
+
       $notifiable = User::where('id', $job->winner->user->id)->first();
       
       $notification_data = [

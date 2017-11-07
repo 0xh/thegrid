@@ -24,7 +24,8 @@ class Bid extends Model
 
     public function job() {
         return $this->belongsTo('App\Job')
-            ->with('only_bids', 'user', 'category', 'skills', 'awarded', 'conversation', 'files', 'questions');
+            ->with('only_bids', 'user', 'category', 'skills', 'awarded', 'conversation', 'files', 'questions')
+            ->withCount('views', 'bidders', 'questions');;
     }
 
     public function jobdetails() {

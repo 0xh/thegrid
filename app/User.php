@@ -67,7 +67,8 @@ class User extends Authenticatable
     }
 
     public function unreadMessages() {
-        return $this->hasMany('App\Message', 'recipient_id')->where('status', 0);
+        return $this->hasMany('App\Message', 'recipient_id')
+            ->where('status', 0);
     }
 
     public function settings() {

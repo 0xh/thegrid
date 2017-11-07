@@ -115,7 +115,8 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'flags', 'views', 'questions');
+		return $query->with('user', 'category', 'skills', 'files', 'flags', 'questions', 'only_bids')
+			->withCount('views', 'bidders', 'questions');
 	}
 
 	public function scopeInfoWithBidders($query) {
