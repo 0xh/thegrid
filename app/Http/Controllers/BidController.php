@@ -24,10 +24,6 @@ class BidController extends Controller
 			['job_id', '=', $data['job_id']]
 		])->first();
 
-		if( $bidded->times == 3 ) {
-			return response()->json(['status' => 'failed', 'message' => 'Maximum of 3 bids is allowed per post'], 422);
-		}
-
 		if( !$bidded ) {
 			$bid = Bid::create([
 				'user_id' => $id,
@@ -95,7 +91,10 @@ class BidController extends Controller
 
 			return response()->json($bid, 200);
 		} else {
-			$bid = Bid::withTrashed()->where('id', $bidded->id)->first();
+			if( $bidded->times == 3 ) {
+				return response()->json(['status' => 'failed', 'message' => 'Maximum of 3 bids is allowed per post'], 422);
+			}
+			$bid = $bidded;//Bid::withTrashed()->where('id', $bidded->id)->first();
 			$bid->restore();
 			$bid->price_bid = $data['price_bid'];
 			$bid->times += 1;
