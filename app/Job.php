@@ -61,17 +61,13 @@ class Job extends Model
 	}
 
 	public function viewsThisWeek() {
-		return $this->hasMany('App\View')//->select([DB::raw('count(job_id) as count'), DB::raw('Date(created_at) as day')])->groupBy('day');
-			->select([
-				'job_id',
-				// This aggregates the data and makes available a 'count' attribute
-				DB::raw('count(id) as `count`'), 
-				// This throws away the timestamp portion of the date
-				DB::raw('DATE(created_at) as day')
-			// Group these records according to that day
-			])->groupBy('day')
-			// And restrict these results to only those created in the last week
+		return $this->hasMany('App\View')
+			->select(['job_id', 'created_at', DB::raw('count(id) as `count`'), DB::raw('DATE(created_at) as day')])
+			->groupBy('day')
 			->where('created_at', '>=', Carbon::now()->subWeeks(1));
+		// return $this->hasMany('App\View')
+		// 	->where('created_at', '>=', \Carbon\Carbon::now()->subWeeks(1));
+			// ->groupBy(function($item){ return $item->created_at->format('Y-m-d H:i:s'); });
 	}
 
 	public function viewsThisMonth() {
@@ -105,6 +101,10 @@ class Job extends Model
 		return $this->belongsToMany('App\Skill');
 	}
 
+	public function tags() {
+		return $this->belongsToMany('App\SubCategory', 'job_tag', 'job_id', 'tag_id');
+	}
+
 	public function category() {
 		return $this->hasOne('App\JobCategory', 'id', 'category_id');
 	}
@@ -115,12 +115,16 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'flags', 'questions', 'only_bids')
+		return $query->with('user', 'category', 'tags', 'files', 'flags', 'questions', 'only_bids')
 			->withCount('views', 'bidders', 'questions');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'skills', 'files', 'bidders', 'winner', 'conversation', 'flags', 'views', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions');
+		return $query->with('user', 'category', 'tags', 'files', 'bidders', 'winner', 'conversation', 'flags', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions')
+			->withCount('views', 'bidders', 'questions');
+	}
+	public function scopeTest($query) {
+		return $query->with('viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions');			
 	}
 
 }

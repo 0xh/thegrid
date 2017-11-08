@@ -61,12 +61,21 @@ class JobController extends Controller
 			}
 		}
 
-		if( isset($data['skills'])) {
+		// if( isset($data['skills'])) {
 			
-			$skills = json_decode($data['skills'], true);
-			if( is_array($skills) ) {
-				foreach($skills as $skill) {
-					$_job->skills()->attach($skill['id']);
+		// 	$skills = json_decode($data['skills'], true);
+		// 	if( is_array($skills) ) {
+		// 		foreach($skills as $skill) {
+		// 			$_job->skills()->attach($skill['id']);
+		// 		}
+		// 	}
+		// }
+		if( isset($data['tags'])) {
+			
+			$tags = json_decode($data['tags'], true);
+			if( is_array($tags) ) {
+				foreach($tags as $tag) {
+					$_job->tags()->attach($tag['id']);
 				}
 			}
 		}
@@ -136,13 +145,24 @@ class JobController extends Controller
 			}
 		}
 
-		if( isset($data['skills'])) {
+		// if( isset($data['skills'])) {
 			
-			$skills = json_decode($data['skills'], true);
-			if( is_array($skills) ) {
-				$_job->skills()->detach();
-				foreach($skills as $skill) {
-					$_job->skills()->attach($skill['id']);
+		// 	$skills = json_decode($data['skills'], true);
+		// 	if( is_array($skills) ) {
+		// 		$_job->skills()->detach();
+		// 		foreach($skills as $skill) {
+		// 			$_job->skills()->attach($skill['id']);
+		// 		}
+		// 	}
+		// }
+
+		if( isset($data['tags'])) {
+			
+			$tags = json_decode($data['tags'], true);
+			if( is_array($tags) ) {
+				$_job->tags()->detach();
+				foreach($tags as $tag) {
+					$_job->tags()->attach($tag['id']);
 				}
 			}
 		}
@@ -166,7 +186,8 @@ class JobController extends Controller
 		//         ->orderBy('created_at', 'desc')
 		//         ->paginate(env('JOBS_PER_PAGE'));
 		// });
-		$jobs = Job::infoWithBidders()->where('user_id', $this->id)
+		$jobs = Job::infoWithBidders()
+					->where('user_id', $this->id)
 					->orderBy('updated_at', 'desc')
 					->paginate(env('JOBS_PER_PAGE'));
 		return response()->json($jobs, 200);
@@ -306,19 +327,27 @@ class JobController extends Controller
 		$data = $request->all();
 		$q = $data['q'];
 
-		$job = Job::search($q)->whereDate('date', '>', date('Y-m-d H:i:s'));
+		// $job = Job::search($q)->whereDate('date', '>', date('Y-m-d H:i:s'));
+		$search = Job::selectRaw('jobs.*')
+			->leftJoin('job_tag', 'job_tag.job_id', '=', 'jobs.id')
+			->leftJoin('sub_categories', 'job_tag.tag_id', '=', 'sub_categories.id')
+			->where('jobs.name', 'like', "%{$q}%")
+			->orWhere('jobs.location', 'like', "%{$q}%")
+			->orWhere('sub_categories.name', 'like', "%{$q}%")
+			->whereDate('date', '>', date('Y-m-d H:i:s'))
+			->groupBy('jobs.id');
 
 		if($data['lat'] && $data['lng']) {
-			$f = sprintf("*, ( 6371 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
+			$f = sprintf("jobs.*, ( 6371 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
 			$data['lat'], $data['lng'], $data['lat']);
 
-			$job->select(DB::raw($f))
-					->having('distance', '<', 50)
-					->orderBy('distance', 'ASC');
+			$search->select(DB::raw($f))
+				->having('distance', '<', 50)
+				->orderBy('distance', 'ASC');
 					// ->groupBy('distance');
 		}
 
-		return response()->json($job->get());
+		return response()->json($search->get());
 	}
 		
 	public function setJobStatus(Request $request, $id, $job_id) {

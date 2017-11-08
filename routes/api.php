@@ -110,9 +110,14 @@ Route::get('/test', function(Request $request) {
   //   ),
   //   $url = env('APP_URL') .'/@macbook/posts/111');
 
-  $post = App\Job::infoWithBidders()->where('user_id', '7')->orderBy('id', 'desc')->get();
-
-  return $post;
+  // $post = App\Job::test()
+  //   ->with('viewsThisWeek')
+  //   ->where('user_id', '7')->orderBy('id', 'desc')->paginate(5);
+  // $post = App\View::where('job_id', 123)
+  //   ->where('created_at', '>=', \Carbon\Carbon::now()->subWeeks(1))
+  //   ->get()
+  //   ->groupBy(function($item){ return $item->created_at->format('Y-m-d H:i:s'); });
+  // return $post;
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -141,7 +146,6 @@ Route::get('/user', 'UserController@getUserInit')->middleware('auth:api');
 Route::post('/login', 'Auth\LoginController@loginAPI');
 Route::post('/login/{provider}', 'Auth\RegisterController@handleProviderCallbackAPI');
 
-
 Route::post('/password/email', 'Auth\ForgotPasswordController@getResetToken');
 Route::post('/password/reset', 'Auth\ResetPasswordController@reset');
 Route::post('/users/register', 'Auth\RegisterController@register');
@@ -164,6 +168,7 @@ Route::get('/users/unique/{input}', 'UserController@isUnique');
 Route::get('/jobs/categories', 'JobCategoryController@getCategories');
 Route::get('/jobs/search', 'JobController@search');
 Route::get('/jobs/{id}', 'JobController@getUserJob');
+Route::get('/tags', 'TagController@getAllTags');
 
 Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/', function($id) {

@@ -17,8 +17,23 @@
 use Illuminate\Http\Request;
 
 Route::get('/', function(Request $request) {
-	echo $request->ip();
-	 var_dump(Location::get('83.110.226.117'));
+	return App\Job::where('id', 123)->with('tags')->get();
+});
+
+Route::get('tags/{q}', function ($q) {
+	
+
+		// we only want "posts" table fields for Eloquent model, thus "selectRaw"
+		$posts = App\Job::selectRaw('jobs.*')
+				->leftJoin('job_tag', 'job_tag.job_id', '=', 'jobs.id')
+				->leftJoin('sub_categories', 'job_tag.tag_id', '=', 'sub_categories.id')
+				->where('jobs.name', 'like', "%{$q}%")
+				->orWhere('jobs.location', 'like', "%{$q}%")
+				->orWhere('sub_categories.name', 'like', "%{$q}%")
+				->whereDate('date', '>', date('Y-m-d H:i:s'))
+				->groupBy('jobs.id')
+				->get();
+		return $posts;
 });
 
 // Route::get('/', function () {
