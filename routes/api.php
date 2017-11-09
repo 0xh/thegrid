@@ -186,6 +186,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   // Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
 
   Route::get('/job/all', 'JobController@all');
+  Route::get('/jobs/search', 'JobController@search');
 
   Route::get('/{id}', 'UserController@getUser');
   Route::put('/{id}', 'UserController@updateUser');

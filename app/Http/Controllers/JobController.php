@@ -11,6 +11,7 @@ use App\Bid;
 use App\Transaction;
 use App\FlagJob;
 use App\View;
+use App\Search;
 use DB;
 use Cache;
 use App\Notifications\AwardBid;
@@ -327,7 +328,6 @@ class JobController extends Controller
 		$data = $request->all();
 		$q = $data['q'];
 
-		// $job = Job::search($q)->whereDate('date', '>', date('Y-m-d H:i:s'));
 		$search = Job::selectRaw('jobs.*')
 			->leftJoin('job_tag', 'job_tag.job_id', '=', 'jobs.id')
 			->leftJoin('sub_categories', 'job_tag.tag_id', '=', 'sub_categories.id')
@@ -344,10 +344,22 @@ class JobController extends Controller
 			$search->select(DB::raw($f))
 				->having('distance', '<', 50)
 				->orderBy('distance', 'ASC');
-					// ->groupBy('distance');
 		}
 
+		$user_id = null;
+		if( $request->user() ) {
+			$user_id = $request->user()->id;
+		}
+		$this->saveSearch($q, $user_id);
+		// return response()->json($request->user());
 		return response()->json($search->get());
+	}
+
+	public function saveSearch($q, $id) {
+		Search::Create([
+			'search' => $q,
+			'user_id' => $id
+		]);
 	}
 		
 	public function setJobStatus(Request $request, $id, $job_id) {
