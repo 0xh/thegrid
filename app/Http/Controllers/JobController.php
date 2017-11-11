@@ -19,6 +19,7 @@ use App\Notifications\MarkPostInProgress;
 use App\Notifications\MarkPostReview;
 use App\Notifications\MarkPostComplete;
 use OneSignal;
+use Carbon\Carbon;
 
 class JobController extends Controller
 {
@@ -328,13 +329,15 @@ class JobController extends Controller
 		$data = $request->all();
 		$q = $data['q'];
 
-		$search = Job::selectRaw('jobs.*')
+		$search = Job::with('user', 'bids', 'files')
 			->leftJoin('job_tag', 'job_tag.job_id', '=', 'jobs.id')
 			->leftJoin('sub_categories', 'job_tag.tag_id', '=', 'sub_categories.id')
-			->where('jobs.name', 'like', "%{$q}%")
-			->orWhere('jobs.location', 'like', "%{$q}%")
-			->orWhere('sub_categories.name', 'like', "%{$q}%")
-			->whereDate('date', '>', date('Y-m-d H:i:s'))
+			->whereDate('jobs.date', '>', Carbon::now())
+			->where(function($query) use($q) {
+				$query->where('jobs.name', 'like', "%{$q}%")
+					->orWhere('jobs.location', 'like', "%{$q}%")
+					->orWhere('sub_categories.name', 'like', "%{$q}%");
+			})
 			->groupBy('jobs.id');
 
 		if($data['lat'] && $data['lng']) {
@@ -350,8 +353,7 @@ class JobController extends Controller
 		if( $request->user() ) {
 			$user_id = $request->user()->id;
 		}
-		$this->saveSearch($q, $user_id);
-		// return response()->json($request->user());
+		// $this->saveSearch($q, $user_id);
 		return response()->json($search->get());
 	}
 
