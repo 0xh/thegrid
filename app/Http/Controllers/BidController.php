@@ -236,6 +236,18 @@ class BidController extends Controller
 		return response()->json(['status' => 'success', 'message' => 'Successfully deleted']);
 	}
 
+	public function getHighlighted(Request $request, $id) {
+		$bids = Bid::info()->where('is_highlighted', true)->get();
+		return response()->json($bids);
+	}
+	
+	public function highlight(Request $request, $id, $bid_id) {
+		$bid = Bid::info()->where('id', $bid_id)->first();
+		$bid->is_highlighted = true;
+		$bid->save();
+		return response()->json($bid);
+	}
+
 	public function acceptJob(Request $request, $id, $bid_id) {
 		$user = $request->user();
 

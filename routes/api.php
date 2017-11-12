@@ -213,6 +213,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   // Route::post('/{id}/bids/approve', 'BidController@approveBid');
   Route::get('/{id}/bids', 'BidController@getBids');
   Route::post('/{id}/bids', 'BidController@bid');
+  Route::get('/{id}/bids/highlighted', 'BidController@getHighlighted');
   Route::get('/{id}/bids/{bid_id}', 'BidController@getBidDetails');
   Route::get('/{id}/bid/{bid_id}', 'BidController@getBidDetails');
   Route::get('/{id}/bid/check/{job_id}', 'BidController@isBidded');
@@ -223,6 +224,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('/{id}/bids/{bid_id}/accept', 'BidController@acceptJob');
   Route::post('/{id}/bids/{bid_id}/decline', 'BidController@declineJob');
   Route::post('/{id}/bids/{bid_id}/remove', 'BidController@removeBid');
+  Route::post('/{id}/bids/{bid_id}/highlight', 'BidController@highlight');
 
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
@@ -240,6 +242,10 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/skills', 'UserController@getSkills');
   Route::post('/{id}/skills', 'UserController@addSkill');
   Route::delete('/{id}/skills/{skill_id}', 'UserController@removeSkill');
+
+  Route::get('/{id}/tags', 'UserController@getTags');
+  Route::post('/{id}/tags', 'UserController@addTag');
+  Route::delete('/{id}/tags/{tag_id}', 'UserController@removeTag');
 
   Route::post('/{id}/review', 'UserController@reviewUser');
 

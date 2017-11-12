@@ -110,6 +110,11 @@ class UserController extends Controller
     $skills =  User::where('id', $id)->first()->skills;
     return response()->json($skills);
   }
+  
+  public function getTags($id) {
+    $tags =  User::where('id', $id)->first()->tags;
+    return response()->json($tags);
+  }
 
   public function addSkill(Request $request, $id) {
     $data = $request->all();
@@ -133,10 +138,26 @@ class UserController extends Controller
     return response()->json($user->skills);
   }
 
+  public function addTag(Request $request, $id) {
+    $user_id = $request->user()->id;
+    $user = User::where('id', $user_id)->first();
+    if(isset($request->tag_id)) {
+      $user->tags()->attach($request->tag_id);
+      return response()->json(['message' => 'ok']);
+    }
+  }
+  
+
   public function removeSkill($id, $skill_id) {
     $user = User::where('id', $id)->first();
     $user->skills()->detach($skill_id);
     return response()->json($user->skills);
+  }
+  
+  public function removeTag($id, $tag_id) {
+    $user = User::where('id', $id)->first();
+    $user->tags()->detach($tag_id);
+    return response()->json($user->tags);
   }
 
   public function isUnique(Request $request, $input) {

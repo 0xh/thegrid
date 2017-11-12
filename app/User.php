@@ -109,8 +109,12 @@ class User extends Authenticatable
         //             });
     }
 
+    public function tags() {
+		return $this->belongsToMany('App\SubCategory', 'tag_user', 'user_id', 'tag_id');
+	}
+
     public function scopeInfo($query) {
-        return $query->with('profile', 'reviews', 'locations', 'country')
+        return $query->with('profile', 'reviews', 'locations', 'country', 'tags')
                      ->withCount('jobs')
                      ->withCount('bids')
                      ->withCount('unreadMessages');
