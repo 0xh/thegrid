@@ -400,5 +400,14 @@ class BidController extends Controller
 			$url = env('APP_URL') . '/posts/' . $post_id);
 	}
 	
+	public function getHighlightedBids(Request $request, $id) {
+	
+			$highlighted_jobs = Bid::with('job', 'winner')
+				->where('user_id', $id)
+				->where('is_highlighted', true)
+				->get();
+			
+			return response()->json($highlighted_jobs);
+		}
 
 }

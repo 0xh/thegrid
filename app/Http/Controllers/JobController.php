@@ -470,6 +470,27 @@ class JobController extends Controller
 			$url = env('APP_URL') . '/bids/' . $bid_id);
 	}
 
+	public function getRelatedJobs(Request $request, $id) {
+		$user = $request->user();
+  
+		$user_tags = $user->tags;
+		$_user_tags = [];
+
+		foreach($user_tags as $tag) {
+			array_push($_user_tags, $tag->id);
+		}
+
+		$related_jobs = Job::with('tags')
+			->whereHas('tags', function ($query) use($_user_tags){
+				$query->whereIn('sub_categories.id', $_user_tags);
+			})
+			->where('user_id', '!=', $user->id)
+			->whereDate('date', '>', Carbon::now())
+			->get();
+
+		return response()->json($related_jobs);
+	}
+
 	public function sendNotificationWithin1km($lat, $lng, $post_id, $username, $user_id) {
 
 		$user = User::where('id', $user_id)->with('settings')->first();

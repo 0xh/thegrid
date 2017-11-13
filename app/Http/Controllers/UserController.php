@@ -352,7 +352,7 @@ class UserController extends Controller
 
   public function getUserByUsername($username) {
 
-    $user = User::info()->where('username', $username)->with('skills')->first();
+    $user = User::info()->where('username', $username)->first();
 
     return response()->json($user);
 

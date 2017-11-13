@@ -108,13 +108,21 @@ class User extends Authenticatable
 
         //             });
     }
+    
+    // public function highlightedJobs() {
+    //     return $this->hasMany('App\Winner')
+    //         ->with('job')
+    //         ->whereHas('job', function($query) {
+    //             $query->where('is_completed', true);
+    //         });
+    // }
 
     public function tags() {
 		return $this->belongsToMany('App\SubCategory', 'tag_user', 'user_id', 'tag_id');
 	}
 
     public function scopeInfo($query) {
-        return $query->with('profile', 'reviews', 'locations', 'country', 'tags')
+        return $query->with('profile', 'reviews', 'locations', 'country', 'tags', 'rating')
                      ->withCount('jobs')
                      ->withCount('bids')
                      ->withCount('unreadMessages');
