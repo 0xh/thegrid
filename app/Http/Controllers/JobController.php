@@ -353,7 +353,7 @@ class JobController extends Controller
 		if( $request->user() ) {
 			$user_id = $request->user()->id;
 		}
-		// $this->saveSearch($q, $user_id);
+		$this->saveSearch($q, $user_id);
 		return response()->json($search->get());
 	}
 
