@@ -111,7 +111,8 @@ class Job extends Model
 
 	public function questions() {
 		return $this->hasMany('App\Query')
-			->with('user', 'reply', 'likes', 'dislikes');
+			->with('user', 'reply', 'likes', 'dislikes')
+			->orderBy('created_at', 'desc');
 	}
 
 	public function scopeInfo($query) {

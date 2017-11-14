@@ -485,10 +485,23 @@ class JobController extends Controller
 				$query->whereIn('sub_categories.id', $_user_tags);
 			})
 			->where('user_id', '!=', $user->id)
+			->where('is_awarded', false)
 			->whereDate('date', '>', Carbon::now())
-			->get();
+			->get(5);
 
 		return response()->json($related_jobs);
+	}
+	
+	public function getPopularJobs(Request $request, $id) {
+		$user = $request->user();
+		$popular_jobs = Job::withCount('views')
+			->where('user_id', '!=', $user->id)
+			->where('is_awarded', false)
+			->whereDate('date', '>', Carbon::now())
+			->orderBy('views_count', 'desc')
+			->get(5);
+		
+		return response()->json($popular_jobs);
 	}
 
 	public function sendNotificationWithin1km($lat, $lng, $post_id, $username, $user_id) {

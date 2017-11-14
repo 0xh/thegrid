@@ -119,25 +119,9 @@ Route::get('/test', function(Request $request) {
   //   ->groupBy(function($item){ return $item->created_at->format('Y-m-d H:i:s'); });
   // return $post;
 
-  $user = App\User::where('id', 2)
-    ->first();
-  
-  $user_tags = $user->tags;
-  $_user_tags = [];
+  $posts = App\Job::withCount('views')->orderBy('views_count', 'desc')->get();
 
-  foreach($user_tags as $tag) {
-    array_push($_user_tags, $tag->id);
-  }
-
-  $related_jobs = Job::with('tags')
-    ->whereHas('tags', function ($query) use($_user_tags){
-      $query->whereIn('sub_categories.id', $_user_tags);
-    })
-    ->where('user_id', '!=', $user->id)
-    ->whereDate('date', '>', Carbon\Carbon::now())
-    ->get();
-
-  return response()->json(['user_tags' => $user_tags, 'jobs' => $related_jobs]);
+  return $posts;
 });
 
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
@@ -229,6 +213,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');
   Route::get('/{id}/completed/jobs', 'JobController@getCompletedJobs');
   Route::get('/{id}/related/jobs', 'JobController@getRelatedJobs');
+  Route::get('/{id}/popular/jobs', 'JobController@getPopularJobs');
   Route::get('/{id}/reviews', 'UserController@getReviews');
 
   // Route::post('/bid', 'BidController@bid');
