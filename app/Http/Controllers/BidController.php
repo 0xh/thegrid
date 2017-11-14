@@ -31,6 +31,8 @@ class BidController extends Controller
 				'price_bid' => $data['price_bid']
 			]);
 
+			$new_bid = $bid;
+
 			if($request->file('files')) {
 				Storage::disk('public_uploads')->makeDirectory('bids');
 				foreach($request->file('files') as $file) {
@@ -62,6 +64,7 @@ class BidController extends Controller
 			// $bid->job = $job;
 			// $bid->user = $user;
 			$bid = Bid::info()->where('id', $bid->id)->first();
+			$bid->job->bid = $new_bid;
 
 			$notifiable = User::where('id', $bid->job->user_id)->first();
 			

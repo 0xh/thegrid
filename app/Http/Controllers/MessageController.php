@@ -60,7 +60,7 @@ class MessageController extends Controller
 				['recipient_id', '=', $id]
 			])->update(['status' => 1]);
 
-			$conversation = Conversation::where('id', $conversation_id)->first();			
+			$conversation = Conversation::infoWithMessages()->where('id', $conversation_id)->first();			
 
 			if($conversation->last_updated_by != $id) {
 				$conversation->unread_count = 0;
