@@ -339,6 +339,10 @@ class JobController extends Controller
 					->orWhere('sub_categories.name', 'like', "%{$q}%");
 			})
 			->groupBy('jobs.id');
+		
+		if($request->user()) {
+			$search->with('winner');
+		}
 
 		if($data['lat'] && $data['lng']) {
 			$f = sprintf("jobs.*, ( 6371 * acos(cos(radians(%f)) * cos(radians(lat)) * cos(radians(lng) - radians(%f)) + sin(radians(%f)) * sin(radians(lat))) ) AS distance ",
@@ -485,9 +489,9 @@ class JobController extends Controller
 				$query->whereIn('sub_categories.id', $_user_tags);
 			})
 			->where('user_id', '!=', $user->id)
-			->where('is_awarded', false)
+			->where('is_awarded', '=', false)
 			->whereDate('date', '>', Carbon::now())
-			->get(5);
+			->get();
 
 		return response()->json($related_jobs);
 	}
