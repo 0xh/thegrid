@@ -33,6 +33,23 @@ class HomeController extends Controller
         return response()->json($location);
     }
 
+    public function getCountryDetails(Request $request) {
+        $ip = $request->ip();
+        
+        // for dev purposes
+        if($ip == '10.0.0.1') {
+            $ip = '83.110.226.117';
+        }
+
+        $location = Cache::remember('location', 15, function() use($ip) {
+            return Location::get($ip);
+        });
+
+        $country = Country::where('iso', $location->countryCode)->first();
+
+        return response()->json($country);
+    }
+
     public function getOG($id) {
         $job = Job::where('id', $id)->first();
         

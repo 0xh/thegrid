@@ -141,6 +141,7 @@ Route::get('/get_server_time', function() {
 
 Route::get('/opengraph/{id}', 'HomeController@getOG');
 Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
+Route::get('/getCountryDetails', 'HomeController@getCountryDetails');
 Route::get('/users/getlocationbyip', 'HomeController@getLocationByIp')->middleware('auth:api');
 
 Route::get('/job/all', 'JobController@all');

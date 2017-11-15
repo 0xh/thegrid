@@ -463,7 +463,10 @@ class UserController extends Controller
       $user_id = $request->user()->id;
     }
 
-    $reviews = Review::where('user_id', $user_id)->with('job')->get();
+    $reviews = Review::where('user_id', $user_id)
+      ->with('job')
+      ->orderBy('stars', 'desc')
+      ->get();
     
     return response()->json($reviews);
   }

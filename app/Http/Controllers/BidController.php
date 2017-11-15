@@ -240,7 +240,10 @@ class BidController extends Controller
 	}
 
 	public function getHighlighted(Request $request, $id) {
-		$bids = Bid::info()->where('is_highlighted', true)->get();
+		$bids = Bid::info()
+			->where('user_id', $id)
+			->where('is_highlighted', true)
+			->get();
 		return response()->json($bids);
 	}
 	
