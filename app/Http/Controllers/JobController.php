@@ -485,12 +485,14 @@ class JobController extends Controller
 		}
 
 		$related_jobs = Job::with('tags')
+			->with('user', 'bids', 'winner', 'files')
 			->whereHas('tags', function ($query) use($_user_tags){
 				$query->whereIn('sub_categories.id', $_user_tags);
 			})
 			->where('user_id', '!=', $user->id)
 			->where('is_awarded', '=', false)
 			->whereDate('date', '>', Carbon::now())
+			->take(5)
 			->get();
 
 		return response()->json($related_jobs);
@@ -498,12 +500,15 @@ class JobController extends Controller
 	
 	public function getPopularJobs(Request $request, $id) {
 		$user = $request->user();
+
 		$popular_jobs = Job::withCount('views')
+			->with('user', 'bids', 'winner', 'files')
 			->where('user_id', '!=', $user->id)
 			->where('is_awarded', false)
 			->whereDate('date', '>', Carbon::now())
 			->orderBy('views_count', 'desc')
-			->get(5);
+			->take(5)
+			->get();
 		
 		return response()->json($popular_jobs);
 	}
