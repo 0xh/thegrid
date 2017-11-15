@@ -253,6 +253,7 @@ class RegisterController extends Controller
       'gender' => $data['gender'],
       'birth_date' => date("Y-m-d H:i:s", strtotime($data['birth_date'])),
       'password' => bcrypt($data['password']),
+      'country_id' => $data['country_id']
     ]);
   }
 
