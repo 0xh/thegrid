@@ -49,6 +49,14 @@ class HomeController extends Controller
 
         return response()->json($country);
     }
+    
+    public function getCountries(Request $request) {
+        
+        $countries = Country::where('currency_unit', '!=', null)
+            ->get();
+
+        return response()->json($countries);
+    }
 
     public function getOG($id) {
         $job = Job::where('id', $id)->first();

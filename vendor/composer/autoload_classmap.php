@@ -15,6 +15,7 @@ return array(
     'AddColumnToJobsTable' => $baseDir . '/database/migrations/2017_10_31_094909_add_column_to_jobs_table.php',
     'AddConfirmationCodeConfirmedToUsersTable' => $baseDir . '/database/migrations/2017_06_21_074610_add_confirmation_code_confirmed_to_users_table.php',
     'AddConfirmationCodeToUsersTable' => $baseDir . '/database/migrations/2017_06_21_061004_add_confirmation_code_to_users_table.php',
+    'AddCountryIdToJobsTable' => $baseDir . '/database/migrations/2017_11_18_112956_add_country_id_to_jobs_table.php',
     'AddCountryIdToUsersTable' => $baseDir . '/database/migrations/2017_10_17_161608_add_country_id_to_users_table.php',
     'AddCurrencyUnitToCountriesTable' => $baseDir . '/database/migrations/2017_11_01_130240_add_currency_unit_to_countries_table.php',
     'AddFieldsToFeedbacksTable' => $baseDir . '/database/migrations/2017_09_24_134958_add_fields_to_feedbacks_table.php',

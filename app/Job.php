@@ -12,7 +12,7 @@ class Job extends Model
 {
 	use LogsActivity, SoftDeletes;
 
-	protected $fillable = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
+	protected $fillable = ['name', 'user_id', 'price', 'country_id', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
 	protected static $logAttributes = ['name', 'user_id', 'price', 'lat', 'lng', 'location', 'category_id', 'date', 'status', 'details'];
 	protected $dates = ['deleted_at'];
 
@@ -30,6 +30,10 @@ class Job extends Model
 					// ->with('winner')
 					->with('user', 'files')
 					->orderBy('price_bid', 'asc');
+	}
+
+	public function country() {
+		return $this->belongsTo('App\Country');
 	}
 
 	public function winner() {
@@ -116,12 +120,12 @@ class Job extends Model
 	}
 
 	public function scopeInfo($query) {
-		return $query->with('user', 'category', 'tags', 'files', 'flags', 'questions', 'only_bids')
+		return $query->with('user', 'category', 'tags', 'files', 'flags', 'questions', 'only_bids', 'country')
 			->withCount('views', 'bidders', 'questions');
 	}
 
 	public function scopeInfoWithBidders($query) {
-		return $query->with('user', 'category', 'tags', 'files', 'bidders', 'winner', 'conversation', 'flags', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions')
+		return $query->with('user', 'category', 'tags', 'files', 'bidders', 'winner', 'conversation', 'flags', 'viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth', 'questions', 'country')
 			->withCount('views', 'bidders', 'questions');
 	}
 	public function scopeTest($query) {

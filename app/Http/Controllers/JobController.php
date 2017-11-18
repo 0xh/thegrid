@@ -43,6 +43,7 @@ class JobController extends Controller
 			'name' => $data['name'],
 			'category_id' => $data['category_id'],
 			'price' => $data['price'],
+			'country_id' => $data['country_id'],
 			'lat' => $data['lat'],
 			'lng' => $data['lng'],
 			'location' => $data['location'],
@@ -102,6 +103,7 @@ class JobController extends Controller
 			'name' => $data['name'],
 			'category_id' => $data['category_id'],
 			'price' => $data['price'],
+			'country_id' => $data['country_id'],
 			'lat' => $data['lat'],
 			'lng' => $data['lng'],
 			'location' => $data['location'],
@@ -169,7 +171,9 @@ class JobController extends Controller
 			}
 		}
 
-		$job = Job::info()->where('id', $data['id'])->first();		
+		$job = Job::info()
+			->with('viewsThisWeek', 'viewsThisMonth', 'offersThisWeek', 'offersThisMonth')
+			->where('id', $data['id'])->first();		
 		$bids = Bid::where('job_id', $data['id'])->get();
 		$job->bids = $bids;
 
@@ -349,7 +353,7 @@ class JobController extends Controller
 			$data['lat'], $data['lng'], $data['lat']);
 
 			$search->select(DB::raw($f))
-				->having('distance', '<', 50)
+				// ->having('distance', '<', 50)
 				->orderBy('distance', 'ASC');
 		}
 
