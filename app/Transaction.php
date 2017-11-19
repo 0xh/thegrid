@@ -18,7 +18,7 @@ class Transaction extends Model
     }
 
     public function job() {
-        return $this->belongsTo('App\Job')->with('category');
+        return $this->belongsTo('App\Job')->with('category', 'country');
     }
 
     public function bid() {
