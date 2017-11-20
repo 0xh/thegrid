@@ -68,7 +68,7 @@ class BidController extends Controller
 
 			$notifiable = User::where('id', $bid->job->user_id)->first();
 			
-			$other_bidder_count = count($bid->job->only_bids) - 1;
+			$other_bidder_count = count($bid->job->bids) - 1;
 
 			if($other_bidder_count < 1) {
 				$title = $request->user()->name . ' bids on your post \'' . $bid->job->name .'\'';
@@ -82,7 +82,7 @@ class BidController extends Controller
 				'job_name' => $bid->job->name,
 				'bidder_id' => $notifiable->id,
 				'bidder_name' => $notifiable->name,
-				'other_bidder_count' => count($bid->job->only_bids) - 1,
+				'other_bidder_count' => count($bid->job->bids) - 1,
 				'title' => $title,
 				'body' => '',
 				'created_at' => \Carbon\Carbon::now()

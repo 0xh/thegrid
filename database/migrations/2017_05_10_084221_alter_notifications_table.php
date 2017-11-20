@@ -14,7 +14,7 @@ class AlterNotificationsTable extends Migration
     public function up()
     {
         Schema::table('notifications', function ($table) {
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
