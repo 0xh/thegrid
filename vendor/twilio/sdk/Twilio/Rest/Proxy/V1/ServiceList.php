@@ -132,6 +132,10 @@ class ServiceList extends ListResource {
             'FriendlyName' => $options['friendlyName'],
             'DefaultTtl' => $options['defaultTtl'],
             'CallbackUrl' => $options['callbackUrl'],
+            'GeoMatchLevel' => $options['geoMatchLevel'],
+            'NumberSelectionBehavior' => $options['numberSelectionBehavior'],
+            'InterceptCallbackUrl' => $options['interceptCallbackUrl'],
+            'OutOfSessionCallbackUrl' => $options['outOfSessionCallbackUrl'],
         ));
 
         $payload = $this->version->create(
@@ -141,10 +145,7 @@ class ServiceList extends ListResource {
             $data
         );
 
-        return new ServiceInstance(
-            $this->version,
-            $payload
-        );
+        return new ServiceInstance($this->version, $payload);
     }
 
     /**
@@ -154,10 +155,7 @@ class ServiceList extends ListResource {
      * @return \Twilio\Rest\Proxy\V1\ServiceContext 
      */
     public function getContext($sid) {
-        return new ServiceContext(
-            $this->version,
-            $sid
-        );
+        return new ServiceContext($this->version, $sid);
     }
 
     /**

@@ -36,6 +36,7 @@ use Twilio\Version;
  */
 class RoomInstance extends InstanceResource {
     protected $_recordings = null;
+    protected $_participants = null;
 
     /**
      * Initialize the RoomInstance
@@ -69,9 +70,7 @@ class RoomInstance extends InstanceResource {
             'links' => Values::array_get($payload, 'links'),
         );
 
-        $this->solution = array(
-            'sid' => $sid ?: $this->properties['sid'],
-        );
+        $this->solution = array('sid' => $sid ?: $this->properties['sid']);
     }
 
     /**
@@ -82,10 +81,7 @@ class RoomInstance extends InstanceResource {
      */
     protected function proxy() {
         if (!$this->context) {
-            $this->context = new RoomContext(
-                $this->version,
-                $this->solution['sid']
-            );
+            $this->context = new RoomContext($this->version, $this->solution['sid']);
         }
 
         return $this->context;
@@ -107,9 +103,7 @@ class RoomInstance extends InstanceResource {
      * @return RoomInstance Updated RoomInstance
      */
     public function update($status) {
-        return $this->proxy()->update(
-            $status
-        );
+        return $this->proxy()->update($status);
     }
 
     /**
@@ -119,6 +113,15 @@ class RoomInstance extends InstanceResource {
      */
     protected function getRecordings() {
         return $this->proxy()->recordings;
+    }
+
+    /**
+     * Access the participants
+     * 
+     * @return \Twilio\Rest\Video\V1\Room\ParticipantList 
+     */
+    protected function getParticipants() {
+        return $this->proxy()->participants;
     }
 
     /**

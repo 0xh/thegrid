@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Proxy\V1\Service;
 
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -28,9 +29,7 @@ class PhoneNumberList extends ListResource {
         parent::__construct($version);
 
         // Path Solution
-        $this->solution = array(
-            'serviceSid' => $serviceSid,
-        );
+        $this->solution = array('serviceSid' => $serviceSid);
 
         $this->uri = '/Services/' . rawurlencode($serviceSid) . '/PhoneNumbers';
     }
@@ -38,13 +37,13 @@ class PhoneNumberList extends ListResource {
     /**
      * Create a new PhoneNumberInstance
      * 
-     * @param string $sid A string that uniquely identifies this Phone Number.
+     * @param array|Options $options Optional Arguments
      * @return PhoneNumberInstance Newly created PhoneNumberInstance
      */
-    public function create($sid) {
-        $data = Values::of(array(
-            'Sid' => $sid,
-        ));
+    public function create($options = array()) {
+        $options = new Values($options);
+
+        $data = Values::of(array('Sid' => $options['sid'], 'PhoneNumber' => $options['phoneNumber']));
 
         $payload = $this->version->create(
             'POST',
@@ -53,11 +52,7 @@ class PhoneNumberList extends ListResource {
             $data
         );
 
-        return new PhoneNumberInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new PhoneNumberInstance($this->version, $payload, $this->solution['serviceSid']);
     }
 
     /**
@@ -153,11 +148,7 @@ class PhoneNumberList extends ListResource {
      * @return \Twilio\Rest\Proxy\V1\Service\PhoneNumberContext 
      */
     public function getContext($sid) {
-        return new PhoneNumberContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new PhoneNumberContext($this->version, $this->solution['serviceSid'], $sid);
     }
 
     /**

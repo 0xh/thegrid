@@ -30,6 +30,7 @@ use Twilio\Version;
  * @property string status
  * @property string closedReason
  * @property integer ttl
+ * @property string mode
  * @property \DateTime dateCreated
  * @property \DateTime dateUpdated
  * @property string url
@@ -64,16 +65,14 @@ class SessionInstance extends InstanceResource {
             'status' => Values::array_get($payload, 'status'),
             'closedReason' => Values::array_get($payload, 'closed_reason'),
             'ttl' => Values::array_get($payload, 'ttl'),
+            'mode' => Values::array_get($payload, 'mode'),
             'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
             'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
             'url' => Values::array_get($payload, 'url'),
             'links' => Values::array_get($payload, 'links'),
         );
 
-        $this->solution = array(
-            'serviceSid' => $serviceSid,
-            'sid' => $sid ?: $this->properties['sid'],
-        );
+        $this->solution = array('serviceSid' => $serviceSid, 'sid' => $sid ?: $this->properties['sid']);
     }
 
     /**
@@ -120,9 +119,7 @@ class SessionInstance extends InstanceResource {
      * @return SessionInstance Updated SessionInstance
      */
     public function update($options = array()) {
-        return $this->proxy()->update(
-            $options
-        );
+        return $this->proxy()->update($options);
     }
 
     /**

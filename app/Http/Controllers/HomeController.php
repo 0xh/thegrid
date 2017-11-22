@@ -12,7 +12,7 @@ use Cache;
 class HomeController extends Controller
 {
     public function getLocationByIp(Request $request) {
-        $ip = $request->ip();
+        $ip = $this->get_ip();
 
         // for dev purposes
         if($ip == '10.0.0.1') {
@@ -23,7 +23,7 @@ class HomeController extends Controller
             return Location::get($ip);
         });
 
-        if($request->user()) {
+        if($request->user() && $location) {
             $user = User::where('id', $request->user()->id)->first();
             $country = Country::where('iso', $location->countryCode)->first();
             $user->country_id = $country->id;
@@ -34,7 +34,7 @@ class HomeController extends Controller
     }
 
     public function getCountryDetails(Request $request) {
-        $ip = $request->ip();
+        $ip = $this->get_ip();
         
         // for dev purposes
         if($ip == '10.0.0.1') {
@@ -79,4 +79,25 @@ class HomeController extends Controller
     public function getAppVersion() {
         return response()->json(['version' => env('APP_VERSION')]);
     }
+
+    public function get_ip() {
+		//Just get the headers if we can or else use the SERVER global
+		if ( function_exists( 'apache_request_headers' ) ) {
+			$headers = apache_request_headers();
+		} else {
+			$headers = $_SERVER;
+		}
+		//Get the forwarded IP if it exists
+		if ( array_key_exists( 'X-Forwarded-For', $headers ) && filter_var( $headers['X-Forwarded-For'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+			$the_ip = $headers['X-Forwarded-For'];
+		} elseif ( array_key_exists( 'HTTP_X_FORWARDED_FOR', $headers ) && filter_var( $headers['HTTP_X_FORWARDED_FOR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 )
+		) {
+			$the_ip = $headers['HTTP_X_FORWARDED_FOR'];
+		} else {
+			
+			$the_ip = filter_var( $_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 );
+		}
+		return $the_ip;
+	}
+
 }

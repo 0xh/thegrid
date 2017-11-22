@@ -30,9 +30,7 @@ class SessionList extends ListResource {
         parent::__construct($version);
 
         // Path Solution
-        $this->solution = array(
-            'serviceSid' => $serviceSid,
-        );
+        $this->solution = array('serviceSid' => $serviceSid);
 
         $this->uri = '/Services/' . rawurlencode($serviceSid) . '/Sessions';
     }
@@ -142,8 +140,9 @@ class SessionList extends ListResource {
             'UniqueName' => $options['uniqueName'],
             'DateExpiry' => Serialize::iso8601DateTime($options['dateExpiry']),
             'Ttl' => $options['ttl'],
+            'Mode' => $options['mode'],
             'Status' => $options['status'],
-            'Participants' => $options['participants'],
+            'Participants' => Serialize::map($options['participants'], function($e) { return Serialize::jsonObject($e); }),
         ));
 
         $payload = $this->version->create(
@@ -153,11 +152,7 @@ class SessionList extends ListResource {
             $data
         );
 
-        return new SessionInstance(
-            $this->version,
-            $payload,
-            $this->solution['serviceSid']
-        );
+        return new SessionInstance($this->version, $payload, $this->solution['serviceSid']);
     }
 
     /**
@@ -167,11 +162,7 @@ class SessionList extends ListResource {
      * @return \Twilio\Rest\Proxy\V1\Service\SessionContext 
      */
     public function getContext($sid) {
-        return new SessionContext(
-            $this->version,
-            $this->solution['serviceSid'],
-            $sid
-        );
+        return new SessionContext($this->version, $this->solution['serviceSid'], $sid);
     }
 
     /**

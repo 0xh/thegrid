@@ -3,7 +3,6 @@
 namespace Spatie\Activitylog\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Exceptions\CouldNotLogChanges;
 
 trait DetectsChanges
@@ -33,7 +32,13 @@ trait DetectsChanges
         }
 
         if (isset(static::$logAttributes)) {
-            $attributes = array_merge($attributes, static::$logAttributes);
+            if (in_array('*', static::$logAttributes)) {
+                $withoutWildcard = array_diff(static::$logAttributes, ['*']);
+
+                $attributes = array_merge($attributes, array_keys($this->attributes), $withoutWildcard);
+            } else {
+                $attributes = array_merge($attributes, static::$logAttributes);
+            }
         }
 
         return $attributes;
@@ -41,7 +46,7 @@ trait DetectsChanges
 
     public function shouldlogOnlyDirty(): bool
     {
-        if (!isset(static::$logOnlyDirty)) {
+        if (! isset(static::$logOnlyDirty)) {
             return false;
         }
 
@@ -50,7 +55,7 @@ trait DetectsChanges
 
     public function attributeValuesToBeLogged(string $processingEvent): array
     {
-        if (!count($this->attributesToBeLogged())) {
+        if (! count($this->attributesToBeLogged())) {
             return [];
         }
 
@@ -106,6 +111,6 @@ trait DetectsChanges
 
         $relatedModel = $model->$relatedModelName ?? $model->$relatedModelName();
 
-        return ["{$relatedModelName}.{$relatedAttribute}" => $relatedModel->$relatedAttribute];
+        return ["{$relatedModelName}.{$relatedAttribute}" => $relatedModel->$relatedAttribute ?? null];
     }
 }

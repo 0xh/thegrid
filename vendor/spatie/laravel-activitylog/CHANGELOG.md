@@ -2,6 +2,15 @@
 
 All notable changes to `spatie/laravel-activitylog` will be documented in this file
 
+## 2.3.1 - 2017-11-13
+- allow nullable relation when using `logChanges`
+
+## 2.3.0 - 2017-11-07
+- add a `log` argument to `activitylog:clean`
+
+## 2.2.0 - 2017-10-16
+- add support for logging all changed attributes using `*`
+
 ## 2.1.2 - 2017-09-28
 - fix for logging changes attributes when deleting soft deletable models
 
