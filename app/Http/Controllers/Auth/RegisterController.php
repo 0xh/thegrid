@@ -374,8 +374,17 @@ class RegisterController extends Controller
 
     } else {
         $user = $socialProvider->user;
-        if( !$user->username ) {
-          $data['new_user'] = 1;
+        if( $user ) {
+          if( !$user->username ) {
+            $data['new_user'] = 1;
+          }
+        } else {
+          $user = User::firstOrCreate(
+            ['email' => $data['email']],
+            ['name' => $data['name']],
+            ['confirmed' => 1]);
+          
+            $data['new_user'] = 1;
         }
     }
 
