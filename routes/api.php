@@ -217,6 +217,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/related/jobs', 'JobController@getRelatedJobs');
   Route::get('/{id}/popular/jobs', 'JobController@getPopularJobs');
   Route::get('/{id}/reviews', 'UserController@getReviews');
+  Route::get('/{id}/marker/{job_id}', 'JobController@getMarkerDetails');
 
   // Route::post('/bid', 'BidController@bid');
   // Route::post('/{id}/bids/approve', 'BidController@approveBid');

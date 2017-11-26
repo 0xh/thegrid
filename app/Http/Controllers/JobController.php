@@ -266,10 +266,14 @@ class JobController extends Controller
 			$radius = $data['rad'];
 		}
 
-		$jobs = Job::with('user')->with('bids');
+		$jobs = Job::with('user');
 
 		if($request->user()) {
-			$jobs->with('winner');
+			$user_id = $request->user()->id;
+			$jobs->with('winner')
+				->with([ 'bid' => function($query) use($user_id) {
+					$query->where('user_id', $user_id);
+				}]);
 		}
 
 		if(isset($data['from'])) {
@@ -322,6 +326,21 @@ class JobController extends Controller
 		// ->groupBy('distance');
 					// ->get();
 		return response()->json($jobs->get(), 200);
+	}
+
+	public function getMarkerDetails(Request $request, $id, $job_id ) {
+		$job = Job::with('user');
+		if( $request->user() ) {
+			$user_id = $request->user()->id;
+			$job->with('winner')
+				->with([ 'bid' => function($query) use($user_id) {
+					$query->where('user_id', $user_id);
+				}]);
+		}
+
+		$job->where('id', $job_id);
+
+		return response()->json($job->first());
 	}
 
 	public function viewJob($id) {

@@ -24,6 +24,10 @@ class Job extends Model
 		return $this->hasMany('App\Bid')
 					->orderBy('price_bid', 'asc');
 	}
+	
+	public function bid() {
+		return $this->hasOne('App\Bid');
+	}
 
 	public function bidders() {
 		return $this->hasMany('App\Bid')
