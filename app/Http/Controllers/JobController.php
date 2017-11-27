@@ -320,7 +320,7 @@ class JobController extends Controller
 		}
 
 		if(!$request->user()) {
-			$jobs->where('status', 0);
+			$jobs->where('is_awarded', false);
 		} else {
 			// $jobs->whereHas('winner', function ($query) use($request) {
 			// 	$query->where('user_id', $request->user()->id);
