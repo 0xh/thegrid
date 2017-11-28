@@ -143,6 +143,7 @@ Route::get('/opengraph/{id}', 'HomeController@getOG');
 Route::get('/getlocationbyip', 'HomeController@getLocationByIp');
 Route::get('/getCountryDetails', 'HomeController@getCountryDetails');
 Route::get('/getCountries', 'HomeController@getCountries');
+Route::get('/getPhoneCodes', 'HomeController@getPhoneCodes');
 Route::get('/users/getlocationbyip', 'HomeController@getLocationByIp')->middleware('auth:api');
 
 Route::get('/job/all', 'JobController@all');

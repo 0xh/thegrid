@@ -57,6 +57,14 @@ class HomeController extends Controller
 
         return response()->json($countries);
     }
+    
+    public function getPhoneCodes(Request $request) {
+        
+        $countries = Country::where('phonecode', '!=', 0)
+            ->get();
+
+        return response()->json($countries);
+    }
 
     public function getOG($id) {
         $job = Job::where('id', $id)->first();

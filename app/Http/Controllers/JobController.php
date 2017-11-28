@@ -281,6 +281,8 @@ class JobController extends Controller
 				->with([ 'bid' => function($query) use($user_id) {
 					$query->where('user_id', $user_id);
 				}]);
+		} else {
+
 		}
 
 		if(isset($data['from'])) {
@@ -319,13 +321,9 @@ class JobController extends Controller
 			$jobs->where('category_id', $data['category']);
 		}
 
-		if(!$request->user()) {
-			$jobs->where('is_awarded', false);
-		} else {
-			// $jobs->whereHas('winner', function ($query) use($request) {
-			// 	$query->where('user_id', $request->user()->id);
-			// });
-		}
+		// if(!$request->user()) {
+		// 	$jobs->where('is_awarded', false);
+		// }
 					
 		$jobs->select(DB::raw($f))
 		->having('distance', '<', $radius)
