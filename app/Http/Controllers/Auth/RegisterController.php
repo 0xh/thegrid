@@ -87,11 +87,9 @@ class RegisterController extends Controller
         });
       }
       // IDEA: Login user after register
-      $data['user'] = User::where('id', $user->id)
-                      ->withCount('jobs')
-                      ->withCount('bids')
-                      ->with('profile')
-                      ->first();
+      $data['user'] = User::info()
+        ->where('id', $user->id)
+        ->first();
       $data['access_token'] =  $user->createToken('THE GRID')->accessToken;
 
       return response()->json($data);
