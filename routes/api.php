@@ -211,6 +211,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::post('{id}/jobs/{job_id}/query', 'QueryController@create');
   Route::post('{id}/queries/{query_id}/like', 'QueryController@like');
   Route::post('{id}/queries/{query_id}/dislike', 'QueryController@dislike');
+  Route::post('{id}/queries/{query_like_id}/deleteLike', 'QueryController@deleteLike');
   Route::post('{id}/queries/{query_id}/reply', 'QueryController@reply');
   
   Route::get('/{id}/recent/jobs', 'JobController@getRecentJobs');

@@ -50,6 +50,17 @@ class QueryController extends Controller
         
         return response()->json($queries);
     }
+
+    public function deleteLike(Request $request, $id, $query_like_id) {
+        QueryLike::destroy($query_like_id);
+        // if( $query_like ) {
+        //     $query_like->delete();
+        // }
+
+        $queries = Query::info()->where('job_id', $request->job_id)->get();
+        
+        return response()->json($queries);
+    }
     
     public function reply(Request $request, $id, $query_id) {
         $dislike = Reply::create([
