@@ -28,7 +28,7 @@ class QueryController extends Controller
     }
 
     public function like(Request $request, $id, $query_id) {
-        $like = QueryLike::create([
+        $like = QueryLike::firstOrCreate([
             'query_id' => $query_id,
             'user_id' => $id,
             'is_liked' => true
@@ -40,7 +40,7 @@ class QueryController extends Controller
     }
     
     public function dislike(Request $request, $id, $query_id) {
-        $dislike = QueryLike::create([
+        $dislike = QueryLike::firstOrCreate([
             'query_id' => $query_id,
             'user_id' => $id,
             'is_liked' => false
