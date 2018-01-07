@@ -31,9 +31,9 @@ class QueryController extends Controller
         $like = QueryLike::firstOrCreate([
             'query_id' => $query_id,
             'user_id' => $id,
-            'is_liked' => true
         ]);
-
+        $like->is_liked = true;
+        $like->save();
         $queries = Query::info()->where('job_id', $request->job_id)->get();
         
         return response()->json($queries);
@@ -43,8 +43,9 @@ class QueryController extends Controller
         $dislike = QueryLike::firstOrCreate([
             'query_id' => $query_id,
             'user_id' => $id,
-            'is_liked' => false
         ]);
+        $dislike->is_liked = false;
+        $dislike->save();
 
         $queries = Query::info()->where('job_id', $request->job_id)->get();
         

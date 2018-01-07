@@ -85,7 +85,8 @@ class BidController extends Controller
 				'other_bidder_count' => count($bid->job->bids) - 1,
 				'title' => $title,
 				'body' => '',
-				'created_at' => \Carbon\Carbon::now()
+				'created_at' => \Carbon\Carbon::now(),
+				'type' => 'post'
 			];
 
 			$notifiable->notify( new BidToPost($notification_data) );
@@ -187,7 +188,8 @@ class BidController extends Controller
 			'bidder_name' => $notifiable->name,
 			'title' => $title,
 			'body' => '',
-			'created_at' => Carbon::now()
+			'created_at' => Carbon::now(),
+			'type' => 'bid'
 		];
 
 		$notifiable->notify( new AwardBid($notification_data) );

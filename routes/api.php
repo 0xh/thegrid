@@ -241,6 +241,7 @@ Route::middleware('auth:api')->prefix('users')->group(function() {
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::get('/{id}/conversations', 'ConversationController@getConversations');
   Route::post('/{id}/conversations', 'ConversationController@createConversation');
+  Route::delete('/{id}/conversations/{conversation_id}/delete', 'ConversationController@delete');
   Route::get('/{id}/conversations/{conversation_id}', 'MessageController@getMessages');
   Route::post('/{id}/conversations/{conversation_id}', 'MessageController@createMessage');
   Route::post('/{id}/conversations/{conversation_id}/read', 'MessageController@readMessage');  

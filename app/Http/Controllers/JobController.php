@@ -443,6 +443,7 @@ class JobController extends Controller
 
 				$notification_data['bid_id'] = $bid_id;
 				$notification_data['title'] = $title;
+				$notification_data['type'] = 'bid';
 
 				if( $data['status'] == 2) {
 					$notifiable->notify( new MarkPostInProgress($notification_data) );
